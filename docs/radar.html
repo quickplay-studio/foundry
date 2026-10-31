@@ -106,6 +106,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
     var c = el("article", "card" + (v.sample ? " sample" : "")); c.setAttribute("tabindex", "0");
     var head = el("div", "head");
     head.appendChild(el("h2", null, v.title || v.slug));
+    head.appendChild(el("span", "pill", v.kind || "app"));
     head.appendChild(el("span", "pill stage", v.stage || "validate"));
     head.appendChild(el("span", "pill " + (v.verdict || "pending"), v.verdict || "pending"));
     if (v.sample) head.appendChild(el("span", "pill", "sample"));

@@ -11,6 +11,7 @@ One Claude Code session per department, Sonnet doing the work, Opus consulted at
 - Intelligence: `adversarial-verification` wants a `prefer` argument on `util.ask_json` to force Groq against Gemini; `tech-stack-detection` needs `foundry/data/fingerprints.json`; `vertical-analysis` installs pytrends in its own step.
 - Legal: UK IPO and EUIPO search pages may not read through Firecrawl; the skill then says unverified and flags caution. Apple, Google Play, domain and trade mark fees are flagged for Charlie, never paid by an agent.
 - Customer and Operations chose thresholds (auto-reply confidence 0.85, 80 percent usage warning, 90 percent pass on agent evaluation) that Charlie may want to tune.
+- Commerce: `marketplace-compliance` runs on GitHub and resolves doubt to the stricter flag; flip it to `claude-code` if a wrong clear worries you. Its defaults (returns allowance 8 percent, margin floor 25 percent, target CPA at 60 percent of break-even, commission tiers) are assumptions marked in the skills.
 - Contracts between jobs that need a check once two departments run together: `validate/<job>.json` shapes, `sell/market-map.json`, `meetings/<date>-<title>.json`, `qa/result.json`.
 
 ## Brief for a department session

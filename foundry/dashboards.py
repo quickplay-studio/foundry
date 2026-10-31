@@ -29,6 +29,7 @@ def summarise(folder):
         "slug": folder.name,
         "title": board.get("title") or idea.get("title") or folder.name,
         "category": idea.get("category", ""),
+        "kind": idea.get("kind", "app"),
         "sample": bool(idea.get("note", "").startswith("Sample venture")),
         "deployed": board.get("deployed") or idea.get("deployed", ""),
         "updated": board.get("updated", ""),

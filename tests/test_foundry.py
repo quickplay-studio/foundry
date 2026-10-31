@@ -78,3 +78,24 @@ def test_launch_writes_all_files(monkeypatch, tmp_path):
     launch.run_one("sample", root=tmp_path)
     assert {p.name for p in dst.iterdir()} == {"idea.json", "brain.md", "plan.md", "board.json", "budget.json", "audit.json"}
     assert json.loads((dst / "budget.json").read_text())["ad_budget"] == 100
+
+
+def test_jobs_gates_and_skip(monkeypatch, tmp_path):
+    from foundry import jobs
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None: (None, None))
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((ROOT / "ventures" / "sample" / "idea.json").read_text())
+    launch.run_one("sample", root=tmp_path)
+    board = json.loads((dst / "board.json").read_text())
+    validate = [j for j in board["jobs"] if j["stage"] == "validate"]
+    later = [j for j in board["jobs"] if j["stage"] != "validate"]
+    assert all(jobs.can_run(board, j) for j in validate)
+    assert not any(jobs.can_run(board, j) for j in later)
+    board["gates"]["validate"] = "passed"
+    assert any(jobs.can_run(board, j) for j in later if j["stage"] == "clear")
+    monkeypatch.setattr(util, "VENTURES", tmp_path)
+    assert jobs.run_venture("sample", 1) == 0  # no free model: nothing runs, nothing is lost
+    board = json.loads((dst / "board.json").read_text())
+    assert {j["status"] for j in board["jobs"]} == {"todo"}
+    assert board["skipped"] and board["skipped"][0]["reason"].startswith("no free model")

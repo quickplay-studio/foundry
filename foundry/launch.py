@@ -59,9 +59,10 @@ def plan_md(idea, result, slug):
     return "\n".join(lines) + "\n"
 
 
-def board(result, slug):
+def board(result, slug, idea=None):
     return {
-        "slug": slug, "updated": util.now(), "stage": result["jobs"][0]["stage"] if result["jobs"] else "validate",
+        "slug": slug, "title": (idea or {}).get("title", slug), "deployed": (idea or {}).get("deployed", util.today()), "updated": util.now(), "stage": result["jobs"][0]["stage"] if result["jobs"] else "validate",
+        "verdict": "pending", "weekly": [], "incidents": [], "skipped": [],
         "business_model": result["business_model"], "model_used": result["model_used"],
         "jobs": [{"id": j["id"], "stage": j["stage"], "department": j["department"], "autonomy": j["autonomy"],
                   "status": "todo", "output": "", "updated": ""} for j in result["jobs"]],
@@ -84,7 +85,7 @@ def run_one(slug, dry_run=False, root=None):
     result = audit.run(idea, skipped=skipped)
     outputs = {
         "brain.md": brain_md(idea, slug), "plan.md": plan_md(idea, result, slug),
-        "board.json": board(result, slug), "budget.json": budget(idea),
+        "board.json": board(result, slug, idea), "budget.json": budget(idea),
         "audit.json": {**result, "skipped": skipped},
     }
     if dry_run:

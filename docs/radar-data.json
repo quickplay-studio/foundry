@@ -1,0 +1,67 @@
+{
+  "generated": "2026-10-31T18:53:07Z",
+  "ventures": [
+    {
+      "slug": "sample",
+      "title": "Sample: Agent Spend Guard",
+      "category": "money",
+      "sample": true,
+      "deployed": "2026-10-31",
+      "updated": "2026-10-31T18:53:07Z",
+      "stage": "validate",
+      "verdict": "pending",
+      "business_model": "b2b",
+      "gates": {
+        "validate": "open",
+        "clear": "open",
+        "build": "open",
+        "launch": "open",
+        "sell": "open",
+        "support": "open",
+        "run": "open"
+      },
+      "stages": {
+        "validate": {
+          "total": 11,
+          "done": 0
+        },
+        "clear": {
+          "total": 9,
+          "done": 0
+        },
+        "build": {
+          "total": 11,
+          "done": 0
+        },
+        "launch": {
+          "total": 18,
+          "done": 0
+        },
+        "sell": {
+          "total": 55,
+          "done": 0
+        },
+        "support": {
+          "total": 13,
+          "done": 0
+        },
+        "run": {
+          "total": 19,
+          "done": 0
+        }
+      },
+      "jobs_total": 136,
+      "jobs_done": 0,
+      "incidents": 0,
+      "skipped": 0,
+      "budget": {
+        "ad_budget": 100,
+        "spent": 0,
+        "revenue": 0
+      },
+      "weekly": [],
+      "sign_ups": 0,
+      "cost_per_sign_up": null
+    }
+  ]
+}

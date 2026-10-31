@@ -1,0 +1,1248 @@
+{
+  "slug": "sample",
+  "title": "Sample: Agent Spend Guard",
+  "deployed": "2026-10-31",
+  "updated": "2026-10-31T18:53:07Z",
+  "stage": "validate",
+  "verdict": "pending",
+  "weekly": [],
+  "incidents": [],
+  "skipped": [],
+  "business_model": "b2b",
+  "model_used": "heuristic",
+  "jobs": [
+    {
+      "id": "audience-analysis",
+      "stage": "validate",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "competitor-analysis",
+      "stage": "validate",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "competitor-teardown",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "pricing-research",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "regulatory-screen",
+      "stage": "validate",
+      "department": "legal",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "trend-monitoring",
+      "stage": "validate",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "vertical-analysis",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "tam-market-sizing",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "research-reports",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "adversarial-verification",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "data-visualisation",
+      "stage": "validate",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "consumer-law-check",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "data-protection",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "entity-and-structure",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "bank-and-payments-setup",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "contract-drafting",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "privacy-policy",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "tax-registration",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "terms-of-service",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "trademark-and-name-check",
+      "stage": "clear",
+      "department": "legal",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "agent-evaluation",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "document-extraction",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "kickoff-pack",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "access-collection",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "project-scaffolding",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "integration-builds",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "data-migration",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "licence-audit",
+      "stage": "build",
+      "department": "legal",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "portal-provisioning",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "qa-and-verification",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "handoff-docs",
+      "stage": "build",
+      "department": "operations",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "hook-writing",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "caption-writing",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "carousel-production",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "cross-platform-adaptation",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "image-generation",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "landing-page-copy",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "lead-magnet-builds",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "comment-cta-fulfilment",
+      "stage": "launch",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "og-and-share-surface",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "performance-mining",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "platform-and-ad-compliance",
+      "stage": "launch",
+      "department": "legal",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "ad-creative",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "publishing",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "seo-and-geo",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "script-writing",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "thumbnail-and-cover-design",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "video-production",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "clip-extraction",
+      "stage": "launch",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "agreement-drafting",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "crm-hygiene",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "crm-sync",
+      "stage": "sell",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "call-capture",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "company-deep-dive",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "buying-committee-mapping",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "deck-production",
+      "stage": "sell",
+      "department": "marketing",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "deliverability",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "funding-and-financials-lookup",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "icp-definition",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "cold-call-scripting",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "database-mining",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "inbox-triage",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "lead-qualification",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "lookalike-modelling",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "market-mapping",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "account-monitoring",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "person-research",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "network-mapping",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "pipeline-reporting",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "forecasting",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "post-call-debrief",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "demo-prototyping",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "follow-up-drafting",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "objection-library",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "pre-call-briefing",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "pricing-support",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "proposal-generation",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "deal-room-assembly",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "reactivation",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "social-mining",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "speed-to-lead",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "tech-stack-detection",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "trigger-detection",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "warm-path-finding",
+      "stage": "sell",
+      "department": "intelligence",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "web-and-maps-scraping",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "list-building",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "account-enrichment",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "contact-enrichment",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "email-verification",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "fit-scoring",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "personalisation-research",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "cold-email-drafting",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "linkedin-messaging",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "campaign-orchestration",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "campaign-launch",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "proof-matching",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "reply-classification",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "hot-lead-routing",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "meeting-booking",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "objection-response",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "referral-capture",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "send-optimisation",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "video-prospecting",
+      "stage": "sell",
+      "department": "sales",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "win-loss-analysis",
+      "stage": "sell",
+      "department": "deals",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "engagement-and-replies",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "health-scoring",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "advocacy-and-referrals",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "churn-prediction",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "member-spotlights",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "moderation",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "newsletter-and-broadcast",
+      "stage": "support",
+      "department": "marketing",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "onboarding-journeys",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "renewals-and-expansion",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "ticket-triage",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "escalations",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "faq-and-self-serve",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "macro-authoring",
+      "stage": "support",
+      "department": "customer",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "budget-tracking",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "context-maintenance",
+      "stage": "run",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "contract-lifecycle",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "cost-and-usage-tracking",
+      "stage": "run",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "document-filing-and-retrieval",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "entity-compliance",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "human",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "expense-categorisation",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "invoice-generation",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "monitoring-and-alerting",
+      "stage": "run",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "incident-response",
+      "stage": "run",
+      "department": "operations",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "news-and-mention-tracking",
+      "stage": "run",
+      "department": "intelligence",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "alert-routing",
+      "stage": "run",
+      "department": "intelligence",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "payment-tracking",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "collections",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "revenue-reporting",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "cash-flow-forecasting",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "goal-pacing",
+      "stage": "run",
+      "department": "back-office",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "sop-generation",
+      "stage": "run",
+      "department": "operations",
+      "autonomy": "assisted",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    },
+    {
+      "id": "status-updates",
+      "stage": "run",
+      "department": "operations",
+      "autonomy": "solo",
+      "status": "todo",
+      "output": "",
+      "updated": ""
+    }
+  ],
+  "gates": {
+    "validate": "open",
+    "clear": "open",
+    "build": "open",
+    "launch": "open",
+    "sell": "open",
+    "support": "open",
+    "run": "open"
+  }
+}

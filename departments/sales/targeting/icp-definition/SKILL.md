@@ -37,6 +37,7 @@ Write and keep the ideal customer profile per vertical: size, pains, buying trig
 
 ## Output
 - `ventures/<slug>/sell/icp.md`. Sections: Offer, Segments, Pains, Triggers, Disqualifiers, Weights, Changelog.
+- `ventures/<slug>/sell/icp.json`: the fenced `icp` block written out as its own file, which Deals (`lead-qualification`, `win-loss-analysis`) and `fit-scoring` read.
 - The `icp` block: `{"segments":[{"name","sic_prefixes","size_bands","regions","titles","keywords","exclusions"}],"weights":{"firmographic":40,"pain":25,"trigger":20,"reachability":15},"offer":"..."}`.
 - Read by market-mapping, database-mining, web-and-maps-scraping, social-mining, lookalike-modelling, fit-scoring and cold-email-drafting.
 

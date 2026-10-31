@@ -1,0 +1,2482 @@
+{
+  "generated": "2026-10-31T19:33:04Z",
+  "jobs": [
+    {
+      "job": "budget-tracking",
+      "department": "back-office",
+      "writes": [
+        "board.json",
+        "budget.json"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/ads-*.csv",
+        "finance/expenses.json",
+        "finance/payments.json",
+        "finance/rates.json",
+        "finance/signups.csv",
+        "launch"
+      ],
+      "office": true
+    },
+    {
+      "job": "cash-flow-forecasting",
+      "department": "back-office",
+      "writes": [
+        "finance/forecast.json",
+        "finance/forecast.md"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/assumptions.json",
+        "finance/cash.json",
+        "finance/commitments.json",
+        "finance/revenue/YYYY-MM.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "collections",
+      "department": "back-office",
+      "writes": [
+        "finance/collections/brief-INV-....md",
+        "finance/collections/drafts/INV-2026-0001-touch-2.md",
+        "finance/collections/log.json"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/invoices.json",
+        "finance/payments.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "invoice-generation",
+      "department": "back-office",
+      "writes": [
+        "finance/invoices.json",
+        "finance/invoices/INV-2026-0001.html"
+      ],
+      "reads": [
+        "brain.md",
+        "brand/logo.svg",
+        "finance/invoice-requests.json",
+        "finance/issuer.json",
+        "finance/tax.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "payment-tracking",
+      "department": "back-office",
+      "writes": [
+        "board.json",
+        "finance/payments.json",
+        "finance/payments.md"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/bank-*.csv",
+        "finance/invoices.json",
+        "finance/processed.json",
+        "finance/stripe-*.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "calendar-management",
+      "department": "back-office",
+      "writes": [
+        "calendar/conflicts.md",
+        "calendar/proposals/YYYY-MM-DD-*.ics",
+        "calendar/proposals/YYYY-MM-DD-*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "calendar/*.ics",
+        "calendar/availability.json",
+        "calendar/proposals"
+      ],
+      "office": true
+    },
+    {
+      "job": "email-triage",
+      "department": "back-office",
+      "writes": [
+        "inbox/digest-YYYY-MM-DD.md",
+        "inbox/triage-YYYY-MM-DD.json",
+        "skipped.json"
+      ],
+      "reads": [
+        "brain.md",
+        "inbox/corrections.csv",
+        "inbox/mail-YYYY-MM-DD.csv",
+        "inbox/rules.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "contract-lifecycle",
+      "department": "back-office",
+      "writes": [
+        "records/contracts-due.md",
+        "records/contracts.json"
+      ],
+      "reads": [
+        "brain.md",
+        "records/contracts",
+        "records/documents/index.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "crm-sync",
+      "department": "back-office",
+      "writes": [
+        "sell/conflicts.md",
+        "sell/crm-contacts.csv",
+        "sell/crm.json"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "sell/manual-changes.csv",
+        "sell/suppressed.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "document-filing-and-retrieval",
+      "department": "back-office",
+      "writes": [
+        "records/documents/*/*",
+        "records/documents/find.md",
+        "records/documents/index.json",
+        "skipped.json"
+      ],
+      "reads": [
+        "brain.md",
+        "inbox/docs",
+        "records/documents/taxonomy.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "entity-compliance",
+      "department": "back-office",
+      "writes": [
+        "records/compliance-brief.md",
+        "records/compliance.json",
+        "skipped.json"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/revenue/*.json",
+        "records/entities.json",
+        "records/sources.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "expense-categorisation",
+      "department": "back-office",
+      "writes": [
+        "finance/accountant/2026-10.csv",
+        "finance/expenses.json",
+        "finance/review.md"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/categories.json",
+        "finance/expenses-confirmed.json",
+        "finance/spend-shared.csv",
+        "finance/spend.csv"
+      ],
+      "office": true
+    },
+    {
+      "job": "goal-pacing",
+      "department": "back-office",
+      "writes": [
+        "finance/pacing.json",
+        "finance/pacing.md"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/revenue/YYYY-MM.json",
+        "skipped.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "revenue-reporting",
+      "department": "back-office",
+      "writes": [
+        "finance/revenue/2026-10.json",
+        "finance/revenue/2026-10.md",
+        "skipped.json"
+      ],
+      "reads": [
+        "brain.md",
+        "finance/rates.json",
+        "finance/revenue"
+      ],
+      "office": true
+    },
+    {
+      "job": "candidate-sourcing",
+      "department": "back-office",
+      "writes": [
+        "skipped.json",
+        "talent/candidates.json",
+        "talent/candidates/*/YYYY-MM-DD.md"
+      ],
+      "reads": [
+        "brain.md",
+        "talent/roles/*.md",
+        "talent/sources.json"
+      ],
+      "office": true
+    },
+    {
+      "job": "hr-and-policy-assistant",
+      "department": "back-office",
+      "writes": [
+        "hr/answers/YYYY-MM-DD-*.md",
+        "hr/gaps.md",
+        "skipped.json"
+      ],
+      "reads": [
+        "brain.md",
+        "hr/handbook.md",
+        "hr/policies/*.md",
+        "hr/questions"
+      ],
+      "office": true
+    },
+    {
+      "job": "onboarding-and-training",
+      "department": "back-office",
+      "writes": [
+        "talent/onboarding/*/plan.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "talent/access-matrix.json",
+        "talent/onboarding/*/brief.md",
+        "talent/roles/*.md"
+      ],
+      "office": true
+    },
+    {
+      "job": "screening-and-scheduling",
+      "department": "back-office",
+      "writes": [
+        "talent/candidates.json",
+        "talent/screens/*/*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "calendar/availability.json",
+        "talent/applications/*/*",
+        "talent/roles/*.md"
+      ],
+      "office": true
+    },
+    {
+      "job": "inventory-watch",
+      "department": "commerce",
+      "writes": [
+        "commerce/inventory.json",
+        "commerce/inventory.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/catalogue.json",
+        "commerce/data/orders.csv",
+        "commerce/data/stock.csv",
+        "commerce/data/supplier-stock.csv",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "order-routing",
+      "department": "commerce",
+      "writes": [
+        "commerce/orders/*-*.csv",
+        "commerce/orders/attention.md",
+        "commerce/routing.json"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/catalogue.json",
+        "commerce/data/orders.csv",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "returns-and-refunds",
+      "department": "commerce",
+      "writes": [
+        "commerce/returns/decisions.json",
+        "commerce/returns/log.csv",
+        "commerce/returns/themes.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/consumer-law-check.md",
+        "commerce/data/returns.csv",
+        "commerce/landed-cost.json",
+        "commerce/routing.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "shipping-and-tracking",
+      "department": "commerce",
+      "writes": [
+        "commerce/shipping/late.md",
+        "commerce/shipping/messages.json",
+        "commerce/shipping/uploads/*-*.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/data/tracking.csv",
+        "commerce/routing.json",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "catalogue-sync",
+      "department": "commerce",
+      "writes": [
+        "commerce/catalogue-report.md",
+        "commerce/catalogue.json",
+        "commerce/feeds/*.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/data/stock.csv",
+        "commerce/listings.json",
+        "commerce/photo-brief.json",
+        "commerce/pricing.json",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "listing-optimisation",
+      "department": "commerce",
+      "writes": [
+        "commerce/listings.json",
+        "commerce/listings.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/compliance.md",
+        "commerce/landed-cost.json",
+        "commerce/shortlist.json",
+        "idea.json",
+        "launch/landing-page.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "pricing-and-offers",
+      "department": "commerce",
+      "writes": [
+        "commerce/pricing.json",
+        "commerce/pricing.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/data/price-limits.json",
+        "commerce/landed-cost.json",
+        "commerce/listings.json",
+        "idea.json",
+        "validate/pricing-research.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "product-photography-brief",
+      "department": "commerce",
+      "writes": [
+        "commerce/photo-brief.json",
+        "commerce/photo-brief.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/listings.json",
+        "commerce/sample-results.json",
+        "commerce/shortlist.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "affiliate-and-creator-programme",
+      "department": "commerce",
+      "writes": [
+        "commerce/creators/messages.md",
+        "commerce/creators/outreach-list.csv",
+        "commerce/creators/programme.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/data/creators.csv",
+        "commerce/landed-cost.json",
+        "commerce/listings.json",
+        "commerce/pricing.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "marketplace-compliance",
+      "department": "commerce",
+      "writes": [
+        "commerce/compliance.json",
+        "commerce/compliance.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/consumer-law-check.md",
+        "commerce/shortlist.json",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "review-management",
+      "department": "commerce",
+      "writes": [
+        "commerce/reviews/complaints.json",
+        "commerce/reviews/digest.md",
+        "commerce/reviews/replies.json"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/data/reviews.csv",
+        "commerce/returns/themes.md",
+        "commerce/sample-results.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "tiktok-shop-setup",
+      "department": "commerce",
+      "writes": [
+        "commerce/setup/*-checklist.md",
+        "commerce/setup/settings.json"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/compliance.md",
+        "commerce/landed-cost.json",
+        "commerce/listings.json",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "landed-cost-modelling",
+      "department": "commerce",
+      "writes": [
+        "commerce/landed-cost.json",
+        "commerce/landed-cost.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/data/costs.json",
+        "commerce/shortlist.json",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "product-selection",
+      "department": "commerce",
+      "writes": [
+        "commerce/shortlist.json",
+        "commerce/shortlist.md"
+      ],
+      "reads": [
+        "brain.md",
+        "idea.json",
+        "validate"
+      ],
+      "office": false
+    },
+    {
+      "job": "sample-and-quality-check",
+      "department": "commerce",
+      "writes": [
+        "commerce/sample-brief.md",
+        "commerce/sample-results.json"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/compliance.md",
+        "commerce/shortlist.json",
+        "commerce/suppliers.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "supplier-research",
+      "department": "commerce",
+      "writes": [
+        "commerce/suppliers.json",
+        "commerce/suppliers.md"
+      ],
+      "reads": [
+        "brain.md",
+        "commerce/shortlist.json",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "engagement-and-replies",
+      "department": "customer",
+      "writes": [
+        "support/community/replies-*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "event-coordination",
+      "department": "customer",
+      "writes": [
+        "support/community/event-brief.md"
+      ],
+      "reads": [
+        "brain.md",
+        "support/faq.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "member-spotlights",
+      "department": "customer",
+      "writes": [
+        "support/community/spotlights/*-*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "support/tickets.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "moderation",
+      "department": "customer",
+      "writes": [
+        "support/community/moderation-log.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/community/rules.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "advocacy-and-referrals",
+      "department": "customer",
+      "writes": [
+        "support/advocacy.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/health.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "churn-prediction",
+      "department": "customer",
+      "writes": [
+        "support/churn.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/health.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "health-scoring",
+      "department": "customer",
+      "writes": [
+        "support/health-history/*.json",
+        "support/health.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/events.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "onboarding-journeys",
+      "department": "customer",
+      "writes": [
+        "support/onboarding.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/events.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "qbr-prep",
+      "department": "customer",
+      "writes": [
+        "support/qbr/*-q*.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "support/health-history/*.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "renewals-and-expansion",
+      "department": "customer",
+      "writes": [
+        "support/renewals.md"
+      ],
+      "reads": [
+        "brain.md",
+        "support/health.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "escalations",
+      "department": "customer",
+      "writes": [
+        "support/escalations.md"
+      ],
+      "reads": [
+        "brain.md",
+        "support/tickets.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "faq-and-self-serve",
+      "department": "customer",
+      "writes": [
+        "support/faq.json"
+      ],
+      "reads": [
+        "brain.md",
+        "clear",
+        "support/tickets.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "macro-authoring",
+      "department": "customer",
+      "writes": [
+        "support/macros.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/tickets.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "ticket-triage",
+      "department": "customer",
+      "writes": [
+        "support/tickets.json"
+      ],
+      "reads": [
+        "brain.md",
+        "support/inbox",
+        "support/macros.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "call-capture",
+      "department": "deals",
+      "writes": [
+        "sell/calls/*/transcript.md",
+        "sell/meetings.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/calls/*"
+      ],
+      "office": false
+    },
+    {
+      "job": "follow-up-drafting",
+      "department": "deals",
+      "writes": [
+        "sell/recaps/*-*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/debriefs/*-*.json",
+        "sell/recaps"
+      ],
+      "office": false
+    },
+    {
+      "job": "objection-library",
+      "department": "deals",
+      "writes": [
+        "sell/objections.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/debriefs/*.json",
+        "sell/replies.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "post-call-debrief",
+      "department": "deals",
+      "writes": [
+        "sell/debriefs/*-*.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/briefs",
+        "sell/calls/*/transcript.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "pre-call-briefing",
+      "department": "deals",
+      "writes": [
+        "sell/briefs/*-*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell",
+        "sell/meetings.json",
+        "sell/objections.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "agreement-drafting",
+      "department": "deals",
+      "writes": [
+        "sell/agreements/*-draft.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear",
+        "sell/pipeline.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "deal-room-assembly",
+      "department": "deals",
+      "writes": [
+        "sell/rooms.json",
+        "sell/rooms/*/index.html"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/proposals/*-v*.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "demo-prototyping",
+      "department": "deals",
+      "writes": [
+        "sell/demos/*/plan.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/debriefs/*-*.json",
+        "sell/objections.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "pricing-support",
+      "department": "deals",
+      "writes": [
+        "sell/pricing/*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/debriefs/*-*.json",
+        "validate"
+      ],
+      "office": false
+    },
+    {
+      "job": "proposal-generation",
+      "department": "deals",
+      "writes": [
+        "sell/proposals/*-v*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/debriefs/*-*.json",
+        "sell/pricing/*.md",
+        "sell/proposals/proposal.css"
+      ],
+      "office": false
+    },
+    {
+      "job": "comment-cta-fulfilment",
+      "department": "deals",
+      "writes": [
+        "sell/fulfilment.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch",
+        "sell/comments.json",
+        "sell/ctas.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "inbox-triage",
+      "department": "deals",
+      "writes": [
+        "sell/triage.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/dms.json",
+        "sell/pipeline.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "lead-qualification",
+      "department": "deals",
+      "writes": [
+        "sell/leads.json",
+        "sell/pipeline.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "speed-to-lead",
+      "department": "deals",
+      "writes": [
+        "sell/leads.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/suppress.csv",
+        "sell/triage.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "crm-hygiene",
+      "department": "deals",
+      "writes": [
+        "sell/hygiene-log.md",
+        "sell/pipeline-archive.csv",
+        "sell/pipeline.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/suppress.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "forecasting",
+      "department": "deals",
+      "writes": [
+        "sell/forecast.json",
+        "sell/forecast.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/pipeline.csv",
+        "sell/reports/*.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "pipeline-reporting",
+      "department": "deals",
+      "writes": [
+        "sell/reports/*.json",
+        "sell/reports/*.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/hygiene-log.md",
+        "sell/pipeline.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "reactivation",
+      "department": "deals",
+      "writes": [
+        "sell/reactivation.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/pipeline.csv",
+        "sell/replies.json",
+        "sell/suppress.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "win-loss-analysis",
+      "department": "deals",
+      "writes": [
+        "sell/targeting-notes.md",
+        "sell/winloss.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.json",
+        "sell/leads.json",
+        "sell/pipeline.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "hot-lead-routing",
+      "department": "deals",
+      "writes": [
+        "sell/pipeline.csv",
+        "sell/replies.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/suppress.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "meeting-booking",
+      "department": "deals",
+      "writes": [
+        "sell/meetings.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/replies.json",
+        "sell/suppress.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "objection-response",
+      "department": "deals",
+      "writes": [
+        "sell/replies.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/objections.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "referral-capture",
+      "department": "deals",
+      "writes": [
+        "sell/replies.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/pipeline.csv",
+        "sell/suppress.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "reply-classification",
+      "department": "deals",
+      "writes": [
+        "sell/replies.json",
+        "sell/suppress.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/inbox.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "buying-committee-mapping",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/committee.json",
+        "sell/accounts/*/committee.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/accounts/*/deep-dive.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "company-deep-dive",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/deep-dive.json",
+        "sell/accounts/*/deep-dive.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "funding-and-financials-lookup",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/funding.json",
+        "sell/accounts/*/funding.md",
+        "sell/funding-summary.json"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "tech-stack-detection",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/tech-stack.json",
+        "sell/accounts/*/tech-stack.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "competitor-teardown",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "validate/competitor-teardown.json",
+        "validate/competitor-teardown.md"
+      ],
+      "reads": [
+        "brain.md",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "pricing-research",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "validate/pricing-research.json",
+        "validate/pricing-research.md"
+      ],
+      "reads": [
+        "brain.md",
+        "validate/competitor-teardown.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "tam-market-sizing",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "validate/tam-market-sizing.json",
+        "validate/tam-market-sizing.md"
+      ],
+      "reads": [
+        "brain.md",
+        "validate/pricing-research.json",
+        "validate/vertical-analysis.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "vertical-analysis",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "validate/vertical-analysis.json",
+        "validate/vertical-analysis.md"
+      ],
+      "reads": [
+        "brain.md",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "account-monitoring",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/signals/signals.jsonl",
+        "sell/signals/snapshots/*.json"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/market-map.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "alert-routing",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "run/alerts/cursor.json",
+        "run/alerts/log.jsonl"
+      ],
+      "reads": [
+        "brain.md",
+        "run/alerts/rules.json",
+        "run/mentions/mentions.jsonl",
+        "sell/signals/signals.jsonl"
+      ],
+      "office": false
+    },
+    {
+      "job": "news-and-mention-tracking",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "run/mentions/digest-*.md",
+        "run/mentions/mentions.jsonl"
+      ],
+      "reads": [
+        "brain.md",
+        "run/mentions/seen.json",
+        "run/mentions/watch.json",
+        "validate/competitor-teardown.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "network-mapping",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/network.json",
+        "sell/accounts/*/network.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/accounts/*/people/*.json",
+        "sell/network/my-contacts.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "person-research",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/people/*.json",
+        "sell/accounts/*/people/*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "warm-path-finding",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "sell/accounts/*/warm-path.md"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/accounts/*/network.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "adversarial-verification",
+      "department": "intelligence",
+      "writes": [
+        "validate/attack.json",
+        "validate/attack.md"
+      ],
+      "reads": [
+        "brain.md",
+        "validate/report.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "data-visualisation",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "validate/charts/*.svg",
+        "validate/report.md"
+      ],
+      "reads": [
+        "brain.md",
+        "research/data"
+      ],
+      "office": false
+    },
+    {
+      "job": "research-reports",
+      "department": "intelligence",
+      "writes": [
+        "board.json",
+        "research/*.md",
+        "validate/report.md",
+        "validate/verdict.json"
+      ],
+      "reads": [
+        "brain.md",
+        "validate/*.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "consumer-law-check",
+      "department": "legal",
+      "writes": [
+        "clear/consumer-law-check.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "data-protection",
+      "department": "legal",
+      "writes": [
+        "clear/data-map.json",
+        "clear/data-protection.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/regulatory-screen.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "platform-and-ad-compliance",
+      "department": "legal",
+      "writes": [
+        "clear/platform-and-ad-compliance.json",
+        "clear/platform-and-ad-compliance.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/regulatory-screen.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "regulatory-screen",
+      "department": "legal",
+      "writes": [
+        "clear/regulatory-screen.json",
+        "clear/regulatory-screen.md"
+      ],
+      "reads": [
+        "brain.md",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "contract-drafting",
+      "department": "legal",
+      "writes": [
+        "clear/contracts/*-*.md",
+        "clear/contracts/*-review-note.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "nda-and-agreements",
+      "department": "legal",
+      "writes": [
+        "clear/agreements/*-*.md",
+        "clear/agreements/register.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "privacy-policy",
+      "department": "legal",
+      "writes": [
+        "clear/privacy-policy.md",
+        "clear/privacy-review-note.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/data-protection.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "terms-of-service",
+      "department": "legal",
+      "writes": [
+        "clear/terms-of-service.md",
+        "clear/terms-review-note.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "bank-and-payments-setup",
+      "department": "legal",
+      "writes": [
+        "clear/bank-and-payments.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "entity-and-structure",
+      "department": "legal",
+      "writes": [
+        "clear/entity-and-structure.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/regulatory-screen.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "tax-registration",
+      "department": "legal",
+      "writes": [
+        "clear/tax-deadlines.json",
+        "clear/tax-registration.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "ip-assignment",
+      "department": "legal",
+      "writes": [
+        "clear/agreements/ip-assignment-*.md",
+        "clear/ip-register.md"
+      ],
+      "reads": [
+        "brain.md",
+        "clear/entity-and-structure.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "licence-audit",
+      "department": "legal",
+      "writes": [
+        "clear/licence-audit.json",
+        "clear/licence-audit.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "trademark-and-name-check",
+      "department": "legal",
+      "writes": [
+        "clear/name-check.json",
+        "clear/name-check.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "approval-docs",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/deals/*/approval-pack-v1.md",
+        "launch/deals/*/changes.md"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/deals/*/script-v1.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "deal-scripting",
+      "department": "marketing",
+      "writes": [
+        "launch/deals/*/checklist.md",
+        "launch/deals/*/script-v1.md"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/deals/*/brief.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "ad-creative",
+      "department": "marketing",
+      "writes": [
+        "launch/ad-brief.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "budget.json",
+        "clear",
+        "commerce/landed-cost.json",
+        "launch"
+      ],
+      "office": false
+    },
+    {
+      "job": "caption-writing",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/captions.json",
+        "launch/captions.md"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/hooks.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "carousel-production",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/carousels/*/copy.md",
+        "launch/carousels/*/slide-01.png",
+        "launch/carousels/index.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/hooks.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "deck-production",
+      "department": "marketing",
+      "writes": [
+        "launch/decks/*.md",
+        "launch/decks/*.notes.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/inputs/deck-brief.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "hook-writing",
+      "department": "marketing",
+      "writes": [
+        "launch/hooks.json",
+        "launch/hooks.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/insights/audience.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "image-generation",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/images/*.jpg",
+        "launch/images/credits.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/brand.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "landing-page-copy",
+      "department": "marketing",
+      "writes": [
+        "launch/landing-page.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/insights/audience.json",
+        "validate"
+      ],
+      "office": false
+    },
+    {
+      "job": "script-writing",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/scripts/*.json",
+        "launch/scripts/*.md",
+        "launch/scripts/index.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/hooks.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "thumbnail-and-cover-design",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/thumbnails/*/a.png",
+        "launch/thumbnails/index.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/video/index.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "video-production",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/video/*.mp4",
+        "launch/video/index.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/scripts/*.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "newsletter-and-broadcast",
+      "department": "marketing",
+      "writes": [
+        "launch/newsletter/*/issue.html"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "og-and-share-surface",
+      "department": "marketing",
+      "writes": [
+        "launch/og/*.png",
+        "launch/og/index.json",
+        "launch/og/tags.html"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "publishing",
+      "department": "marketing",
+      "writes": [
+        "launch/publish-log.json",
+        "launch/queue.json"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/adapted/*.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "seo-and-geo",
+      "department": "marketing",
+      "writes": [
+        "launch/seo/metadata.json",
+        "launch/seo/patch.md",
+        "launch/seo/report.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/landing-page.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "audience-analysis",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/insights/audience.json",
+        "launch/insights/audience.md"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/inputs/dms.txt"
+      ],
+      "office": false
+    },
+    {
+      "job": "competitor-analysis",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/insights/competitors.md",
+        "launch/insights/hook-patterns.json"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/inputs/competitors.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "performance-mining",
+      "department": "marketing",
+      "writes": [
+        "launch/insights/performance.json",
+        "launch/insights/performance.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/publish-log.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "trend-monitoring",
+      "department": "marketing",
+      "writes": [
+        "launch/insights/trends-*.json",
+        "launch/insights/trends.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "clip-extraction",
+      "department": "marketing",
+      "writes": [
+        "launch/clips/*/clip-01.mp4",
+        "launch/clips/*/index.json"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/inputs/recordings/*.mp4"
+      ],
+      "office": false
+    },
+    {
+      "job": "cross-platform-adaptation",
+      "department": "marketing",
+      "writes": [
+        "board.json",
+        "launch/adapted/*.json",
+        "launch/adapted/index.md"
+      ],
+      "reads": [
+        "brain.md",
+        "launch/scripts/*.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "lead-magnet-builds",
+      "department": "marketing",
+      "writes": [
+        "launch/lead-magnet/gate-page.md",
+        "launch/lead-magnet/guide.md",
+        "launch/lead-magnet/index.json",
+        "sell/ctas.json"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "launch/insights/audience.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "agent-evaluation",
+      "department": "operations",
+      "writes": [
+        "eval/history.json",
+        "eval/results.json",
+        "eval/verdict.md"
+      ],
+      "reads": [
+        "brain.md",
+        "eval/benchmark.jsonl"
+      ],
+      "office": false
+    },
+    {
+      "job": "data-migration",
+      "department": "operations",
+      "writes": [
+        "migration/brief.md"
+      ],
+      "reads": [
+        "brain.md",
+        "migration/notes.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "document-extraction",
+      "department": "operations",
+      "writes": [
+        "extract/records.jsonl"
+      ],
+      "reads": [
+        "brain.md",
+        "extract/inbox",
+        "extract/schema.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "integration-builds",
+      "department": "operations",
+      "writes": [],
+      "reads": [
+        "brain.md",
+        "kickoff/access-status.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "portal-provisioning",
+      "department": "operations",
+      "writes": [],
+      "reads": [
+        "board.json",
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "qa-and-verification",
+      "department": "operations",
+      "writes": [
+        "qa/report.md",
+        "qa/result.json"
+      ],
+      "reads": [
+        "brain.md",
+        "kickoff/access-status.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "meeting-follow-ups",
+      "department": "operations",
+      "writes": [
+        "actions.json",
+        "meetings/*-*-recap.md"
+      ],
+      "reads": [
+        "brain.md",
+        "meetings/*-*.json",
+        "people.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "portal-sync",
+      "department": "operations",
+      "writes": [],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "deliverables/index.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "status-updates",
+      "department": "operations",
+      "writes": [
+        "status/*.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "budget.json",
+        "qa/result.json",
+        "status/latest.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "context-maintenance",
+      "department": "operations",
+      "writes": [
+        "archive/brain-*.md",
+        "brain.md"
+      ],
+      "reads": [],
+      "office": false
+    },
+    {
+      "job": "handoff-docs",
+      "department": "operations",
+      "writes": [
+        "handoff.md"
+      ],
+      "reads": [
+        "brain.md",
+        "kickoff/access-status.json",
+        "qa/result.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "sop-generation",
+      "department": "operations",
+      "writes": [],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "transcript-processing",
+      "department": "operations",
+      "writes": [
+        "meetings/*-*.json"
+      ],
+      "reads": [
+        "brain.md",
+        "meetings/inbox",
+        "meetings/index.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "access-collection",
+      "department": "operations",
+      "writes": [
+        "kickoff/access-status.json"
+      ],
+      "reads": [
+        "brain.md",
+        "kickoff/access.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "kickoff-pack",
+      "department": "operations",
+      "writes": [
+        "kickoff/access.md",
+        "kickoff/note.md"
+      ],
+      "reads": [
+        "brain.md",
+        "idea.json",
+        "kickoff"
+      ],
+      "office": false
+    },
+    {
+      "job": "project-scaffolding",
+      "department": "operations",
+      "writes": [
+        "kickoff/scaffold-commands.md",
+        "kickoff/scaffold.md",
+        "launch/brand.json"
+      ],
+      "reads": [
+        "brain.md",
+        "idea.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "cost-and-usage-tracking",
+      "department": "operations",
+      "writes": [
+        "board.json",
+        "usage-summary.json"
+      ],
+      "reads": [
+        "brain.md",
+        "budget.json",
+        "limits.json",
+        "usage.jsonl"
+      ],
+      "office": false
+    },
+    {
+      "job": "incident-response",
+      "department": "operations",
+      "writes": [
+        "incidents/*.md"
+      ],
+      "reads": [
+        "board.json",
+        "brain.md",
+        "monitors.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "monitoring-and-alerting",
+      "department": "operations",
+      "writes": [
+        "board.json",
+        "monitors.json"
+      ],
+      "reads": [
+        "brain.md",
+        "monitor-state.json"
+      ],
+      "office": false
+    },
+    {
+      "job": "account-enrichment",
+      "department": "sales",
+      "writes": [
+        "sell/accounts.csv"
+      ],
+      "reads": [
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "contact-enrichment",
+      "department": "sales",
+      "writes": [
+        "sell/leads.csv",
+        "sell/linkedin-todo.md"
+      ],
+      "reads": [
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "email-verification",
+      "department": "sales",
+      "writes": [
+        "sell/leads.csv",
+        "sell/suppression.csv",
+        "sell/verification.json"
+      ],
+      "reads": [],
+      "office": false
+    },
+    {
+      "job": "fit-scoring",
+      "department": "sales",
+      "writes": [
+        "sell/leads.csv"
+      ],
+      "reads": [
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "database-mining",
+      "department": "sales",
+      "writes": [
+        "sell/raw/database.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "list-building",
+      "department": "sales",
+      "writes": [
+        "sell/leads.csv"
+      ],
+      "reads": [
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "social-mining",
+      "department": "sales",
+      "writes": [
+        "sell/raw/social.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "web-and-maps-scraping",
+      "department": "sales",
+      "writes": [
+        "sell/raw/maps.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "cold-call-scripting",
+      "department": "sales",
+      "writes": [
+        "sell/sequences/call-*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "cold-email-drafting",
+      "department": "sales",
+      "writes": [
+        "sell/sequences/email-*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "linkedin-messaging",
+      "department": "sales",
+      "writes": [
+        "sell/linkedin-queue.md",
+        "sell/sequences/linkedin-*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "personalisation-research",
+      "department": "sales",
+      "writes": [
+        "sell/dossiers/*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "proof-matching",
+      "department": "sales",
+      "writes": [
+        "sell/proof.json"
+      ],
+      "reads": [
+        "brain.md",
+        "proof"
+      ],
+      "office": false
+    },
+    {
+      "job": "video-prospecting",
+      "department": "sales",
+      "writes": [
+        "sell/sequences/video-*.md"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "campaign-launch",
+      "department": "sales",
+      "writes": [
+        "sell/send-queue.csv",
+        "sell/sent.csv"
+      ],
+      "reads": [
+        "brain.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "campaign-orchestration",
+      "department": "sales",
+      "writes": [
+        "sell/campaigns.json"
+      ],
+      "reads": [
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "deliverability",
+      "department": "sales",
+      "writes": [
+        "sell/deliverability.json"
+      ],
+      "reads": [],
+      "office": false
+    },
+    {
+      "job": "send-optimisation",
+      "department": "sales",
+      "writes": [
+        "sell/send-windows.json"
+      ],
+      "reads": [],
+      "office": false
+    },
+    {
+      "job": "icp-definition",
+      "department": "sales",
+      "writes": [
+        "sell/icp.json",
+        "sell/icp.md"
+      ],
+      "reads": [
+        "audit.json",
+        "brain.md",
+        "sell/sent.csv"
+      ],
+      "office": false
+    },
+    {
+      "job": "lookalike-modelling",
+      "department": "sales",
+      "writes": [
+        "sell/lookalike-model.json",
+        "sell/raw/lookalike.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "market-mapping",
+      "department": "sales",
+      "writes": [
+        "sell/market-map.csv",
+        "sell/market-map.md"
+      ],
+      "reads": [
+        "audit.json",
+        "brain.md",
+        "sell/icp.md"
+      ],
+      "office": false
+    },
+    {
+      "job": "trigger-detection",
+      "department": "sales",
+      "writes": [
+        "sell/triggers.csv"
+      ],
+      "reads": [
+        "brain.md",
+        "sell/icp.md"
+      ],
+      "office": false
+    }
+  ],
+  "gaps": [],
+  "drops": {
+    "brand/logo.svg": [
+      "back-office/invoice-generation"
+    ],
+    "calendar/*.ics": [
+      "back-office/calendar-management"
+    ],
+    "calendar/availability.json": [
+      "back-office/calendar-management",
+      "back-office/screening-and-scheduling"
+    ],
+    "commerce/data/costs.json": [
+      "commerce/landed-cost-modelling"
+    ],
+    "commerce/data/creators.csv": [
+      "commerce/affiliate-and-creator-programme"
+    ],
+    "commerce/data/orders.csv": [
+      "commerce/inventory-watch",
+      "commerce/order-routing"
+    ],
+    "commerce/data/price-limits.json": [
+      "commerce/pricing-and-offers"
+    ],
+    "commerce/data/returns.csv": [
+      "commerce/returns-and-refunds"
+    ],
+    "commerce/data/reviews.csv": [
+      "commerce/review-management"
+    ],
+    "commerce/data/stock.csv": [
+      "commerce/inventory-watch",
+      "commerce/catalogue-sync"
+    ],
+    "commerce/data/supplier-stock.csv": [
+      "commerce/inventory-watch"
+    ],
+    "commerce/data/tracking.csv": [
+      "commerce/shipping-and-tracking"
+    ],
+    "deliverables/index.json": [
+      "operations/portal-sync"
+    ],
+    "eval/benchmark.jsonl": [
+      "operations/agent-evaluation"
+    ],
+    "extract/inbox": [
+      "operations/document-extraction"
+    ],
+    "extract/schema.json": [
+      "operations/document-extraction"
+    ],
+    "finance/ads-*.csv": [
+      "back-office/budget-tracking"
+    ],
+    "finance/assumptions.json": [
+      "back-office/cash-flow-forecasting"
+    ],
+    "finance/bank-*.csv": [
+      "back-office/payment-tracking"
+    ],
+    "finance/cash.json": [
+      "back-office/cash-flow-forecasting"
+    ],
+    "finance/categories.json": [
+      "back-office/expense-categorisation"
+    ],
+    "finance/commitments.json": [
+      "back-office/cash-flow-forecasting"
+    ],
+    "finance/expenses-confirmed.json": [
+      "back-office/expense-categorisation"
+    ],
+    "finance/invoice-requests.json": [
+      "back-office/invoice-generation"
+    ],
+    "finance/issuer.json": [
+      "back-office/invoice-generation"
+    ],
+    "finance/processed.json": [
+      "back-office/payment-tracking"
+    ],
+    "finance/rates.json": [
+      "back-office/budget-tracking",
+      "back-office/revenue-reporting"
+    ],
+    "finance/revenue/YYYY-MM.json": [
+      "back-office/cash-flow-forecasting",
+      "back-office/goal-pacing"
+    ],
+    "finance/signups.csv": [
+      "back-office/budget-tracking"
+    ],
+    "finance/spend-shared.csv": [
+      "back-office/expense-categorisation"
+    ],
+    "finance/spend.csv": [
+      "back-office/expense-categorisation"
+    ],
+    "finance/stripe-*.csv": [
+      "back-office/payment-tracking"
+    ],
+    "finance/tax.json": [
+      "back-office/invoice-generation"
+    ],
+    "hr/handbook.md": [
+      "back-office/hr-and-policy-assistant"
+    ],
+    "hr/policies/*.md": [
+      "back-office/hr-and-policy-assistant"
+    ],
+    "hr/questions": [
+      "back-office/hr-and-policy-assistant"
+    ],
+    "inbox/corrections.csv": [
+      "back-office/email-triage"
+    ],
+    "inbox/docs": [
+      "back-office/document-filing-and-retrieval"
+    ],
+    "inbox/mail-YYYY-MM-DD.csv": [
+      "back-office/email-triage"
+    ],
+    "inbox/rules.json": [
+      "back-office/email-triage"
+    ],
+    "launch/deals/*/brief.md": [
+      "marketing/deal-scripting"
+    ],
+    "launch/inputs/competitors.json": [
+      "marketing/competitor-analysis"
+    ],
+    "launch/inputs/deck-brief.md": [
+      "marketing/deck-production"
+    ],
+    "launch/inputs/dms.txt": [
+      "marketing/audience-analysis"
+    ],
+    "launch/inputs/recordings/*.mp4": [
+      "marketing/clip-extraction"
+    ],
+    "meetings/inbox": [
+      "operations/transcript-processing"
+    ],
+    "meetings/index.json": [
+      "operations/transcript-processing"
+    ],
+    "migration/notes.md": [
+      "operations/data-migration"
+    ],
+    "proof": [
+      "sales/proof-matching"
+    ],
+    "records/contracts": [
+      "back-office/contract-lifecycle"
+    ],
+    "records/documents/taxonomy.json": [
+      "back-office/document-filing-and-retrieval"
+    ],
+    "records/entities.json": [
+      "back-office/entity-compliance"
+    ],
+    "records/sources.json": [
+      "back-office/entity-compliance"
+    ],
+    "research/data": [
+      "intelligence/data-visualisation"
+    ],
+    "sell/manual-changes.csv": [
+      "back-office/crm-sync"
+    ],
+    "sell/network/my-contacts.csv": [
+      "intelligence/network-mapping"
+    ],
+    "sell/proposals/proposal.css": [
+      "deals/proposal-generation"
+    ],
+    "support/community/rules.md": [
+      "customer/moderation"
+    ],
+    "support/inbox": [
+      "customer/ticket-triage"
+    ],
+    "talent/access-matrix.json": [
+      "back-office/onboarding-and-training"
+    ],
+    "talent/applications/*/*": [
+      "back-office/screening-and-scheduling"
+    ],
+    "talent/onboarding/*/brief.md": [
+      "back-office/onboarding-and-training"
+    ],
+    "talent/roles/*.md": [
+      "back-office/candidate-sourcing",
+      "back-office/onboarding-and-training",
+      "back-office/screening-and-scheduling"
+    ],
+    "talent/sources.json": [
+      "back-office/candidate-sourcing"
+    ]
+  }
+}

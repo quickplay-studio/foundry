@@ -38,6 +38,7 @@ Stand up the repo, context files and plan for a new venture.
 ## Output
 - New repo `quickplay-studio/<slug>` containing `README.md`, `CLAUDE.md`, `.claude/settings.json`, `.github/workflows/ci.yml`, `.gitignore`, `app/index.html`, `tests/test_smoke.py`, `docs/mvp.md`, green on its first push.
 - `ventures/<slug>/kickoff/scaffold.md` in Foundry, and the board entry above.
+- `ventures/<slug>/launch/brand.json`: `{name, tagline, colours: {bg, text, accent}, font, logo, voice}` from the brain, so Marketing (`image-generation`, `thumbnail-and-cover-design`, `carousel-production`) starts from one brand file; Charlie edits it once.
 - If `gh` is not signed in or the organisation refuses, write the exact commands to `ventures/<slug>/kickoff/scaffold-commands.md`, add a `skipped` line, and stop.
 
 ## The ladder

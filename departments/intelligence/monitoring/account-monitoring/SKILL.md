@@ -21,7 +21,7 @@ Watch a target list for funding, hiring, leadership and tech changes.
 - `ventures/<slug>/brain.md`: problem and who, so signals are scored by relevance to what the venture sells
 
 ## Inputs
-- The target list from `market-mapping`: assumed at `ventures/<slug>/sell/market-map.json`, one object per account with `name`, `domain`, `company_number` (UK) and `account_slug`. Maximum 50 accounts per venture.
+- The target list from `market-mapping`: `ventures/<slug>/sell/market-map.csv` (columns company_number, company, segment, sic_codes, incorporated_on, postcode, region, company_type, source, collected_on); `account_slug` is the slugified company name and `domain` comes from `sell/accounts.csv` when enrichment has run. Maximum 50 accounts per venture.
 - Previous snapshots in `ventures/<slug>/sell/signals/snapshots/<account-slug>.json`.
 - Env: `GEMINI_API_KEY`, `GROQ_API_KEY`; optional `GH_TOKEN`, `COMPANIES_HOUSE_API_KEY` (free key Charlie may add as a secret; absent means the funding and leadership checks are skipped and logged).
 
@@ -53,5 +53,5 @@ Companies House API, public job board APIs, Google News RSS, `requests`, Gemini 
 
 ## Build notes
 - Snapshots in git give free history. Keep them small; store hashes, not page text.
-- The `market-map.json` path and shape are assumed from the Sales session; adjust if different.
+- `market-map.csv` is the Sales `market-mapping` output; the columns above are its contract.
 - Tests offline: two snapshots a week apart produce the expected events; an unchanged week produces none.

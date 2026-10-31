@@ -20,7 +20,8 @@ from . import audit, util
 MAX_JOBS = 5
 PROMPT = """You are one agent in a small company's AI workforce. Do the job below exactly as its skill file says, for the venture described, using only the material given. Write in UK English, no em or en dashes, no hype. If the job needs a service or data you do not have, do the part you can and say what is missing in the summary.
 
-Return JSON only: {{"path": "<relative path under the venture folder, from the skill's Output section>", "content": "<the complete output file, markdown>", "summary": "<two sentences>", "flag": "<clear, caution or stop, when the skill asks for a flag, else ok>"}}
+Return JSON only: {{"files": [{{"path": "<relative path under the venture folder, from the skill's Output section>", "content": "<the complete file: markdown, or JSON as a string>"}}], "summary": "<two sentences>", "flag": "<clear, caution or stop, when the skill asks for a flag, else ok>"}}
+Write every file the Output section names (a .md and a .json pair both), in the shapes it gives.
 
 COMPANY BRAIN
 {company}
@@ -92,15 +93,24 @@ def run_job(folder, board, job, dry_run=False):
         return {"dry_run": True}
     skipped = []
     result, model = util.ask_json(prompt, skipped)
-    if not result or not isinstance(result.get("content"), str) or not result.get("path"):
+    files = []
+    if result:
+        if isinstance(result.get("files"), list):
+            files = [f for f in result["files"] if isinstance(f, dict) and isinstance(f.get("content"), str) and f.get("path")]
+        elif isinstance(result.get("content"), str) and result.get("path"):
+            files = [{"path": result["path"], "content": result["content"]}]
+    if not files:
         return {"skipped": "no free model answered: " + "; ".join(s["reason"] for s in skipped)[:200]}
-    rel = re.sub(r"^(\./|/)+", "", str(result["path"]))
-    if ".." in rel or not rel:
-        rel = f"{job['stage']}/{job['id']}.md"
-    out = folder / rel
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(result["content"].rstrip() + "\n", encoding="utf-8")
-    return {"output": rel, "summary": str(result.get("summary", ""))[:300], "flag": str(result.get("flag", "ok"))[:10], "model": model}
+    written = []
+    for i, f in enumerate(files[:6]):
+        rel = re.sub(r"^(\./|/)+", "", str(f["path"]).replace("ventures/<slug>/", ""))
+        if ".." in rel or not rel:
+            rel = f"{job['stage']}/{job['id']}{'' if i == 0 else i}.md"
+        out = folder / rel
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(f["content"].rstrip() + "\n", encoding="utf-8")
+        written.append(rel)
+    return {"output": written[0], "outputs": written, "summary": str(result.get("summary", ""))[:300], "flag": str(result.get("flag", "ok"))[:10], "model": model}
 
 
 def run_venture(slug, limit, dry_run=False, only=None):
@@ -133,6 +143,7 @@ def run_venture(slug, limit, dry_run=False, only=None):
         else:
             job["status"] = "done" if job["autonomy"] == "solo" else "review"
             job["output"] = result["output"]
+            job["outputs"] = result["outputs"]
             board.setdefault("log", []).append({"date": util.today(), "job": job["id"], "status": job["status"], "flag": result["flag"], "summary": result["summary"], "model": result["model"]})
             if result["flag"] == "stop":
                 board["gates"][job["stage"]] = "failed"

@@ -37,7 +37,7 @@ Builds the posting schedule, waits for Charlie's approval, then posts due items 
 7. Append to `launch/publish-log.json`, `{post_id, platform, url, published, hook_id, format, status}`, which `performance-mining` reads. Set this job to `done` in `ventures/<slug>/board.json` when every row is posted, failed or manual.
 
 ## Output
-- `ventures/<slug>/launch/queue.json` and `queue.md` (the schedule), `publish-log.json` (what went out). Charlie sees the pull request and the log.
+- `ventures/<slug>/launch/queue.json` and `queue.md` (the schedule), `ventures/<slug>/launch/publish-log.json` (what went out, read by `performance-mining`). Charlie sees the pull request and the log.
 
 ## The ladder
 - Human-led: Charlie posts each item by hand from the checklist.

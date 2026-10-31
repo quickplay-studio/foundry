@@ -78,7 +78,7 @@ def test_launch_writes_all_files(monkeypatch, tmp_path):
     dst.mkdir()
     (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
     launch.run_one("sample", root=tmp_path)
-    assert {p.name for p in dst.iterdir()} == {"idea.json", "brain.md", "plan.md", "board.json", "budget.json", "audit.json"}
+    assert {p.name for p in dst.iterdir()} == {"idea.json", "brain.md", "plan.md", "board.json", "budget.json", "audit.json", "README.md"}
     assert json.loads((dst / "budget.json").read_text())["ad_budget"] == 100
 
 
@@ -101,3 +101,43 @@ def test_jobs_gates_and_skip(monkeypatch, tmp_path):
     board = json.loads((dst / "board.json").read_text())
     assert {j["status"] for j in board["jobs"]} == {"todo"}
     assert board["skipped"] and board["skipped"][0]["reason"].startswith("no free model")
+
+
+def test_every_read_has_a_writer_or_an_owner():
+    from foundry import contracts
+    rows = contracts.scan()
+    missing = contracts.gaps(rows)
+    assert not missing, missing
+    # the seams the department agents guessed at are now explicit
+    writes = {w for r in rows for w in r["writes"]}
+    for path in ("sell/icp.json", "sell/market-map.csv", "sell/ctas.json", "launch/brand.json", "launch/publish-log.json",
+                 "launch/ad-brief.md", "commerce/landed-cost.json", "clear/platform-and-ad-compliance.md", "validate/report.md"):
+        assert any(contracts.matches(path, [w]) for w in writes), path
+
+
+def test_end_to_end_with_a_fake_model(monkeypatch, tmp_path):
+    """A venture moves through validate with a model that answers, outputs land, gates and stage advance."""
+    from foundry import dashboards, jobs
+
+    def fake(prompt, skipped=None, prefer=None):
+        if prompt.startswith("You are the audit engine"):
+            return None, None  # heuristic audit
+        return {"files": [{"path": "validate/out.md", "content": "# done"}, {"path": "validate/out.json", "content": "{}"}],
+                "summary": "ok", "flag": "clear"}, "fake"
+
+    monkeypatch.setattr(util, "ask_json", fake)
+    monkeypatch.setattr(util, "VENTURES", tmp_path)
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
+    launch.run_one("sample", root=tmp_path)
+    assert jobs.run_venture("sample", 3) == 3
+    board = json.loads((dst / "board.json").read_text())
+    ran = [j for j in board["jobs"] if j["status"] in ("done", "review")]
+    assert len(ran) == 3 and all(j["stage"] == "validate" for j in ran)
+    assert (dst / "validate" / "out.md").exists() and (dst / "validate" / "out.json").exists()
+    assert board["log"][0]["model"] == "fake"
+    monkeypatch.setattr(util, "DATA", tmp_path)
+    monkeypatch.setattr(dashboards, "OUT", tmp_path / "radar-data.json")
+    data = dashboards.main()
+    assert data["ventures"][0]["stages"]["validate"]["done"] >= 1

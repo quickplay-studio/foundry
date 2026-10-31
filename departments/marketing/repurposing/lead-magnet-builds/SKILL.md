@@ -38,6 +38,7 @@ Turns the content theme people ask about most into a short gated guide and the p
 ## Output
 - `ventures/<slug>/launch/lead-magnet/guide.md` and `guide.pdf`.
 - `ventures/<slug>/launch/lead-magnet/gate-page.md` with sections Headline, Bullets, Form, Consent, Thank-you.
+- `ventures/<slug>/sell/ctas.json`: `[{keyword, asset, dm_text, platforms, gate_page}]`, the comment keywords that unlock each magnet, read by Deals `comment-cta-fulfilment`.
 - `ventures/<slug>/launch/lead-magnet/index.json`: `{theme, pages, words, pdf, sources:[]}`. Read by `newsletter-and-broadcast` and `seo-and-geo`.
 
 ## The ladder

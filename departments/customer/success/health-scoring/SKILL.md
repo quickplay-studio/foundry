@@ -38,7 +38,7 @@ Score every account on usage, sentiment and engagement.
 ## Output
 - `ventures/<slug>/support/health.json`: `{"updated": "...", "weights": {}, "summary": {"green": 0, "amber": 0, "red": 0, "new": 0, "dormant": 0}, "accounts": [{"user_id", "plan", "tenure_days", "score", "band", "trend", "usage", "engagement", "sentiment", "flags": []}]}`
 - `support/health.md`: counts, the 20 lowest scores with their flags, and a "low data" note if there are under 30 accounts.
-- `support/health-history/<date>.json`: weekly snapshot.
+- `ventures/<slug>/support/health-history/<date>.json`: weekly snapshot, read by `churn-prediction` and `qbr-prep`.
 
 ## The ladder
 - Human-led: Charlie looks at PostHog himself; the job only writes the scoring definition into `events.json`.

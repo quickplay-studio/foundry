@@ -70,6 +70,19 @@ def board(result, slug, idea=None):
     }
 
 
+def readme_md(idea, slug):
+    contracts = util.read_json(util.ROOT / "map" / "contracts.json", {})
+    drops = contracts.get("drops", {})
+    lines = [f"# {idea.get('title', slug)}: working folder", "",
+             "Written by Foundry's launch and jobs runs. `plan.md` is the order of work, `board.json` the state (job status, gates, verdict), `budget.json` the money. Stage folders fill as jobs run.", "",
+             "## Moving it on", "- Set `gates.<stage>` to `passed` in `board.json` to open the next stage.", "- Jobs at `review` in `board.json` are drafts for you; set them to `done` once used.",
+             "- Set `verdict` to `park` or `kill` to stop the venture.", "",
+             "## Files you can drop in", "Optional. Each unlocks the job named; without it the job skips that step or uses a default.", ""]
+    for path, jobs in drops.items():
+        lines.append(f"- `{path}`: {', '.join(jobs)}")
+    return "\n".join(lines) + "\n"
+
+
 def budget(idea):
     return {"currency": "GBP", "ad_budget": idea.get("budget_gbp", 0), "spent": 0, "revenue": 0,
             "lines": [], "updated": util.now()}
@@ -84,7 +97,7 @@ def run_one(slug, dry_run=False, root=None):
     skipped = []
     result = audit.run(idea, skipped=skipped)
     outputs = {
-        "brain.md": brain_md(idea, slug), "plan.md": plan_md(idea, result, slug),
+        "brain.md": brain_md(idea, slug), "plan.md": plan_md(idea, result, slug), "README.md": readme_md(idea, slug),
         "board.json": board(result, slug, idea), "budget.json": budget(idea),
         "audit.json": {**result, "skipped": skipped},
     }

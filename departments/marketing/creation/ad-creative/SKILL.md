@@ -73,3 +73,4 @@ Free first. Gemini 2.5 Flash and Groq Llama 3.3 70B through `foundry.util.ask_js
 - Not built yet. Stdlib plus `requests`; the field check is a tested function that fails on a missing or extra field.
 - A copy of the brief goes in the pull request body so Charlie can approve from his phone.
 - Ad text limits change; keep them in one table in code.
+- GitHub implementation: `run.py` beside this file (jobkit).

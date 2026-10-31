@@ -53,3 +53,4 @@ Google News RSS, Hacker News Algolia API, Reddit public JSON, App Store reviews 
 ## Build notes
 - Keep `seen.json` capped at the last 5,000 hashes.
 - Tests offline with an RSS fixture and a duplicate-heavy day.
+- GitHub implementation: `run.py` beside this file (jobkit).

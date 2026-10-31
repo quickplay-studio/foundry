@@ -55,3 +55,4 @@ Free first. YouTube Data API free quota, Hacker News Algolia API, Apify free tie
 - Not built yet. Stdlib plus `requests`; the personal-data strip is a tested function with fixtures.
 - With no model, write counts of raw terms and the language bank only; label the rest `needs model`.
 - Delete anything raw from artifacts after 30 days.
+- GitHub implementation: `run.py` beside this file (jobkit).

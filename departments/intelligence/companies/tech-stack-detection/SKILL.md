@@ -54,3 +54,4 @@ What stays with Charlie: whether a gap is worth mentioning to the account, and n
 - The fingerprint table is the product; start with about 60 common tools and grow it from misses.
 - Detection is evidence, not proof. Do not state a tool as fact in outreach without a high-confidence row.
 - Tests offline with saved headers, HTML and DNS responses for three sites.
+- GitHub implementation: `run.py` beside this file (jobkit).

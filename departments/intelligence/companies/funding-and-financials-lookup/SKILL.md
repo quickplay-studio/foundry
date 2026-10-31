@@ -53,3 +53,4 @@ Companies House API (including its Document API), SEC EDGAR APIs, Google News RS
 - Runner script; the `ix:nonFraction` parser is about 30 lines of stdlib `re` and `html.parser`. Cache fetched accounts by filing id so a document is never fetched twice.
 - Do not store directors' dates of birth or home addresses from the register.
 - Tests offline with one saved iXBRL accounts file, one filing history and one Form D response.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -54,3 +54,4 @@ What stays with Charlie: the decision to kill, pivot or proceed, and the validat
 - `foundry.util`'s model chain needs a way to prefer Groq for step 4 (a small `prefer` argument); the build session adds it, not this department.
 - Keep the check code separate from the model code so tests run offline: fixtures for a dead link, a figure not on the page, a wrong sum and a contradicted absence.
 - About 6 model calls and under 10 Firecrawl credits per venture.
+- GitHub implementation: `run.py` beside this file (jobkit).

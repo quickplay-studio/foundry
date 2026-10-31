@@ -54,3 +54,4 @@ Free first. Pexels and Unsplash free APIs, Gemini image output if the free tier 
 - Not built yet. Stdlib plus `requests`; ImageMagick and ffmpeg are installed in the workflow with `apt-get`.
 - Fallback with no stock or model: a flat brand-colour card with the headline, which always works.
 - Credits are required: Pexels asks for attribution where practical and Unsplash expects its download-tracking call.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -53,3 +53,4 @@ Hacker News Algolia API, Reddit public JSON, App Store search API, pytrends, Com
 - Runner script plus a `workflow_dispatch` entry with a `slug` input; also chained from the launch workflow. Stdlib plus `requests`; pytrends installed in the job step only, not in `requirements.txt`.
 - The score thresholds are starting values; tune them after five ventures against what actually sold.
 - Tests offline with saved API responses; one test that a blocked Reddit call is skipped, not fatal.
+- GitHub implementation: `run.py` beside this file (jobkit).

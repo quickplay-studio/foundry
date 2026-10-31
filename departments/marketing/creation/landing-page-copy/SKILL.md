@@ -65,3 +65,4 @@ Free first. Gemini 2.5 Flash and Groq Llama 3.3 70B through `foundry.util.ask_js
 - Not built yet. Stdlib plus `requests`; the lint and the claims table are tested functions.
 - Do not A/B test with fewer than about 100 sign-ups per variant; ship one version and change one thing at a time.
 - Fallback with no model: assemble sections from the brain and mark the file `draft: template`.
+- GitHub implementation: `run.py` beside this file (jobkit).

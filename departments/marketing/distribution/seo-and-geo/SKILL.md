@@ -57,3 +57,4 @@ Free first. PageSpeed Insights API, Google Search Console (Charlie's login), vid
 - Not built yet. Stdlib plus `requests`; the HTML audit uses `html.parser`. Each check is a small tested function.
 - Fallback with no model: title from the H1 and price line, description from the first two lines of the hero.
 - Do not stuff keywords; one primary phrase once per field.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -55,3 +55,4 @@ Free first. Gemini 2.5 Flash, Flash-Lite and Groq Llama 3.3 70B through `foundry
 - Not built yet. Stdlib plus `requests`. Steps 4 and 5 are plain functions with tests.
 - Fallback with no model: fill the `template` fields from `hook-patterns.json` with language-bank phrases and score them the same way.
 - The platform list comes from `channels.json`, so adding a platform needs no code change.
+- GitHub implementation: `run.py` beside this file (jobkit).

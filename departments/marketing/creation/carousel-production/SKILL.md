@@ -55,3 +55,4 @@ Free first. Headless Chrome and ImageMagick on GitHub Actions, Pexels and Unspla
 - Not built yet. One template, one render function; no new Python packages (shell out to Chrome).
 - Fallback with no model: slides from the hook, the `brain.md` problem line, MVP bullets and proof line.
 - Test the contrast and size checks with fixture PNGs.
+- GitHub implementation: `run.py` beside this file (jobkit).

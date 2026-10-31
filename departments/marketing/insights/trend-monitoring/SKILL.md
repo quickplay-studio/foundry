@@ -55,3 +55,4 @@ Free first. Hacker News Algolia API, YouTube Data API free quota, Firecrawl free
 - Not built yet. Weekly cron plus `workflow_dispatch`; stdlib plus `requests`.
 - Without a model, scores use steps 3 to 5 with fit set to 0 and the brief says so.
 - Test offline with a saved Algolia response and a saved YouTube response.
+- GitHub implementation: `run.py` beside this file (jobkit).

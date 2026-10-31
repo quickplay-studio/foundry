@@ -54,3 +54,4 @@ Free first. Gemini 2.5 Flash and Groq Llama 3.3 70B through `foundry.util.ask_js
 - Not built yet. Stdlib plus `requests`; steps 4 and 5 are tested functions.
 - Fallback with no model: fill beat templates from `brain.md` and the hook text; mark the file `draft: template`.
 - Sponsored scripts are `deal-scripting`, not this job.
+- GitHub implementation: `run.py` beside this file (jobkit).

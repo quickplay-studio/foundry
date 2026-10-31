@@ -53,3 +53,4 @@ GitHub API, Hacker News API and Algolia search, Companies House API, Firecrawl, 
 - Runner script taking `--slug`, `--account`, `--person`. Public sources only; respect robots.txt.
 - Keep these sheets in a private repo only. If the repo is public, the job writes nothing and logs why.
 - Tests offline: an ambiguous-name fixture that must stop, and a fixture where forbidden fields are present and must be dropped.
+- GitHub implementation: `run.py` beside this file (jobkit).

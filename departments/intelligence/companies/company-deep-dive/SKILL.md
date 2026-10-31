@@ -54,3 +54,4 @@ Companies House API, SEC EDGAR, Greenhouse, Lever and Ashby public job APIs, Goo
 - Runner script taking `--slug` and `--account`. Cap at 30 accounts per run to stay inside the free model limits.
 - Public business information only. No personal data beyond name, title and role.
 - Tests offline with saved Companies House and job board responses.
+- GitHub implementation: `run.py` beside this file (jobkit).

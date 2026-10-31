@@ -56,3 +56,4 @@ Free first. Headless Chrome, Gemini 2.5 Flash and Groq Llama 3.3 70B through `fo
 - Not built yet. Stdlib plus `requests`; the lint and the PDF check are tested functions.
 - Fallback with no model: outline plus brain facts as a checklist, marked `draft: template`.
 - Never email the list from here; that is `newsletter-and-broadcast`.
+- GitHub implementation: `run.py` beside this file (jobkit).

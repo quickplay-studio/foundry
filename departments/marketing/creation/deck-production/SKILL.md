@@ -55,3 +55,4 @@ Free first. Marp CLI on GitHub Actions, Canva free tier by hand, Gemini 2.5 Flas
 - Not built yet. Marp runs from `npx` in the workflow, so no repo dependency; pin the version.
 - Fallback with no model: outline headings with the brain's lines under each.
 - This job has no earlier job in the tree. It becomes useful at the sell stage for B2B ideas, or whenever Charlie runs a webinar.
+- GitHub implementation: `run.py` beside this file (jobkit).

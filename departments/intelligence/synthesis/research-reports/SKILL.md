@@ -56,3 +56,4 @@ Gemini 2.5 Flash, Groq, Mermaid (rendered by GitHub), Hacker News Algolia API, R
 - Other departments' validate jobs are assumed to write `ventures/<slug>/validate/<job>.json` in this shape. Confirm when `regulatory-screen`, `trend-monitoring` and `audience-analysis` are built.
 - Free budget per venture across the validate stage is roughly 30 model calls and under 70 Firecrawl credits, so the 500 one-off credits cover about seven ventures.
 - Tests offline with sidecar fixtures for go, pivot, no-go and provisional.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -54,3 +54,4 @@ Free first. YouTube Data API and Meta Graph API on free quotas, Buffer free tier
 - Not built yet. Stdlib plus `requests`; API clients are thin and tested with mocked HTTP.
 - The first run is a dry run that writes `queue.md` and posts nothing.
 - Secret names beyond Foundry's default set are added by Charlie; none go in files.
+- GitHub implementation: `run.py` beside this file (jobkit).

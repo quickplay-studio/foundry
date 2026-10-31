@@ -53,3 +53,4 @@ App Store lookup API, Firecrawl, Hacker News Algolia API, Reddit public JSON, Fr
 - Runner script; stdlib `statistics` for percentiles. Prices are public list prices only; do not scrape behind a login.
 - Percentile rule and the 10-item test are starting values; tune after five ventures.
 - Tests offline with saved pricing page HTML fixtures, including a page with annual-only pricing.
+- GitHub implementation: `run.py` beside this file (jobkit).

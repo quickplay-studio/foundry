@@ -54,3 +54,4 @@ App Store search, lookup and reviews RSS, Hacker News Algolia API, Reddit public
 - Runner script plus `workflow_dispatch` with a `slug` input. Respect robots.txt and each site's terms; if a page forbids it, record the competitor from store data only.
 - Dominant competitor thresholds (4.5 rating, 10,000 ratings) are starting values; tune them.
 - Tests offline with saved lookup and review fixtures.
+- GitHub implementation: `run.py` beside this file (jobkit).

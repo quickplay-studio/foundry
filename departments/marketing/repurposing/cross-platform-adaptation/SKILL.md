@@ -53,3 +53,4 @@ Free first. Gemini 2.5 Flash and Groq Llama 3.3 70B through `foundry.util.ask_js
 - Not built yet. Stdlib plus `requests`. Format mapping is a table in code; the limit check is a tested function.
 - Fallback with no model: take the master caption, trim at a sentence end to fit, add the right call to action.
 - Add a platform by adding one row to the table.
+- GitHub implementation: `run.py` beside this file (jobkit).

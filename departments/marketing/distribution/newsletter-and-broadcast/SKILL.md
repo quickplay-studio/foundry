@@ -54,3 +54,4 @@ Free first. A free email service Charlie picks, such as MailerLite or Buttondown
 - Not built yet. Stdlib plus `requests`; the HTML is one template with slots, rendered with string replacement.
 - Fallback with no model: lead item from the top question and its brain answer, plus the call to action.
 - Run the first issue as a test only: no real send until Charlie has seen it in two mail clients.
+- GitHub implementation: `run.py` beside this file (jobkit).

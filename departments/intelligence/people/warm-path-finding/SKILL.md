@@ -52,3 +52,4 @@ Gemini 2.5 Flash, Groq, GitHub Actions. No web fetches, no messaging, no Claude.
 - Small script: filter, rank, brief, name check. Keep it under 80 lines.
 - It must refuse to run if no edge carries `confirmed`, and log under `skipped` why.
 - Tests offline: a graph with one confirmed and one unconfirmed path, and a graph with no confirmed path.
+- GitHub implementation: `run.py` beside this file (jobkit).

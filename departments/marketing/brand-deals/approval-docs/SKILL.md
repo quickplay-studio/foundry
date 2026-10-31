@@ -54,3 +54,4 @@ Free first. Headless Chrome for PDF, Gemini 2.5 Flash and Groq Llama 3.3 70B thr
 - Not built yet. Stdlib plus `requests`; the pack is one template with slots.
 - Fallback with no model: run the code checks only and mark the AI check `not run`.
 - Never overwrite an earlier version; each version is a new file.
+- GitHub implementation: `run.py` beside this file (jobkit).

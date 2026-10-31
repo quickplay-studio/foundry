@@ -53,3 +53,4 @@ Companies House API, GitHub API, Hacker News Algolia API, Firecrawl, Gemini 2.5 
 - Graph code is plain Python (`collections.deque`); keep it under 120 lines and unit test with a six-node fixture.
 - Keep contact data out of logs and out of any public repo or workflow output.
 - Tests offline with saved officer appointments and a small contacts CSV.
+- GitHub implementation: `run.py` beside this file (jobkit).

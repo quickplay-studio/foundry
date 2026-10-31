@@ -54,3 +54,4 @@ Free first. YouTube Data API and Meta Graph API on free quotas; vidIQ export fro
 - Not built yet. One script on a weekly cron plus `workflow_dispatch`; Python 3.12 stdlib plus `requests`.
 - Steps 1 to 5 are arithmetic, so the job is useful even when every model is down.
 - Test offline with fixture API responses in `tests/`. Never read raw comments here; that is `audience-analysis`.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -55,3 +55,4 @@ GitHub Issues and pull requests through `GH_TOKEN`, Gemini 2.5 Flash, Groq, GitH
 - Routing and scoring are plain Python, so tests are cheap: a noisy fixture of 100 items must yield at most `max_alerts_per_day` issues.
 - Never route personal data from `person-research` sheets into an issue.
 - Tests offline with a stubbed GitHub client.
+- GitHub implementation: `run.py` beside this file (jobkit).

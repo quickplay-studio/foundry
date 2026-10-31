@@ -53,3 +53,4 @@ Free first. Gemini 2.5 Flash and Groq Llama 3.3 70B through `foundry.util.ask_js
 - Not built yet. Stdlib plus `requests`; fit check and checklist are tested functions.
 - Fallback with no model: the proven format with slots filled from the brief's must-say points.
 - Keep one folder per brand so nothing leaks between deals.
+- GitHub implementation: `run.py` beside this file (jobkit).

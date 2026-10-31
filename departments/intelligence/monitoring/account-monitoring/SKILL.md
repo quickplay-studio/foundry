@@ -55,3 +55,4 @@ Companies House API, public job board APIs, Google News RSS, `requests`, Gemini 
 - Snapshots in git give free history. Keep them small; store hashes, not page text.
 - `market-map.csv` is the Sales `market-mapping` output; the columns above are its contract.
 - Tests offline: two snapshots a week apart produce the expected events; an unchanged week produces none.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -54,3 +54,4 @@ ONS API, Nomis API, World Bank API, Companies House API (optional), Gemini 2.5 F
 - Runner script with the funnel arithmetic as plain functions; unit test the sums. A figure with no source link is rejected before it is written.
 - Official statistics lag; state the year of every count.
 - Tests offline with saved ONS and Nomis responses.
+- GitHub implementation: `run.py` beside this file (jobkit).

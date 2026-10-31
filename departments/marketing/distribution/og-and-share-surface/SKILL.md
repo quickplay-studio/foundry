@@ -56,3 +56,4 @@ Free first. Headless Chrome and ImageMagick on GitHub Actions, Pexels and Unspla
 - Not built yet. Stdlib plus `requests`; one HTML template with slots.
 - Platform preview caches are sticky: if an image changes, change its file name rather than overwrite it.
 - Fallback with no model: title and the first line of the description.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -54,3 +54,4 @@ Free first. ffmpeg on GitHub Actions, Groq Whisper, Gemini 2.5 Flash and Groq Ll
 - Not built yet. Stdlib plus `requests`; ffmpeg is called as a command.
 - Fallback with no model: pick windows by speech rate and the presence of numbers; mark the index `heuristic`.
 - Never fetch other people's videos. This job only cuts files that are in `inputs/recordings/`.
+- GitHub implementation: `run.py` beside this file (jobkit).

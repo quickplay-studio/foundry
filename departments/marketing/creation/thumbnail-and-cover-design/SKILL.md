@@ -54,3 +54,4 @@ Free first. ImageMagick on GitHub Actions, Pexels and Unsplash free stock, Canva
 - Not built yet. Stdlib plus `requests`; ImageMagick installed in the workflow.
 - A cover that looks clickable but misleads breaks platform rules and trust; the check list has no "shock" setting.
 - Fallback with no model: the hook text shortened to four words at the head of the sentence.
+- GitHub implementation: `run.py` beside this file (jobkit).

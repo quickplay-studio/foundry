@@ -53,3 +53,4 @@ Python standard library SVG strings, Mermaid for diagrams (rendered by GitHub), 
 - A small renderer (`bar`, `line`, `funnel`, `scorecard`) of about 150 lines; stay inside stdlib plus `requests`.
 - Run after `research-reports` and before `adversarial-verification`, so the challenge pass can check chart data against the sidecars. The index does not enforce this order; the workflow does.
 - Tests offline: render each type from a fixture and assert the SVG contains the labels and the title check works.
+- GitHub implementation: `run.py` beside this file (jobkit).

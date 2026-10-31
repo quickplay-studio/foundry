@@ -54,3 +54,4 @@ Free first. Gemini 2.5 Flash and Groq Llama 3.3 70B through `foundry.util.ask_js
 - Not built yet. Stdlib plus `requests`; the limit table and the checks are tested functions.
 - Fallback with no model: caption = hook + product line from `brain.md` + call to action.
 - Platform limits change; the table is the only place to edit.
+- GitHub implementation: `run.py` beside this file (jobkit).

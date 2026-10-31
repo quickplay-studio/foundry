@@ -55,3 +55,4 @@ Free first. Firecrawl free tier for pages, YouTube Data API free quota, vidIQ (c
 - Not built yet. `workflow_dispatch` job; stdlib plus `requests`.
 - Pattern labels need a model. With none available, write the collected table and leave `hook-patterns.json` empty with a note.
 - Quote only short extracts. The output records patterns, not copied wording.
+- GitHub implementation: `run.py` beside this file (jobkit).

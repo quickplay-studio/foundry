@@ -55,3 +55,4 @@ Free first. git log, GitHub API, Gemini 2.5 Flash then Groq (`foundry.util.ask_j
 - A step the model cannot tie to a command, file or log line is deleted from the draft.
 - Re-check the `Last checked` date each time the SOP is used; the job re-tests any SOP older than 90 days and opens a pull request if it fails.
 - SOPs hold secret names only, never values.
+- GitHub implementation: `run.py` beside this file (jobkit).

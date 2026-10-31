@@ -53,3 +53,4 @@ Free first. GitHub dependency graph API, PyPI and npm registry APIs, deps.dev, t
 - Runs in the venture repo as a workflow on pull requests that change lockfiles, as well as once at build stage. The stage here is build; the output still goes under `clear/` so the gates read one folder.
 - The model never decides a licence is permissive; it only summarises text. The SPDX id from the registry is the source of truth.
 - Tests offline: fixture lockfiles with one GPL, one unknown and one MIT item.
+- GitHub implementation: `run.py` beside this file (jobkit).

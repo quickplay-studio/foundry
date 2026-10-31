@@ -53,3 +53,4 @@ Free first. The checklist and stack mapping are a lookup table, no model needed.
 - Runs in the same workflow job as `launch`, or as its own job on a push that changes `board.json`.
 - Numbers in the note come from `idea.json` and `budget.json`, never from the model. Check the note against them before commit.
 - Never put a key, token or password in either file. A grep for `AIza`, `gsk_` and `sk-` must return nothing.
+- GitHub implementation: `run.py` beside this file (jobkit).

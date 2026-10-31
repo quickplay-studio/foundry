@@ -57,3 +57,4 @@ Free first. GitHub Actions on a 6-hourly schedule (about 4 short runs a day, wel
 - Scheduled runs can start late. Allow for it in `max_age_hours`.
 - Never put a webhook URL or token in `monitors.json`.
 - This job cannot watch itself. The UptimeRobot check on the live URL and the daily heartbeat commit are the outside checks.
+- GitHub implementation: `run.py` beside this file (jobkit).

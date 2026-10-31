@@ -57,3 +57,4 @@ Free first. GitHub Actions weekly and on a change to `board.json` or `meetings/`
 - The marker block is generated, not hand-written. Say so in a comment line inside it.
 - Numbers come from JSON. Do not let a model restate them.
 - Idempotent: running twice on the same state produces no diff.
+- GitHub implementation: `run.py` beside this file (jobkit).

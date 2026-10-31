@@ -59,3 +59,4 @@ Free first. GitHub REST API, Firecrawl free tier for the limits pages (as of Oct
 - Use pence for money in code, pounds in text.
 - Percentages are rounded half up to one decimal place.
 - A `high` cost incident is read by `incident-response` and by the weekly Back Office budget line.
+- GitHub implementation: `run.py` beside this file (jobkit).

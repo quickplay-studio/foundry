@@ -58,3 +58,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) fo
 - Thresholds and deadlines are read from gov.uk each run and written with a "read on" date; nothing is hard-coded from memory.
 - Re-run when the structure changes or revenue passes 70 percent of the VAT threshold.
 - Tests offline with fixture pages for each structure.
+- GitHub implementation: `run.py` beside this file (jobkit).

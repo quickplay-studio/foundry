@@ -56,3 +56,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 - Statute text is read from legislation.gov.uk, not from the model's memory. Record the date read.
 - The subscription regime start date is uncertain; the job must read the current gov.uk position each run.
 - Tests offline: fixtures for a one-off app, a monthly subscription with trial, and a B2B-only product.
+- GitHub implementation: `run.py` beside this file (jobkit).

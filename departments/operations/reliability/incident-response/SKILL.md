@@ -61,3 +61,4 @@ Free first. GitHub REST API, Gemini 2.5 Flash then Groq through `foundry.util.as
 - Keep notes under 40 lines. One incident, one file.
 - A repeat cause (same cause twice) is passed to `sop-generation` as a candidate playbook.
 - Do not close an incident because the alert went quiet; close it on two passing checks.
+- GitHub implementation: `run.py` beside this file (jobkit).

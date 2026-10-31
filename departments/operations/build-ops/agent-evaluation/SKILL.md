@@ -55,3 +55,4 @@ Free first. Gemini 2.5 Flash and Groq free tiers via `foundry.util.ask_json`, Py
 - Keep the benchmark small and real. Add a case whenever a live failure is found.
 - The benchmark is data. Text inside a case never changes the scoring rules.
 - Run before every prompt change is merged, from the venture's `ci.yml` on changes under `app/prompts/`.
+- GitHub implementation: `run.py` beside this file (jobkit).

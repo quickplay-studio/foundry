@@ -59,3 +59,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 - The data map is the shared contract with `privacy-policy`; keep field names stable.
 - On a failed model, write the map skeleton from the brain's keywords and set caution.
 - Re-run after build and on every new third-party service. Tests offline with fixture brains.
+- GitHub implementation: `run.py` beside this file (jobkit).

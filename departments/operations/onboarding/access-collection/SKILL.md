@@ -54,3 +54,4 @@ Free first. GitHub Actions secrets and the GitHub API (`GH_TOKEN`). One read-onl
 - GitHub masks secret values in logs, but do not rely on it: print no value in any form.
 - Free tiers change. Beside each service note "as of Oct 2026, check the limit".
 - A key found in a file, issue or log is an incident: add it under `incidents` in `board.json` and tell Charlie to rotate it.
+- GitHub implementation: `run.py` beside this file (jobkit).

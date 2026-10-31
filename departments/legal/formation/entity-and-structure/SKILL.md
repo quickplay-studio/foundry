@@ -59,3 +59,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) fo
 - Tax rates come from gov.uk each run, never from the model. Print the tax year used.
 - Writes the chosen structure to `ventures/<slug>/board.json` only after Charlie records it; `tax-registration`, `terms-of-service` and `bank-and-payments-setup` read it.
 - Tests offline with fixture rate tables.
+- GitHub implementation: `run.py` beside this file (jobkit).

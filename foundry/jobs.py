@@ -11,6 +11,7 @@ names, and returns one output file. Solo jobs are marked done; assisted and huma
 jobs are marked review, so Charlie sees the draft before it is used.
 """
 import argparse
+import datetime as dt
 import os
 import json
 import re
@@ -144,47 +145,73 @@ def run_script(script, folder, job, dry_run=False):
             "summary": str(result.get("summary", ""))[:300], "flag": str(result.get("flag", "ok"))[:10], "model": "run.py"}
 
 
+RECURRING_DAYS = {"run": 7, "support": 3}  # done jobs in these stages run again after this many days
+
+
+def due_again(job):
+    days = RECURRING_DAYS.get(job.get("stage"))
+    if not days or job["status"] != "done" or not job.get("updated"):
+        return False
+    try:
+        last = dt.datetime.strptime(job["updated"][:10], "%Y-%m-%d").date()
+    except ValueError:
+        return False
+    return (dt.date.today() - last).days >= days
+
+
+def note_skipped(board, job_id, reason):
+    """One skipped line per job, newest wins, forty kept."""
+    board["skipped"] = [s for s in board.get("skipped", []) if s.get("job") != job_id][-39:]
+    board["skipped"].append({"job": job_id, "reason": reason, "date": util.today()})
+
+
 def run_venture(slug, limit, dry_run=False, only=None):
     folder = util.VENTURES / slug
     board = util.read_json(folder / "board.json")
     if not board:
         return 0
     done = 0
-    for job in board["jobs"]:
+    for job_id in [j["id"] for j in board["jobs"]]:
         if done >= limit:
             break
-        if only and job["id"] != only:
+        if only and job_id != only:
             continue
-        if job["status"] != "todo" or not can_run(board, job):
+        job = next(j for j in board["jobs"] if j["id"] == job_id)
+        if not (job["status"] == "todo" or due_again(job)) or not can_run(board, job):
             continue
         result = run_job(folder, board, job, dry_run)
         if result.get("dry_run"):
             done += 1
             continue
+        # a run.py may have written board.json itself (incidents, weekly lines, verdict): re-read before touching it
+        fresh = util.read_json(folder / "board.json") or board
+        board = fresh
+        job = next(j for j in board["jobs"] if j["id"] == job_id)
         job["updated"] = util.now()
         if "skipped" in result:
             reason = result["skipped"]
-            board.setdefault("skipped", []).append({"job": job["id"], "reason": reason, "date": util.today()})
-            board["skipped"] = board["skipped"][-40:]
+            note_skipped(board, job_id, reason)
             if reason.startswith("no free model"):
+                board["updated"] = util.now()
+                if not dry_run:
+                    util.write_json(folder / "board.json", board)
                 break  # nothing else will answer today either; try again tomorrow
             if reason == "skill file missing":
                 job["status"] = "skipped"
-            continue  # stubs and Claude Code jobs stay todo
         else:
             job["status"] = "done" if job["autonomy"] == "solo" else "review"
             job["output"] = result["output"]
             job["outputs"] = result["outputs"]
-            board.setdefault("log", []).append({"date": util.today(), "job": job["id"], "status": job["status"], "flag": result["flag"], "summary": result["summary"], "model": result["model"]})
+            board.setdefault("log", []).append({"date": util.today(), "job": job_id, "status": job["status"], "flag": result["flag"], "summary": result["summary"], "model": result["model"]})
             if result["flag"] == "stop":
                 board["gates"][job["stage"]] = "failed"
-                board["verdict"] = "kill"
-        done += 1
-    board["updated"] = util.now()
-    board["stage"] = next((j["stage"] for j in board["jobs"] if j["status"] in ("todo", "review")), board["stage"])
-    board["log"] = board.get("log", [])[-60:]
-    if not dry_run:
-        util.write_json(folder / "board.json", board)
+                board["verdict"] = "blocked"  # Charlie decides: override in writing, or kill
+            done += 1
+        board["updated"] = util.now()
+        board["stage"] = next((j["stage"] for j in board["jobs"] if j["status"] in ("todo", "review")), board["stage"])
+        board["log"] = board.get("log", [])[-60:]
+        if not dry_run:
+            util.write_json(folder / "board.json", board)
     print(f"{slug}: {done} jobs run")
     return done
 

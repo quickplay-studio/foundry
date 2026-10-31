@@ -56,3 +56,4 @@ Free first. GitHub Actions on a Monday 07:00 UK cron and on a push that changes 
 - The fifth line starts with `Spend:` and is for Charlie only. `portal-sync` removes it before anything is shared.
 - Keep each update under 600 characters.
 - Cron runs in UTC. Set it for 06:00 and 07:00 UTC to cover British Summer Time, and skip the second run if an update for today exists.
+- GitHub implementation: `run.py` beside this file (jobkit).

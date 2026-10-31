@@ -58,3 +58,4 @@ Free first. Companies House Public Data API (free key), UK IPO and EUIPO search 
 - The UK IPO and EUIPO search pages are dynamic and may not be readable. The job must degrade to `unverified` with the searches listed, never to green.
 - Keep variant generation deterministic in code; the model only adds translations and scores borderline hits.
 - Tests offline: fixture API replies for a clean name, a live company clash and a registered mark clash.
+- GitHub implementation: `run.py` beside this file (jobkit).

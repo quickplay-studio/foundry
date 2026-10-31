@@ -55,3 +55,4 @@ Free first. GitHub Actions, the GitHub API, the venture's free host (Cloudflare 
 - Never link to a private repo file from the portal; copy the file or leave it out.
 - Keep the leak check as a separate function with its own test so it cannot be skipped by accident.
 - Personal data of anyone in a recap is removed before sharing; when unsure, leave the recap out.
+- GitHub implementation: `run.py` beside this file (jobkit).

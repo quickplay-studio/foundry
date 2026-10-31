@@ -56,3 +56,4 @@ Free first. Gemini 2.5 Flash and Groq free tiers, Firecrawl free tier, `pdftotex
 - A `confidence` below 0.7 goes to review whatever the model said. Confidence is the share of required fields found verbatim in the source text.
 - Keep the raw text out of git unless the repo is private and the documents are Charlie's own.
 - QA (`qa-and-verification`) re-runs ten real documents through this job and compares by hand-checked answers.
+- GitHub implementation: `run.py` beside this file (jobkit).

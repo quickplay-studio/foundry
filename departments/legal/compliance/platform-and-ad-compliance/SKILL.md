@@ -57,3 +57,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) fo
 - Policy pages change; read them fresh each run and record the date. Keep a checklist in code, not in the prompt, so results are repeatable.
 - Re-run on every new or edited asset. A failed read is `caution`, not `clear`.
 - Tests offline: fixtures with a clean listing, an unsupported "best" claim, and an undisclosed influencer post.
+- GitHub implementation: `run.py` beside this file (jobkit).

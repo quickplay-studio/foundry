@@ -55,3 +55,4 @@ Free first. git, a fact-collection script in Python stdlib, GitHub Actions for t
 - If the product has changed since QA, re-run `qa-and-verification` first.
 - Keep `handoff.md` to one page. Link to the runbook for detail.
 - Voice from `brain/company.md`: plain, short, UK English, no dashes, no exclamation marks.
+- GitHub implementation: `run.py` beside this file (jobkit).

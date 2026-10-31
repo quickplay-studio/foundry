@@ -55,3 +55,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 - Fees change often; the fee table is always read fresh and dated.
 - Writes the chosen providers to `board.json` only after Charlie records them; `payment-tracking` reads this.
 - Tests offline with saved pricing page fixtures.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -95,9 +95,13 @@ MODEL_CHAIN = [
 ]
 
 
-def ask_json(prompt, skipped=None):
-    """Try each free model in turn; return (parsed JSON, model name) or (None, None)."""
-    for name, call in MODEL_CHAIN:
+def ask_json(prompt, skipped=None, prefer=None):
+    """Try each free model in turn; return (parsed JSON, model name) or (None, None).
+
+    prefer="groq" or "gemini" moves that family to the front, for a second opinion
+    from a different model family (adversarial-verification)."""
+    chain = sorted(MODEL_CHAIN, key=lambda m: 0 if prefer and m[0].startswith(prefer) else 1) if prefer else MODEL_CHAIN
+    for name, call in chain:
         try:
             text = call(prompt)
             start, end = text.find("{"), text.rfind("}")

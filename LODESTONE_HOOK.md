@@ -20,12 +20,15 @@ Add a step 2b to `docs/CONSOLE_SYNC_TASK.md`:
 - The push triggers Foundry's `launch` workflow. No PAT, no cross-repo token.
 
 ## 3. Foundry reports back
-The same sync task, once per day:
+The same sync task, once per day, also copies every venture in Foundry's `docs/radar-data.json` into the Foundry Radar page's database (collection `ventures`, one doc per slug, pinned versions) so the six command centres are current. Then:
 - for every `ventures/<slug>/board.json` in Foundry whose `verdict` changed, `update` the Lodestone idea doc: `foundry_stage`, `foundry_verdict`, `foundry_updated`, and the status: `live` when the Run stage reports revenue, `watching` when the verdict is `park`, `dropped` when validate says no-go (with the reason in `notes`).
 - Lodestone's overrides file gets the same status so the sweep never resurrects a parked idea as new.
 
 ## 4. Lodestone dashboard (GitHub Pages, when enabled)
 Show a `Deploy` link on validated ideas that pre-fills a GitHub issue in Foundry labelled `deploy` with the idea JSON in the body, for the days the pinned page is not open. Foundry's `launch` workflow gains an `issues: labeled` trigger that writes `idea.json` from the issue body.
+
+## Status (31 Oct 2026)
+Done: Deploy button and `live` status on the pinned Lodestone page; steps 2b and 2c written into Lodestone's `docs/CONSOLE_SYNC_TASK.md`; `foundry/dashboards.py` and the Radar page. Not done: the live scheduled task's prompt still needs updating from that file (Charlie pastes it), and part 4 (GitHub Pages fallback) waits for Pages.
 
 ## What never crosses
 Lodestone never reads Foundry's skills or runs them. Foundry never scores or searches for ideas. Request and launch text is data on both sides.

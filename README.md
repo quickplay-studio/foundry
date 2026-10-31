@@ -6,7 +6,7 @@ Foundry is Charlie's AI workforce: 151 agent jobs across 8 departments, every on
 
 1. Lodestone finds an idea and Charlie marks it `validated`, then presses Deploy. The idea arrives here as `ventures/<slug>/idea.json`.
 2. `.github/workflows/launch.yml` runs `python -m foundry.launch`: the audit engine (Gemini, then Groq, then a heuristic, all free) picks the jobs that apply to this idea, orders them by stage and dependency, and writes `brain.md`, `plan.md`, `board.json` and `budget.json` in the venture folder.
-3. Departments run their jobs in stage order (`playbooks/deploy-order.md`). Solo jobs run on GitHub Actions with free models. Assisted jobs open a pull request. Human jobs write a one-page brief and stop. Complicated jobs run in Claude Code with Sonnet, Opus as advisor.
+3. Departments run their jobs in stage order (`playbooks/deploy-order.md`). `.github/workflows/jobs.yml` runs every morning: `python -m foundry.jobs` takes the next ready `runs_on: github` jobs for each venture whose stage gate is open, has a free model do each one from its skill file and the brains, and writes the output into the venture folder. Solo jobs are marked done; assisted and human jobs are marked review for Charlie. `runs_on: claude-code` jobs wait for a Claude Code session (Sonnet, Opus as advisor). Charlie moves a stage on by setting its gate to `passed` in `board.json`.
 4. Ads are the one thing that costs money: Marketing writes the brief, Charlie approves the budget and pays the platform. Back Office tracks spend and revenue weekly and applies the kill rule.
 5. The verdict goes back to Lodestone: `live`, parked (`watching`) or `dropped`.
 
@@ -18,9 +18,11 @@ Foundry is Charlie's AI workforce: 151 agent jobs across 8 departments, every on
 - `foundry/`: `audit`, `launch`, `scaffold`, `util`.
 - `ventures/<slug>/`: everything about one venture. `sample` is a test fixture.
 - `playbooks/deploy-order.md`: stages, outputs, gates, kill rule.
-- `dashboards/`: the six command centres (session 9).
-- `docs/map.html`: the visual skill tree.
+- `docs/radar.html`: the Foundry Radar, six command centres on one pinned Claude page, fed from `docs/radar-data.json` by the daily sync.
+- `docs/map.html`: the visual skill tree, pinned too; rebuild with `python -m foundry.mapbuild` after skills change.
+- `foundry/jobs.py`: the GitHub job runner. `foundry/dashboards.py`: radar data.
 - `cli/foundry.sh`: `status`, `sync` (into `~/.claude/skills`), `zip` (for the Claude app).
+- `templates/venture/`: what a new venture repo starts from (Operations `project-scaffolding`).
 - `LODESTONE_HOOK.md`: the changes Lodestone needs (session 10).
 
 ## Secrets

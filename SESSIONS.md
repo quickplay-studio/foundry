@@ -4,6 +4,14 @@ One Claude Code session per department, Sonnet doing the work, Opus consulted at
 
 ## Done
 - Session 0 (31 Oct 2026): index, scaffold, brain template, audit engine, launch pipeline, deploy order, map page, Lodestone hook spec.
+- Session 1 (31 Oct 2026, eight Sonnet agents in parallel): every department filled; job runner (`foundry/jobs.py`, `jobs.yml`); Radar page and `foundry/dashboards.py`; venture template; Lodestone Deploy button and sync steps.
+
+## Open points from the department agents
+- Operations: no job builds the MVP itself; `project-scaffolding` opens one issue per MVP bullet for a Claude Code session in the venture repo. Decide whether an `mvp-build` job is wanted.
+- Intelligence: `adversarial-verification` wants a `prefer` argument on `util.ask_json` to force Groq against Gemini; `tech-stack-detection` needs `foundry/data/fingerprints.json`; `vertical-analysis` installs pytrends in its own step.
+- Legal: UK IPO and EUIPO search pages may not read through Firecrawl; the skill then says unverified and flags caution. Apple, Google Play, domain and trade mark fees are flagged for Charlie, never paid by an agent.
+- Customer and Operations chose thresholds (auto-reply confidence 0.85, 80 percent usage warning, 90 percent pass on agent evaluation) that Charlie may want to tune.
+- Contracts between jobs that need a check once two departments run together: `validate/<job>.json` shapes, `sell/market-map.json`, `meetings/<date>-<title>.json`, `qa/result.json`.
 
 ## Brief for a department session
 Paste, replacing `<dept>`:
@@ -19,8 +27,8 @@ Paste, replacing `<dept>`:
 6. `back-office` (the weekly run and the kill rule)
 7. `sales`
 8. `deals`
-9. Audit, dashboards and CLI session: make `audit.py` consult filled skills' `breaks_into`, build the six command centres in `dashboards/` from `ventures/*/board.json`, finish `cli/foundry.sh`.
-10. Lodestone hook session: apply `LODESTONE_HOOK.md` in the Lodestone repo and on the pinned Lodestone page.
+9. Hardening session: make `audit.py` consult filled skills' `breaks_into`; give `foundry/jobs.py` tool calls (Firecrawl, Apify, Companies House) so GitHub jobs can fetch, not only reason; the open points above.
+10. First real venture: press Deploy in Lodestone, watch the validate stage run, fix what breaks.
 
 ## Weekly drop
 Every Sunday the Ideas Inbox batch may add one job to `map/tree.json`; `python -m foundry.scaffold` creates its stub; the next department session fills it.

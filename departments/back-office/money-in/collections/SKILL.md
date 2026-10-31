@@ -60,3 +60,4 @@ Gemini 2.5 Flash for the draft, then Groq, then a fixed template per touch; as o
 - The three templates live in `foundry/templates/collections/` and the model only fills names, dates and one personal line; a template alone must be good enough.
 - Tests offline: touch selection by day count, promised-date hold, consumer skip, no draft after touch 3.
 - Late-payment interest rules differ for consumers and businesses; do not code a rate, always read the gov.uk page.
+- GitHub implementation: `run.py` beside this file (jobkit).

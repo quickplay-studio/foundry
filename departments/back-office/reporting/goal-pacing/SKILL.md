@@ -55,3 +55,4 @@ Python stdlib. Gemini 2.5 Flash or Groq free tier for the paragraph; as of Oct 2
 - One module, `foundry/pacing.py`. Tests offline: no target, no revenue, one month only, a parked venture, a capped trend.
 - Keep the forecast honest: three data points is a guess, so print how many months it rests on.
 - The target-line format is a proposal for the brain interview; confirm it when Charlie next runs `brain/INTERVIEW.md`.
+- GitHub implementation: `run.py` beside this file (jobkit).

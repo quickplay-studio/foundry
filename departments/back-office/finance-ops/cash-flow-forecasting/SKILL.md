@@ -59,3 +59,4 @@ Python stdlib. Gemini 2.5 Flash then Groq free tier for the commentary; as of Oc
 - One module, `foundry/cashflow.py`. Integer minor units; currencies other than GBP converted with `office/finance/rates.json` and flagged when no rate exists.
 - Tests offline: unanchored forecast, zero revenue, park venture, buffer breach in week 9, ad budget exhausting mid-horizon.
 - Do not compute VAT, corporation tax or income tax here; those belong to the accountant and to `entity-compliance`.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -57,3 +57,4 @@ No model. Python stdlib `csv` and `hashlib` in a GitHub Actions weekly job. Stri
 - One module, `foundry/payments.py`. Minor-unit integers inside this file; `budget.json` keeps pounds to two decimals, so convert once at the boundary.
 - Tests offline: a Stripe-shaped fixture, a refund, a duplicate file drop, a header that is missing, an unmatched payment.
 - Runs before `budget-tracking` and `revenue-reporting` in the weekly order.
+- GitHub implementation: `run.py` beside this file (jobkit).

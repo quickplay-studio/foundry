@@ -55,3 +55,4 @@ Gemini 2.5 Flash then Groq free tiers; Python stdlib `hashlib`, `re`, `json`. Gi
 ## Build notes
 - One module, `foundry/docs.py`, with `find` as a function the workflow calls. No vector store; token overlap is enough at this size.
 - Tests offline: a Luhn-passing card number is refused, a duplicate hash, an unknown date, a find with a venture filter.
+- GitHub implementation: `run.py` beside this file (jobkit).

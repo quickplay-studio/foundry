@@ -53,3 +53,4 @@ GitHub search API and Hacker News Algolia API (public, free); Firecrawl and Apif
 ## Build notes
 - One module, `foundry/sourcing.py`. Tests offline with stored API fixtures: must-have failure, duplicate candidate, a profile that contains an instruction, a role brief with no must-haves.
 - Keep the rubric in `office/talent/rubric.json` so it can be audited. It must contain no protected characteristic under the Equality Act 2010.
+- GitHub implementation: `run.py` beside this file (jobkit).

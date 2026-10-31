@@ -57,3 +57,4 @@ Python stdlib. ECB reference rates over plain HTTP. Gemini 2.5 Flash then Groq f
 - One module, `foundry/revenue.py`. Amounts in minor units, converted once, half-up rounding.
 - Tests offline: refund in a later month, a second currency with and without a rate, an empty portfolio, a re-run of the same month.
 - `office/` is a new root folder for all portfolio-level back-office data; the dashboards session should read `office/finance/` as well as `ventures/*/`.
+- GitHub implementation: `run.py` beside this file (jobkit).

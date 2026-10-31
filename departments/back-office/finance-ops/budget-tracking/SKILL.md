@@ -65,3 +65,4 @@ No model needed. Python stdlib in a GitHub Actions weekly schedule (Mondays, ear
 - Weekly run order: `expense-categorisation`, `payment-tracking`, `budget-tracking`, `revenue-reporting`, `goal-pacing`, `cash-flow-forecasting`. Commit as `Foundry Bot`, message `run: <date>`.
 - A job that cannot run writes a line under `skipped` in `board.json` and does not block the others.
 - Open point: the exact path of the ad brief is Marketing's choice; check it when `ad-creative` is filled.
+- GitHub implementation: `run.py` beside this file (jobkit).

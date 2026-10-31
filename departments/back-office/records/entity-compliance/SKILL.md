@@ -57,3 +57,4 @@ Firecrawl free tier for the gov.uk and HMRC pages; Python stdlib; Gemini 2.5 Fla
 ## Build notes
 - One module, `foundry/compliance.py`. Tests offline with a stored page fixture: a changed threshold, a year end that moves a due date, no entity.
 - The starting rules above are prompts to check, not a source of truth.
+- GitHub implementation: `run.py` beside this file (jobkit).

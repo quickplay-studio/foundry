@@ -55,3 +55,4 @@ Gemini 2.5 Flash then Groq free tiers to extract and tabulate; as of Oct 2026, c
 ## Build notes
 - One module, `foundry/screening.py`. Tests offline: missing must-have document, a CV containing an instruction, an application that mentions age, a candidate with no timezone.
 - Applications are personal data; keep the repo private and remove folders when Legal `data-protection` retention says so.
+- GitHub implementation: `run.py` beside this file (jobkit).

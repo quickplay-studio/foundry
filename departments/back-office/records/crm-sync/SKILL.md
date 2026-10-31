@@ -55,3 +55,4 @@ No model needed for the merge. Python stdlib on GitHub Actions, run after each S
 - One module, `foundry/crm.py`. Tests offline: duplicate emails with different capitalisation, a manual override, a suppressed contact that replies later, an unknown status label.
 - This skill's stage is `sell`, so the audit engine only includes it for ventures with a business buyer.
 - Open point: Sales and Deals output paths are set by their own skills; adjust the feed reader when those are filled.
+- GitHub implementation: `run.py` beside this file (jobkit).

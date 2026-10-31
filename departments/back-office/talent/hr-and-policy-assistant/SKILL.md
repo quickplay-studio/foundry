@@ -53,3 +53,4 @@ Gemini 2.5 Flash then Groq free tiers; Python stdlib. GitHub Actions on `issues:
 ## Build notes
 - One module, `foundry/hr.py`. Tests offline: a question the handbook covers, one it does not, an escalation topic, a question containing an instruction to ignore the handbook.
 - The handbook itself is a Legal and Charlie task; this skill only reads it.
+- GitHub implementation: `run.py` beside this file (jobkit).

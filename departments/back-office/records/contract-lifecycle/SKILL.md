@@ -56,3 +56,4 @@ Gemini 2.5 Flash then Groq free tiers; Python stdlib; GitHub API through `GH_TOK
 - One module, `foundry/contracts.py`. Tests offline with fixture text: auto-renewal, missing end date, notice deadline in the past, model reply with invented fields rejected because no quote supports them.
 - Reject any extracted field whose quote does not appear in the source text.
 - Open point: the register is empty until the first contract is signed.
+- GitHub implementation: `run.py` beside this file (jobkit).

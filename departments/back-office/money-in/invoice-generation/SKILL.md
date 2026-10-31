@@ -56,3 +56,4 @@ No model. Python stdlib on GitHub Actions, triggered when `invoice-requests.json
 - One module, `foundry/invoices.py`, plus one HTML template with a CSS variable for the accent colour taken from the venture's brand file if present.
 - Tests offline: rounding, mixed VAT, gapless numbering after a rejected request, idempotent re-run.
 - Multi-currency invoices are issued in the customer's currency; conversion to GBP happens in `revenue-reporting`, never here.
+- GitHub implementation: `run.py` beside this file (jobkit).

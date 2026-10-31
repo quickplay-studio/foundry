@@ -53,3 +53,4 @@ Gemini 2.5 Flash then Groq free tiers; Python stdlib `mailbox`, `csv`, `re`; as 
 ## Build notes
 - One module, `foundry/triage.py`. Tests offline with a three-message fixture mbox: phishing look-alike domain, a customer, a newsletter, and a body that tries to give the job an instruction.
 - Draft replies are out of scope for this skill; if wanted later, add them as a separate assisted job so autonomy stays honest.
+- GitHub implementation: `run.py` beside this file (jobkit).

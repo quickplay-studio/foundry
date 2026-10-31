@@ -55,3 +55,4 @@ Python stdlib `csv`. Gemini 2.5 Flash then Groq free tiers for the uncertain row
 - One module, `foundry/expenses.py`. Keep the rules file small and readable; it is the real asset.
 - Tests offline: a rule hit, a model reply with an invalid category, a digit run stripped, a re-run that adds nothing.
 - Receipts are filed by `document-filing-and-retrieval`; link by its index id, not by copying files.
+- GitHub implementation: `run.py` beside this file (jobkit).

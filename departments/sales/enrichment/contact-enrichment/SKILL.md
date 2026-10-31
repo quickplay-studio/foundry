@@ -53,3 +53,4 @@ Firecrawl free tier, Companies House API, Hunter free plan, Gemini 2.5 Flash for
 ## Build notes
 - Extract with a regex first, Gemini only for ambiguous pages, to save free quota.
 - Tests: a page fixture with a role address and a named address; assert a guessed pattern is never written.
+- GitHub implementation: `run.py` beside this file (jobkit).

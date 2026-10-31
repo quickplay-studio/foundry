@@ -53,3 +53,4 @@ Gemini 2.5 Flash then Groq for scripts (as of Oct 2026, check the limit). Charli
 ## Build notes
 - Word-count check is code: over 190 words fails.
 - Tests: a script without a dossier fact fails; a send line without the unsubscribe footer in its email wrapper fails.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -52,3 +52,4 @@ Gmail API free quota. Consumer accounts have lower daily limits than Workspace (
 ## Build notes
 - Build `.github/workflows/sell-send.yml` and `foundry/sales/send.py` (stdlib plus `requests`). Tests mock the Gmail API.
 - Never log message bodies or tokens in Actions output.
+- GitHub implementation: `run.py` beside this file (jobkit).

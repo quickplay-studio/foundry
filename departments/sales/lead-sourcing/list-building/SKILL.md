@@ -53,3 +53,4 @@ Python standard library only. Gemini 2.5 Flash only to settle ambiguous segment 
 ## Build notes
 - Idempotent: running twice changes nothing. Tests: duplicate across two sources, a suppressed domain, a gmail.com address on a company row.
 - `leads.csv` is the contract for every later Sales job; change columns only by appending.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -54,3 +54,4 @@ Google DNS over HTTPS, Hunter free plan, an in-repo disposable-domain list. No p
 ## Build notes
 - A `likely` address is not proven. The first 10 sends of a campaign act as the real test; the deliverability job reads the bounce rate.
 - Tests: offline, DNS responses monkeypatched; cover a bounce adding to suppression.
+- GitHub implementation: `run.py` beside this file (jobkit).

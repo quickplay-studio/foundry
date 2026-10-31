@@ -52,3 +52,4 @@ Gemini 2.5 Flash then Groq for drafting (as of Oct 2026, check the limit). No Li
 ## Build notes
 - Length check is code. Tests: a 201-character note fails; a message with no dossier fact fails.
 - Keep the queue to tier A and 15 rows at most.
+- GitHub implementation: `run.py` beside this file (jobkit).

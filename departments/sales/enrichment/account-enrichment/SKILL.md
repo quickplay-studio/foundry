@@ -52,3 +52,4 @@ Companies House API, Firecrawl free tier, Google DNS over HTTPS, `requests` (as 
 ## Build notes
 - Keep fingerprint rules in data, not code: a short JSON map of tag to pattern, easy to extend.
 - Tests: homepage and DNS fixtures; assert an unknown stack stays blank and a dissolved company is flagged.
+- GitHub implementation: `run.py` beside this file (jobkit).

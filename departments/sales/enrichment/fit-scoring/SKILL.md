@@ -53,3 +53,4 @@ Python standard library for the sums, Gemini 2.5 Flash then Groq for the pain sc
 ## Build notes
 - Run twice: once after account-enrichment, once after email-verification, since reachability changes.
 - Tests: a lead per tier, one disqualified, one manual override that must survive.
+- GitHub implementation: `run.py` beside this file (jobkit).

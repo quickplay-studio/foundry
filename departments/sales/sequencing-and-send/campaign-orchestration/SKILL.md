@@ -59,3 +59,4 @@ Python standard library. Gemini 2.5 Flash only to explain a cadence choice in th
 ## Build notes
 - Deterministic: the same inputs give the same file. Tests: a suppressed lead gets no touch, an individual gets no email, weekends shift.
 - Lead ids in a campaign are frozen once it is `live`; new leads join a new cohort.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -53,3 +53,4 @@ Hacker News Algolia API, Apify free credit, Gemini 2.5 Flash or Groq for the rol
 ## Build notes
 - A thin file is the right result: a dozen real people beat a thousand scraped handles.
 - Tests: a fixture with a hobbyist and a business owner; assert the hobbyist is dropped and no email field is filled.
+- GitHub implementation: `run.py` beside this file (jobkit).

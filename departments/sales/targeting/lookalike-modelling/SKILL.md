@@ -56,3 +56,4 @@ Python standard library for the lift maths; Gemini 2.5 Flash for the notes (as o
 - Plain counting, no machine-learning library. The point is a transparent list Charlie can read.
 - Idle until the first 5 customers; the skip line is the expected state for a new venture.
 - Tests: a 6-customer fixture where one SIC prefix dominates, and a 4-customer fixture that must skip.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -56,3 +56,4 @@ Companies House API, Firecrawl free tier, Google News RSS, Gemini 2.5 Flash then
 - Poll, do not stream, until a venture needs speed; the Companies House streaming API is a later option.
 - Dedupe on `company_number + trigger_type + evidence_url`.
 - Tests: fixtures for officers, filings and an RSS feed; assert a hit without evidence is dropped.
+- GitHub implementation: `run.py` beside this file (jobkit).

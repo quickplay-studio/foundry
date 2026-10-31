@@ -54,3 +54,4 @@ Companies House API, Firecrawl free tier, the other free registers above (as of 
 ## Build notes
 - Cache each API response under `raw/cache/` (git-ignored) so a re-run costs no calls.
 - Tests: fixtures for company and officer JSON; assert no date of birth reaches the CSV.
+- GitHub implementation: `run.py` beside this file (jobkit).

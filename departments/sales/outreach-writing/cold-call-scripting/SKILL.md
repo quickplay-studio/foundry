@@ -53,3 +53,4 @@ Gemini 2.5 Flash then Groq for drafting (as of Oct 2026, check the limit). No pa
 ## Build notes
 - Keep to one page per segment. Tests: assert the rules block is the first section.
 - Revise after the first 10 calls using `calls.csv` outcomes.
+- GitHub implementation: `run.py` beside this file (jobkit).

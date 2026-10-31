@@ -92,10 +92,11 @@ def test_jobs_gates_and_skip(monkeypatch, tmp_path):
     board = json.loads((dst / "board.json").read_text())
     validate = [j for j in board["jobs"] if j["stage"] == "validate"]
     later = [j for j in board["jobs"] if j["stage"] != "validate"]
-    assert all(jobs.can_run(board, j) for j in validate)
+    assert any(jobs.can_run(board, j) for j in validate)
+    assert all(jobs.can_run(board, j) for j in validate if jobs.deps_done(board, j))
     assert not any(jobs.can_run(board, j) for j in later)
     board["gates"]["validate"] = "passed"
-    assert any(jobs.can_run(board, j) for j in later if j["stage"] == "clear")
+    assert any(jobs.can_run(board, j) for j in later if j["stage"] == "clear" and jobs.deps_done(board, j))
     monkeypatch.setattr(util, "VENTURES", tmp_path)
     monkeypatch.setattr(jobs, "run_script", lambda script, folder, job, dry_run=False: {"skipped": "no free model answered: test"})
     assert jobs.run_venture("sample", 1) == 0  # no free model: nothing runs, nothing is lost
@@ -148,3 +149,22 @@ def test_end_to_end_with_a_fake_model(monkeypatch, tmp_path):
     monkeypatch.setattr(dashboards, "OUT", tmp_path / "radar-data.json")
     data = dashboards.main()
     assert data["ventures"][0]["stages"]["validate"]["done"] >= 1
+
+
+def test_dependencies_and_halt_gate_the_runner(monkeypatch, tmp_path):
+    from foundry import jobs
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None, prefer=None: (None, None))
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
+    launch.run_one("sample", root=tmp_path)
+    board = json.loads((dst / "board.json").read_text())
+    by_id = {j["id"]: j for j in board["jobs"]}
+    assert jobs.can_run(board, by_id["vertical-analysis"])
+    assert not jobs.can_run(board, by_id["research-reports"]), "waits for the validate jobs it builds on"
+    by_id["vertical-analysis"]["status"] = "done"
+    for dep in ("vertical-analysis", "competitor-teardown", "tam-market-sizing", "pricing-research"):
+        by_id[dep]["status"] = "done"
+    assert jobs.can_run(board, by_id["research-reports"])
+    board["verdict"] = "blocked"
+    assert not jobs.can_run(board, by_id["vertical-analysis"]), "a blocked venture waits for Charlie"

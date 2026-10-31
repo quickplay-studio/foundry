@@ -51,3 +51,4 @@ Gemini 2.5 Flash then Groq to phrase the lines (as of Oct 2026, check the limit)
 ## Build notes
 - A new venture has no customers. Honest demand evidence plus a clear price beats a made-up case study; the job must produce that, not skip.
 - Tests: an input with no customers must yield type `demand` lines only.
+- GitHub implementation: `run.py` beside this file (jobkit).

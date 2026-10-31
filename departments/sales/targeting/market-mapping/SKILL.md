@@ -54,3 +54,4 @@ Companies House API (free key; as of Oct 2026, check the limit and terms). Firec
 - Write rows as they arrive and keep `market-map-state.json` with the last `start_index`, so a run cut by the Actions time limit resumes.
 - Tests use a saved API response fixture; never call the live API in tests.
 - Re-run quarterly. New companies join the map; none are deleted, only marked `inactive`.
+- GitHub implementation: `run.py` beside this file (jobkit).

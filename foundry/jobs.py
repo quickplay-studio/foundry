@@ -52,16 +52,26 @@ def ready(text):
     return bool(re.search(r"^status:\s*ready", text, re.M))
 
 
+HALT_VERDICTS = ("blocked", "park", "kill")
+
+
+def deps_done(board, job):
+    """Every builds_on job that is on this board has produced its output (done or review)."""
+    status = {j["id"]: j["status"] for j in board["jobs"]}
+    meta = {j["id"]: j for j in util.all_jobs()}.get(job["id"], {})
+    return all(status.get(dep, "absent") in ("done", "review", "absent") for dep in meta.get("builds_on", []))
+
+
 def can_run(board, job):
     order = audit.STAGE_ORDER
     stage = job["stage"]
-    if stage not in order:
+    if stage not in order or board.get("verdict") in HALT_VERDICTS:
         return False
     for earlier in order[: order.index(stage)]:
         has_jobs = any(j["stage"] == earlier for j in board["jobs"])
         if has_jobs and board["gates"].get(earlier) != "passed":
             return False
-    return True
+    return deps_done(board, job)
 
 
 def venture_files(folder, skill_text, limit=6000):

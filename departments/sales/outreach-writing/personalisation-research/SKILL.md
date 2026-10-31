@@ -54,3 +54,4 @@ Firecrawl free tier, Gemini 2.5 Flash then Groq (as of Oct 2026, check each limi
 ## Build notes
 - Quote verification is a plain substring test in code, not a model judgement.
 - Tests: a page fixture and a model answer containing one invented quote; assert it is dropped.
+- GitHub implementation: `run.py` beside this file (jobkit).

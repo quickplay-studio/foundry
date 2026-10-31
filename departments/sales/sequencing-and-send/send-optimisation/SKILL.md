@@ -51,3 +51,4 @@ Python standard library, the gov.uk bank holiday feed. No paid optimiser.
 ## Build notes
 - Little data early on. Under 100 sends the job only applies the defaults and the bank holiday skip.
 - Tests: a bank holiday is skipped, a cap never exceeds the deliverability cap, a 29-send bucket never wins.
+- GitHub implementation: `run.py` beside this file (jobkit).

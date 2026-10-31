@@ -51,3 +51,4 @@ Google DNS over HTTPS, mail-tester.com free allowance, Google Postmaster Tools, 
 ## Build notes
 - Build `foundry/sales/deliverability.py`. Tests: DNS fixtures for pass and fail, and a bounce series that crosses 3 percent.
 - Read-only on `sent.csv`; it only writes `deliverability.json` and the alert line.
+- GitHub implementation: `run.py` beside this file (jobkit).

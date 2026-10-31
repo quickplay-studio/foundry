@@ -54,3 +54,4 @@ Apify free monthly credit (Google Maps actor), Firecrawl free tier, Companies Ho
 ## Build notes
 - Log credit used per run in `board.json` so the 80 percent stop is auditable.
 - Tests: an actor output fixture with one limited company and one sole trader; assert the sole trader is `individual`.
+- GitHub implementation: `run.py` beside this file (jobkit).

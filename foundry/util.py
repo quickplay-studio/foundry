@@ -90,11 +90,38 @@ def _groq(prompt, model):
     return data["choices"][0]["message"]["content"]
 
 
+def _freellm(prompt, model="auto"):
+    """The FreeLLMAPI router started on the runner by foundry.freellm (OpenAI-compatible, free tiers only)."""
+    key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
+    if not (key and base):
+        raise RuntimeError("FREELLM router not running")
+    body = {"model": model, "temperature": 0.2, "max_tokens": 4000,
+            "messages": [{"role": "system", "content": "Answer with one JSON object and nothing else."},
+                         {"role": "user", "content": prompt}]}
+    data = http_post_json(base + "/chat/completions", body, {"Authorization": f"Bearer {key}"}, timeout=180)
+    return data["choices"][0]["message"]["content"]
+
+
 MODEL_CHAIN = [
+    ("freellm/auto", lambda p: _freellm(p)),
     ("gemini/gemini-2.5-flash", lambda p: _gemini(p, "gemini-2.5-flash")),
     ("gemini/gemini-2.5-flash-lite", lambda p: _gemini(p, "gemini-2.5-flash-lite")),
     ("groq/llama-3.3-70b-versatile", lambda p: _groq(p, "llama-3.3-70b-versatile")),
 ]
+
+
+def search(query, n=5, topic="general"):
+    """Web search through the router (POST FREELLM_BASE/search) while it is up; [] otherwise or on any failure."""
+    key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
+    if not (key and base):
+        return []
+    try:
+        data = http_post_json(base + "/search", {"query": query, "max_results": n, "topic": topic},
+                              {"Authorization": f"Bearer {key}"}, timeout=40)
+        rows = data.get("results", []) if isinstance(data, dict) else data
+        return [{"title": r.get("title", ""), "url": r.get("url", ""), "content": str(r.get("content", ""))[:1500]} for r in rows][:n]
+    except Exception:  # noqa: BLE001
+        return []
 
 
 def ask_json(prompt, skipped=None, prefer=None):

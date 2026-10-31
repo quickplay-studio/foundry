@@ -10,7 +10,7 @@ Foundry is Charlie's AI workforce: 167 agent jobs across 9 departments, every on
 ## How it works
 
 1. A venture goes into the private data repo as `ventures/<slug>/idea.json` (`INTAKE.md`: the GitHub web editor, `python -m foundry.intake`, or a Claude chat).
-2. `.github/workflows/launch.yml` (every four hours) runs `python -m foundry.launch --all`: the audit engine (Gemini, then Groq, then a heuristic, all free) picks the jobs that apply to this idea, orders them by stage and dependency, and writes `brain.md`, `plan.md`, `board.json` and `budget.json` in the venture folder.
+2. `.github/workflows/launch.yml` (every four hours) runs `python -m foundry.launch --all`: the audit engine (the free router first, then any Gemini or Groq key, then a heuristic) picks the jobs that apply to this idea, orders them by stage and dependency, and writes `brain.md`, `plan.md`, `board.json` and `budget.json` in the venture folder.
 3. Departments run their jobs in stage order (`playbooks/deploy-order.md`). `.github/workflows/jobs.yml` runs every morning: `python -m foundry.jobs` takes the next ready `runs_on: github` jobs for each venture whose stage gate is open, has a free model do each one from its skill file and the brains, and writes the output into the venture folder. Solo jobs are marked done; assisted and human jobs are marked review for Charlie. `runs_on: claude-code` jobs wait for a Claude Code session (Sonnet, Opus as advisor). Charlie moves a stage on by setting its gate to `passed` in `board.json`.
 4. Ads are the one thing that costs money: Marketing writes the brief, Charlie approves the budget and pays the platform. Back Office tracks spend and revenue weekly and applies the kill rule.
 5. The verdict lives in `board.json` (`continue`, `scale`, `park`, `kill`) and on the Foundry Radar page once the optional sync task (`docs/FOUNDRY_SYNC_TASK.md`) is set up.
@@ -25,7 +25,7 @@ Foundry is Charlie's AI workforce: 167 agent jobs across 9 departments, every on
 - `playbooks/deploy-order.md`: stages, outputs, gates, kill rule.
 - `docs/radar.html`: the Foundry Radar, six command centres on one pinned Claude page, fed from the private repo's `radar-data.json` by the daily sync.
 - `docs/map.html`: the visual skill tree, pinned too; rebuild with `python -m foundry.mapbuild` after skills change.
-- `foundry/jobs.py`: the GitHub job runner. `foundry/dashboards.py`: radar data.
+- `foundry/jobs.py`: the GitHub job runner. `foundry/dashboards.py`: radar data. `foundry/freellm.py` and `.github/actions/freellm`: the free model router, pinned in `config.json`.
 - `cli/foundry.sh`: `status`, `sync` (into `~/.claude/skills`), `zip` (for the Claude app).
 - `templates/venture/`: what a new venture repo starts from (Operations `project-scaffolding`).
 - `INTAKE.md`: how a venture goes in. `foundry/intake.py`: the local command. `templates/idea.template.json`: the shape.
@@ -33,7 +33,7 @@ Foundry is Charlie's AI workforce: 167 agent jobs across 9 departments, every on
 
 ## Secrets
 
-Settings, Secrets and variables, Actions, on this repo: `VENTURES_TOKEN` (a fine-grained personal access token, repository access limited to `foundry-ventures`, permission Contents: read and write; required), `GEMINI_API_KEY` (Google AI Studio, free) and optionally `GROQ_API_KEY`, `FIRECRAWL_API_KEY`, `APIFY_TOKEN`, `COMPANIES_HOUSE_API_KEY`. Without a model key the audit uses the heuristic and jobs wait.
+Settings, Secrets and variables, Actions, on this repo. Required: `VENTURES_TOKEN` (a fine-grained personal access token, repository access limited to `foundry-ventures`, permission Contents: read and write). That is all: the models come from the FreeLLMAPI router (`foundry/freellm.py`, the same router Quickplay runs), started in Docker on the runner for each job over free, keyless tiers, so no Gemini, Groq or Claude key is needed. Optional, each a free plan with no card: `TAVILY_API_KEY`, `EXA_API_KEY`, `FIRECRAWL_API_KEY` or `LINKUP_API_KEY` (web search through the router), `OLLAMA_API_KEY` and `LLM7_API_KEY` (more chat capacity), `APIFY_TOKEN`, `COMPANIES_HOUSE_API_KEY`. If the router cannot start, the job falls back to `GEMINI_API_KEY` or `GROQ_API_KEY` when present, else the heuristic, and tries again next run.
 
 ## Run locally
 

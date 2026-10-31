@@ -45,6 +45,17 @@ jobs:
       - name: Test
         run: python -m pytest -q tests
 
+      - name: Free model router (FreeLLMAPI on the runner, fails open)
+        uses: ./.github/actions/freellm
+        continue-on-error: true
+        with:
+          tavily: ${{ secrets.TAVILY_API_KEY }}
+          exa: ${{ secrets.EXA_API_KEY }}
+          firecrawl: ${{ secrets.FIRECRAWL_API_KEY }}
+          linkup: ${{ secrets.LINKUP_API_KEY }}
+          ollama: ${{ secrets.OLLAMA_API_KEY }}
+          llm7: ${{ secrets.LLM7_API_KEY }}
+
       - name: Launch
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -57,6 +68,12 @@ jobs:
             python -m foundry.launch --slug "$SLUG"
           fi
           python -m foundry.dashboards
+
+      - name: Router stats, then stop it
+        if: ${{ always() }}
+        uses: ./.github/actions/freellm
+        continue-on-error: true
+        with: { mode: stats }
 
       - name: Commit venture data
         working-directory: data

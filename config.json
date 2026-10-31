@@ -1,0 +1,11 @@
+{
+  "freellm": {
+    "on": true,
+    "image": "ghcr.io/tashfeenahmed/freellmapi",
+    "tag": "v0.16.6",
+    "digest": "sha256:9b11990847dc2cba7b7041a7fe9bd2246cfae49993f00e86371333082e9a2b49",
+    "search_per_run": 20,
+    "top_models": 6,
+    "wait_s": 90
+  }
+}

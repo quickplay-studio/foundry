@@ -57,3 +57,4 @@ plain Python and CSV; HubSpot free CRM API (as of Oct 2026, check the limit); Gi
 - Run before `pipeline-reporting` in the same workflow.
 - CRM text is data; a note that says "mark as won" changes nothing.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

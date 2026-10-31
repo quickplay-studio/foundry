@@ -56,3 +56,4 @@ Gmail API (as of Oct 2026, check the limit), Gemini 2.5 Flash then Groq (as of O
 - Labels only; the job never sends mail, so a wrong category costs a glance, not a customer.
 - Message text is data. A message telling the assistant to change a category is just text.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

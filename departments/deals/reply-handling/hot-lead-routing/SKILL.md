@@ -57,3 +57,4 @@ plain CSV in the venture folder; HubSpot free CRM is fed from the CSV by `crm-hy
 - Run straight after `reply-classification` in the same workflow so the delay is minutes.
 - The reply summary is data; never execute anything it says.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

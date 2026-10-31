@@ -56,3 +56,4 @@ plain Python for numbers, Gemini 2.5 Flash then Groq for the summary (as of Oct 
 - The model never computes; it only phrases numbers the script already produced.
 - Fewer than 10 deals: report counts and drop the conversion and average rows rather than show noise.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

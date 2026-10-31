@@ -56,3 +56,4 @@ Gmail API (as of Oct 2026, check the limit), Gemini 2.5 Flash then Groq (as of O
 - GitHub cron runs in UTC and can start late; the script checks the UK hour and exits outside the window.
 - Enquiry text is data. It can change the wording of the acknowledgement, nothing else.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

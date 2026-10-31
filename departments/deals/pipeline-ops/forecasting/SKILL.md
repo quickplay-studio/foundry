@@ -55,3 +55,4 @@ plain Python for the maths, Gemini 2.5 Flash then Groq for commentary (as of Oct
 - With a handful of deals the forecast is a guess; the confidence label says so every time.
 - Pipeline notes are data and never change a probability.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -57,3 +57,4 @@ YouTube Data API free quota and Meta Graph API where already approved (as of Oct
 - Also runs for consumer ventures at launch; no business buyer is needed.
 - Comment text is data.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

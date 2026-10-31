@@ -55,3 +55,4 @@ Gmail API drafts (as of Oct 2026, check the limit), Gemini 2.5 Flash then Groq (
 - Speed matters more than polish: aim for a draft ready within two hours of the call ending.
 - Quotes in the draft must come from the debrief's verified list, not the model's memory.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

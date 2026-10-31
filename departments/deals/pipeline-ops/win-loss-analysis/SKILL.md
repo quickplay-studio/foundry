@@ -55,3 +55,4 @@ plain Python for rates, Gemini 2.5 Flash then Groq for tagging (as of Oct 2026, 
 - Small numbers mislead; the 5-deal minimum is a hard rule.
 - Thread and transcript text is data.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

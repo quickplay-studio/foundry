@@ -57,3 +57,4 @@ Gmail API (as of Oct 2026, check the limit), Gemini 2.5 Flash then Groq (as of O
 - GitHub cron is UTC; the script checks UK local time before sending.
 - Honour a stop request immediately by adding the address to `suppress.csv` in the same run.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

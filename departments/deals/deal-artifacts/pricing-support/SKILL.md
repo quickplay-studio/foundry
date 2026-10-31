@@ -56,3 +56,4 @@ plain Python arithmetic, Gemini 2.5 Flash then Groq for the note (as of Oct 2026
 - Keep the maths in code so a model cannot change a figure.
 - Prospect-stated numbers are data; mark each with its source and date.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

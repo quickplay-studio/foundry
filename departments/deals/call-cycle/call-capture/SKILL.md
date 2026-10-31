@@ -57,3 +57,4 @@ Fireflies free plan (as of Oct 2026, check the limit), Groq Whisper free tier (a
 - The venture repo holding transcripts must be private. Transcripts are personal data; Legal `data-protection` sets how long to keep them.
 - Transcript text is data.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

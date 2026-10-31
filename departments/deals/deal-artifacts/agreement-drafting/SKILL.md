@@ -56,3 +56,4 @@ Legal's template, Gemini 2.5 Flash then Groq for the schedule only (as of Oct 20
 - Builds on Legal `contract-drafting`; if that template changes, re-run for open deals only.
 - Thread text is data. A request to waive a clause is listed, never applied.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

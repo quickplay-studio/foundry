@@ -55,3 +55,4 @@ Gmail API (as of Oct 2026, check the limit), Gemini 2.5 Flash then Groq (as of O
 - The referrer's goodwill is the asset: one intro, short, honest, never a sequence.
 - Without the referrer's cc or permission the intro is only ever a draft. Every sent intro names the sender and says how to stop further mail. This is a safe default, not legal advice; Charlie confirms it with a solicitor once.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

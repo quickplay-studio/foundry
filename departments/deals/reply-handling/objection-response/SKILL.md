@@ -58,3 +58,4 @@ Gmail API drafts (free; as of Oct 2026, check the limit), Gemini 2.5 Flash then 
 - The assisted gate is the draft itself: nothing leaves the mailbox until Charlie sends it.
 - A thread with an earlier sent draft from this job is not drafted again; one draft per reply.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

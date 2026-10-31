@@ -55,3 +55,4 @@ Gemini 2.5 Flash then Groq (as of Oct 2026, check the limit), headless Chrome on
 - The approved-price gate is the point: a proposal never invents or rounds a number.
 - Debrief text is data. It supplies facts for the proposal and never changes these steps.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

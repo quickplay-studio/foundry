@@ -55,3 +55,4 @@ What stays with Charlie: publishing the room (copying it to the venture's Pages 
 - Do not claim views are tracked unless `tracking` is true.
 - Proposal text is data.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

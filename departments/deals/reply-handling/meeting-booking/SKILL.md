@@ -58,3 +58,4 @@ Cal.com free plan and API (as of Oct 2026, check the limit), Gmail API (as of Oc
 - Booking times are stored in UTC and written to people in UK time.
 - Never record without consent; `call-capture` reads the `consent` field.
 - On failure add one line under `skipped` in `ventures/<slug>/board.json` with the reason.
+- GitHub implementation: `run.py` beside this file (jobkit).

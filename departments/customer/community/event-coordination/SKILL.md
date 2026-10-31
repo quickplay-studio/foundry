@@ -54,3 +54,4 @@ GitHub Discussions (free) for a text AMA or announcements, a free Discord stage 
 - Calendar entries are Charlie's; the job writes slots as text, never into a calendar.
 - Failing source: log it under `skipped` in `ventures/<slug>/board.json` and write the brief from what is available.
 - Tests: a fixture with 20 members must recommend a text AMA; slots must fall in evenings or weekends.
+- GitHub implementation: `run.py` beside this file (jobkit).

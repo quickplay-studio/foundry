@@ -62,3 +62,4 @@ GitHub Discussions (free) and a free Discord server, both with their own moderat
 - Store a hash of the author handle, not the handle, in the log of a public repo.
 - A failing platform call is logged under `skipped` in `ventures/<slug>/board.json`; the queue is still written.
 - Tests: planted spam, planted email address, planted self-harm line; each must land in its class and action.
+- GitHub implementation: `run.py` beside this file (jobkit).

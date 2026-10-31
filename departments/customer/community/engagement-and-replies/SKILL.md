@@ -60,3 +60,4 @@ GitHub Discussions (free), a free Discord server if one exists, Hacker News Algo
 - Under 5 items a week the job should still run; an empty queue is written as "nothing new".
 - Failing source: skip it, log the reason under `skipped` in `ventures/<slug>/board.json`, write the rest.
 - Tests: fixture threads for each class; a thread saying "I'm 15" must produce no draft.
+- GitHub implementation: `run.py` beside this file (jobkit).

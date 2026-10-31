@@ -57,3 +57,4 @@ PostHog free tier and the payment provider's read access (as of Oct 2026, check 
 - If PostHog or the payment source fails, score what is available, mark `partial: true`, and log the reason under `skipped` in `ventures/<slug>/board.json`.
 - Do not commit emails or names. `user_id` only.
 - Tests: fixture events and payments with one account per band, one failed payment cap, one cancel cap.
+- GitHub implementation: `run.py` beside this file (jobkit).

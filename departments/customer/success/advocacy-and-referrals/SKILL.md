@@ -56,3 +56,4 @@ Python stdlib plus `requests`; Gemini 2.5 Flash and Groq free tiers for drafts. 
 - Under 20 users there may be no eligible candidates. Write "none eligible" and stop.
 - Store only `user_id`; the real contact stays in the inbox tool.
 - Tests: a user with an open ticket must never be selected; a draft offering a free month for a review must be rejected.
+- GitHub implementation: `run.py` beside this file (jobkit).

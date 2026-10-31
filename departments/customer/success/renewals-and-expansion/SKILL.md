@@ -56,3 +56,4 @@ Python stdlib plus `requests`; Gemini 2.5 Flash and Groq free tiers for the note
 - If payments cannot be read, write a brief from health alone and log the gap under `skipped` in `ventures/<slug>/board.json`.
 - Keep user ids only; no names or emails in the brief.
 - Tests: fixture with one annual renewal at 20 days, one amber monthly account, one green account at a plan limit; each must land in its class.
+- GitHub implementation: `run.py` beside this file (jobkit).

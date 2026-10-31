@@ -63,3 +63,4 @@ Python stdlib plus `requests` for the rules and back-test; no model needed for s
 - Consumer subscriptions: a user who wants to cancel must be able to; the notes never obstruct cancelling.
 - If health history is missing, run on the current snapshot only and log it under `skipped` in `ventures/<slug>/board.json`.
 - Tests: fixture history with one planted churner must be caught at 14 days out.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -54,3 +54,4 @@ GitHub Discussions (free), PostHog free tier for milestone events (as of Oct 202
 - A refusal is final: `refused` is never asked again.
 - Keep a handle hash, not the handle, in the committed JSON if the repo is public.
 - Tests: a candidate with an open complaint is skipped; a draft with a quote not in the source text is rejected.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -58,3 +58,4 @@ Python stdlib plus `requests` for all arithmetic. Gemini 2.5 Flash and Groq free
 - Missing source: leave its rows blank, note it at the top, and log it under `skipped` in `ventures/<slug>/board.json`.
 - Under 30 paying users, add one line saying the percentages move a lot on small counts.
 - Tests: a fixture quarter with known counts must reproduce every number in the table.
+- GitHub implementation: `run.py` beside this file (jobkit).

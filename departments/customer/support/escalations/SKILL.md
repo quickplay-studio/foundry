@@ -54,3 +54,4 @@ Gemini 2.5 Flash and Groq free tiers for case summaries. GitHub Issues as the al
 - A run with no triggers writes "No escalations" and opens no issue.
 - Never copy full message text into the issue if the repo is public; use the ticket id and summary only.
 - Tests: a fixture with a planted refund threat and a planted incident must both appear, ranked by deadline.
+- GitHub implementation: `run.py` beside this file (jobkit).

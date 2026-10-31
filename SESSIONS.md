@@ -6,6 +6,16 @@ One Claude Code session per department, Sonnet doing the work, Opus consulted at
 - Session 0 (31 Oct 2026): index, scaffold, brain template, audit engine, launch pipeline, deploy order, map page, Lodestone hook spec.
 - Session 1 (31 Oct 2026, eight Sonnet agents in parallel): every department filled; job runner (`foundry/jobs.py`, `jobs.yml`); Radar page and `foundry/dashboards.py`; venture template; Lodestone Deploy button and sync steps; split into public code repo and private `foundry-ventures` data repo because private-repo Actions were blocked on the account.
 
+- Session 2 (31 Oct 2026, nine Sonnet agents): a `run.py` for every one of the 149 GitHub jobs, the `jobkit` helpers, the offline harness (`tests/test_runs.py`), cross-department contracts (`foundry/contracts.py`, `map/contracts.json`) with the seams fixed, the runner gated on dependencies with recurring run and support jobs and three-attempt skips, the FreeLLMAPI router, and a local full-lifecycle drive with the fake model (`FOUNDRY_FAKE_MODEL=1`) that ran every stage of three ventures without a script crashing.
+
+## Known gaps after session 2
+- Live APIs were never called from this sandbox (its proxy blocks them): Hacker News, Reddit, App Store, YouTube, Meta, Gmail, Cal.com, HubSpot, Fireflies, Pexels, Companies House, ONS. The first real runs may need small query fixes; every call is wrapped and logs a skip.
+- Nothing posts, sends, pays or opens issues from GitHub. Where a skill wanted that, the script writes the commands or draft to a file. A later session can add a `sell-send` workflow (Gmail) and issue-opening with a scoped token.
+- Claude Code jobs (18 of 167) wait for a session: icp-definition, cold-email-drafting, demo-prototyping, project-scaffolding, integration-builds, data-migration, portal-provisioning, qa-and-verification, buying-committee-mapping, onboarding-journeys, calendar-management, onboarding-and-training, video-production, terms-of-service, privacy-policy, contract-drafting, nda-and-agreements, ip-assignment.
+- PDFs are read only when pypdf is installed (guarded); renders need ffmpeg or ImageMagick on the runner (both present on ubuntu-latest) and headless Chrome for PDF pages (pending).
+- Jobs outside a launch stage (email-triage, talent, HR) run only on demand: `python -m foundry.jobs --slug <slug> --job <id>`, or the jobs workflow with the job input.
+- bank-and-payments-setup and research-reports can return a stop; the runner then sets `verdict: blocked` and waits for Charlie to override in writing or kill.
+
 ## Open points from the department agents
 - Operations: no job builds the MVP itself; `project-scaffolding` opens one issue per MVP bullet for a Claude Code session in the venture repo. Decide whether an `mvp-build` job is wanted.
 - Intelligence: `adversarial-verification` wants a `prefer` argument on `util.ask_json` to force Groq against Gemini; `tech-stack-detection` needs `foundry/data/fingerprints.json`; `vertical-analysis` installs pytrends in its own step.

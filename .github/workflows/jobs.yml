@@ -60,12 +60,28 @@ jobs:
           llm7: ${{ secrets.LLM7_API_KEY }}
 
       - name: Run jobs
-        env:
+        env:  # every one optional; a missing key skips that step and logs it
+          GH_TOKEN: ${{ github.token }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ secrets.POSTHOG_PROJECT_ID }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          SUPPORT_IMAP_USER: ${{ secrets.SUPPORT_IMAP_USER }}
+          SUPPORT_IMAP_PASSWORD: ${{ secrets.SUPPORT_IMAP_PASSWORD }}
+          HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
+          HUBSPOT_TOKEN: ${{ secrets.HUBSPOT_TOKEN }}
+          CALCOM_API_KEY: ${{ secrets.CALCOM_API_KEY }}
+          CALCOM_BOOKING_URL: ${{ secrets.CALCOM_BOOKING_URL }}
+          FIREFLIES_API_KEY: ${{ secrets.FIREFLIES_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          DEAL_ROOM_PING_URL: ${{ secrets.DEAL_ROOM_PING_URL }}
         run: |
           python -m foundry.launch --all
           SLUG="${{ github.event.inputs.slug || 'all' }}"

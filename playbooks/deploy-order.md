@@ -2,8 +2,10 @@
 
 What runs when a Lodestone idea is deployed, what each stage must produce, and the gate that opens the next one. The audit engine (`foundry/audit.py`) picks the jobs for the specific idea; this is the order and the rules.
 
-## 0. Deploy
-Lodestone marks the idea `building` and writes `ventures/<slug>/idea.json` here. The `launch` workflow runs the audit and writes `brain.md`, `plan.md`, `board.json`, `budget.json`. Cost: nothing. Time: two minutes.
+## 0. Intake
+`ventures/<slug>/idea.json` lands in the data repo (`INTAKE.md`). The `launch` workflow runs the audit and writes `brain.md`, `plan.md`, `board.json`, `budget.json`. Cost: nothing. Time: two minutes.
+
+By kind: an `app` builds software; a `channel` builds the content pipeline and launches on the platforms; `shop`, `tiktok-shop` and `dropshipping` add the Commerce department (product selection and landed cost in validate, marketplace compliance in clear, shop setup and catalogue in build, listings and creators in launch, fulfilment in run, returns and reviews in support); a `service` keeps the sell stage.
 
 ## 1. Validate (Intelligence, free models on GitHub)
 Jobs: `regulatory-screen`, `vertical-analysis`, `competitor-teardown`, `pricing-research`, `tam-market-sizing`, `trend-monitoring`, `audience-analysis`, `research-reports`, `adversarial-verification`.
@@ -38,7 +40,7 @@ Gate: first real ticket answered.
 ## 7. Run (Back Office, weekly)
 Jobs: `budget-tracking`, `revenue-reporting`, `goal-pacing`, `cash-flow-forecasting`, `expense-categorisation`, `payment-tracking`, `news-and-mention-tracking`, `context-maintenance`.
 Output: `budget.json` current, one weekly line in `board.json`: spent, revenue, sign-ups, cost per sign-up, verdict.
-Kill rule: if after the approved budget the venture has no revenue and no sign-up trend, the verdict is `park`, the idea goes back to Lodestone as `watching`, and the agents stop. The dashboards keep the record.
+Kill rule: if after the approved budget the venture has no revenue and no sign-up trend, the verdict is `park` and the agents stop. The Radar keeps the record.
 
 ## Rules that hold in every stage
 - Every job reads `brain/company.md` and the venture brain first.

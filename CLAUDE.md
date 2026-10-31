@@ -1,12 +1,13 @@
 # Foundry: rules for Claude sessions
 
-Foundry is Charlie's AI workforce: 151 agent jobs across 8 departments (Sales, Deals, Marketing, Operations, Intelligence, Customer, Back Office, Legal), each a skill file, all reading one second brain. Lodestone finds the app ideas; Foundry takes a validated idea and runs it through validate, clear, build, launch, sell, support and run. Modelled on SkillTree by Altari, with Legal added.
+Foundry is Charlie's AI workforce: 167 agent jobs across 9 departments (Sales, Deals, Marketing, Operations, Intelligence, Customer, Back Office, Legal, Commerce), each a skill file, all reading one second brain. It is a standalone project: any venture (an app, a content channel such as Quickplay, an online shop, a TikTok Shop, dropshipping, a service) goes in as one `idea.json` (`INTAKE.md`) and runs through validate, clear, build, launch, sell, support and run. Modelled on SkillTree by Altari, with Legal and Commerce added. Lodestone integration is parked (`docs/LODESTONE_LATER.md`).
 
 ## Hard rules
 
 - UK English. No em or en dashes anywhere, commits included; use commas, colons or full stops. `tests/test_foundry.py` fails on one.
 - Free tools only until a venture has made money; never create accounts; no card on file. The one exception is ad spend, which Charlie funds and approves per campaign. Keys only from GitHub secret env vars: `GEMINI_API_KEY`, `GROQ_API_KEY`, `GH_TOKEN` (`github.token`); optional `FIRECRAWL_API_KEY`, `APIFY_TOKEN`, `COMPANIES_HOUSE_API_KEY`, `POSTHOG_API_KEY`, `POSTHOG_PROJECT_ID`, `SUPPORT_IMAP_USER`, `SUPPORT_IMAP_PASSWORD`, `DISCORD_BOT_TOKEN`, `PAYMENTS_READ_KEY`. A skill whose key is missing skips that step and logs it; CSV exports in the venture folder are the fallback.
-- Separate from Quickplay and from Lodestone's code: never import or copy their code. Lodestone talks to Foundry only through `ventures/<slug>/idea.json`.
+- Two repos. This one (`quickplay-studio/foundry`) is public: code, skills, workflows, the map; GitHub Actions is free on it. `quickplay-studio/foundry-ventures` is private: every venture, the office folder and `radar-data.json`; the workflows check it out into `data/` with the `VENTURES_TOKEN` secret and commit back to it. `data/` is git-ignored here and nothing from it is ever committed to the public repo. Paths in skills (`ventures/<slug>/...`, `office/...`) are relative to the private repo's root, which is `data/` locally.
+- Other projects (Quickplay, Lodestone, Helm) are ventures or neighbours, never code dependencies: never import or copy their code, and never edit their repos from here. A venture that already has its own repo gets briefs and reports in `ventures/<slug>/`; Charlie carries changes across.
 - Nothing in `departments/legal/` is legal advice. Every legal job is assisted or human; drafts get a solicitor or Charlie before use.
 - Python 3.12 stdlib plus `requests`; pytest dev only. Short code, no frameworks. Tests offline.
 - A skill never calls Claude. Routine jobs run on GitHub Actions with free models (Gemini, then Groq, then a heuristic); complicated jobs run in a Claude Code session, Sonnet doing the work, Opus as advisor (`.claude/settings.json`).
@@ -24,10 +25,10 @@ Foundry is Charlie's AI workforce: 151 agent jobs across 8 departments (Sales, D
 - `brain/`: `company.md` (Charlie's offers, voice, constraints), `INTERVIEW.md` (how the brain is built), `ventures/` is a symlink-free pointer: venture brains live in `ventures/<slug>/brain.md`.
 - `departments/<dept>/<function>/<job>/SKILL.md`: one skill per job. Frontmatter from the index; body per `templates/SKILL.template.md`. `status: stub` until a department session fills it.
 - `foundry/`: `util` (dates, slugify, JSON, HTTP, model chain), `audit` (marks the tree for a venture and orders the jobs), `launch` (idea.json to brain, plan and board), `jobs` (runs `runs_on: github` jobs in plan order on the free models, gated by stage), `dashboards` (board and budget into `docs/radar-data.json`), `scaffold` (index to folders and stubs), `mapbuild` (index into `docs/map.html`). `cli/foundry.sh`: status, sync into Claude Code, zip for the Claude app.
-- `ventures/<slug>/`: `idea.json` (from Lodestone), `brain.md`, `plan.md`, `board.json`, `budget.json`, `audit.json`, then stage folders (`validate/`, `clear/`, `build/`, `launch/`, `sell/`, `support/`, `finance/`). Job status in `board.json`: `todo`, `review` (assisted or human output waiting for Charlie), `done`, `blocked`, `skipped`. Gates: `open`, `passed`, `failed`; Charlie sets `passed`. Verdict: `pending`, `continue`, `scale`, `park`, `kill`.
+- `data/` (private checkout, git-ignored): `ventures/<slug>/`, `office/`, `radar-data.json`. `ventures/<slug>/`: `idea.json` (from Lodestone), `brain.md`, `plan.md`, `board.json`, `budget.json`, `audit.json`, then stage folders (`validate/`, `clear/`, `build/`, `launch/`, `sell/`, `support/`, `finance/`). Job status in `board.json`: `todo`, `review` (assisted or human output waiting for Charlie), `done`, `blocked`, `skipped`. Gates: `open`, `passed`, `failed`; Charlie sets `passed`. Verdict: `pending`, `continue`, `scale`, `park`, `kill`.
 - `playbooks/deploy-order.md`: the stage order and gates.
-- `dashboards/`: notes on the six command centres. The live page is the pinned Foundry Radar (a Claude page with a database); `docs/radar-data.json` is what the daily Lodestone console sync copies into it.
-- `.github/workflows/launch.yml`: runs on a push that adds or changes `ventures/*/idea.json`. `jobs.yml`: daily 05:23 UTC, runs up to 5 ready GitHub jobs across ventures in plan order, then rebuilds `docs/radar-data.json`.
+- `dashboards/`: notes on the six command centres. The live page is the pinned Foundry Radar (a Claude page with a database); the private repo's `radar-data.json` is what the daily Lodestone console sync copies into it.
+- `.github/workflows/launch.yml`: every four hours, launches any venture in the private repo that has an `idea.json` and no `board.json`. `jobs.yml`: daily 05:23 UTC, launches the same way, then runs up to 5 ready GitHub jobs across ventures in plan order, then rebuilds `radar-data.json`. Both commit to the private repo only.
 - `SESSIONS.md`: the brief for each department session.
 
 ## Working in the repo
@@ -35,4 +36,4 @@ Foundry is Charlie's AI workforce: 151 agent jobs across 8 departments (Sales, D
 - Commit as `Foundry Bot <foundry@users.noreply.github.com>` for bot commits (`launch: <slug>`), plain imperative otherwise.
 - Before pushing: `python -m pytest -q tests`, then `git pull --rebase`.
 - Offline checks: `python -m foundry.launch --slug sample --dry-run` and `python -m foundry.jobs --slug sample --dry-run` must write nothing.
-- Foundry stays private: venture brains, meeting transcripts and support data live here.
+- Local setup: `git clone https://github.com/quickplay-studio/foundry-ventures data` inside this repo, or `mkdir -p data/ventures` and drop `tests/fixtures/sample-idea.json` in as `data/ventures/sample/idea.json` to try the pipeline.

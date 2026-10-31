@@ -26,7 +26,7 @@ def test_tree_is_consistent():
     ids = [j["id"] for j in jobs]
     assert len(ids) == len(set(ids)), "duplicate job id"
     assert len(ids) >= 151
-    assert {d["id"] for d in tree["departments"]} == {"sales", "deals", "marketing", "operations", "intelligence", "customer", "back-office", "legal"}
+    assert {d["id"] for d in tree["departments"]} == {"sales", "deals", "marketing", "operations", "intelligence", "customer", "back-office", "legal", "commerce"}
     for j in jobs:
         assert j["autonomy"] in ("solo", "assisted", "human"), j["id"]
         assert j.get("stage") in (None, *audit.STAGE_ORDER), j["id"]
@@ -44,9 +44,12 @@ def test_scaffold_matches_tree():
 
 
 def test_heuristic_audit_and_order():
-    idea = json.loads((ROOT / "ventures" / "sample" / "idea.json").read_text())
+    idea = json.loads((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
     result = audit.heuristic(idea, util.all_jobs())
     assert result["model"] == "b2b"
+    assert not any(k["id"] == "order-routing" for k in result["keep"])  # an app keeps no commerce jobs
+    shop = audit.heuristic(dict(idea, kind="tiktok-shop"), util.all_jobs())
+    assert any(k["id"] == "order-routing" for k in shop["keep"])
     ordered = audit.topo_order([j for j in util.all_jobs() if j["id"] in {k["id"] for k in result["keep"]}])
     seen = set()
     for j in ordered:
@@ -60,10 +63,9 @@ def test_heuristic_audit_and_order():
 
 def test_dry_run_writes_nothing(monkeypatch, tmp_path):
     monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None: (None, None))
-    src = ROOT / "ventures" / "sample"
     dst = tmp_path / "sample"
     dst.mkdir()
-    (dst / "idea.json").write_text((src / "idea.json").read_text())
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
     out = launch.run_one("sample", dry_run=True, root=tmp_path)
     assert set(dst.iterdir()) == {dst / "idea.json"}
     assert out["board.json"]["jobs"] and out["board.json"]["model_used"] == "heuristic"
@@ -74,7 +76,7 @@ def test_launch_writes_all_files(monkeypatch, tmp_path):
     monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None: (None, None))
     dst = tmp_path / "sample"
     dst.mkdir()
-    (dst / "idea.json").write_text((ROOT / "ventures" / "sample" / "idea.json").read_text())
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
     launch.run_one("sample", root=tmp_path)
     assert {p.name for p in dst.iterdir()} == {"idea.json", "brain.md", "plan.md", "board.json", "budget.json", "audit.json"}
     assert json.loads((dst / "budget.json").read_text())["ad_budget"] == 100
@@ -85,7 +87,7 @@ def test_jobs_gates_and_skip(monkeypatch, tmp_path):
     monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None: (None, None))
     dst = tmp_path / "sample"
     dst.mkdir()
-    (dst / "idea.json").write_text((ROOT / "ventures" / "sample" / "idea.json").read_text())
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
     launch.run_one("sample", root=tmp_path)
     board = json.loads((dst / "board.json").read_text())
     validate = [j for j in board["jobs"] if j["stage"] == "validate"]

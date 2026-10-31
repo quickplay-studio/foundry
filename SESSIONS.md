@@ -4,7 +4,7 @@ One Claude Code session per department, Sonnet doing the work, Opus consulted at
 
 ## Done
 - Session 0 (31 Oct 2026): index, scaffold, brain template, audit engine, launch pipeline, deploy order, map page, Lodestone hook spec.
-- Session 1 (31 Oct 2026, eight Sonnet agents in parallel): every department filled; job runner (`foundry/jobs.py`, `jobs.yml`); Radar page and `foundry/dashboards.py`; venture template; Lodestone Deploy button and sync steps.
+- Session 1 (31 Oct 2026, eight Sonnet agents in parallel): every department filled; job runner (`foundry/jobs.py`, `jobs.yml`); Radar page and `foundry/dashboards.py`; venture template; Lodestone Deploy button and sync steps; split into public code repo and private `foundry-ventures` data repo because private-repo Actions were blocked on the account.
 
 ## Open points from the department agents
 - Operations: no job builds the MVP itself; `project-scaffolding` opens one issue per MVP bullet for a Claude Code session in the venture repo. Decide whether an `mvp-build` job is wanted.
@@ -27,8 +27,9 @@ Paste, replacing `<dept>`:
 6. `back-office` (the weekly run and the kill rule)
 7. `sales`
 8. `deals`
+8b. `commerce` (shops, TikTok Shop, dropshipping; added 31 Oct 2026)
 9. Hardening session: make `audit.py` consult filled skills' `breaks_into`; give `foundry/jobs.py` tool calls (Firecrawl, Apify, Companies House) so GitHub jobs can fetch, not only reason; the open points above.
-10. First real venture: press Deploy in Lodestone, watch the validate stage run, fix what breaks.
+10. First real ventures: `quickplay-daily` (channel) and a real product in `tiktok-shop-pilot`; watch the validate stage run, fix what breaks. Lodestone hook later (`docs/LODESTONE_LATER.md`).
 
 ## Weekly drop
 Every Sunday the Ideas Inbox batch may add one job to `map/tree.json`; `python -m foundry.scaffold` creates its stub; the next department session fills it.

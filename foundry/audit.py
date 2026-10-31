@@ -10,11 +10,13 @@ from . import util
 
 STAGE_ORDER = ["validate", "clear", "build", "launch", "sell", "support", "run"]
 
-PROMPT = """You are the audit engine of an AI workforce. A new product idea is below, and after it the list of agent jobs the workforce can run, one per line as id | department | stage | summary.
+COMMERCE_KINDS = ("shop", "tiktok-shop", "dropshipping")
+
+PROMPT = """You are the audit engine of an AI workforce. A new venture is below (its kind is one of app, channel, shop, tiktok-shop, dropshipping, service), and after it the list of agent jobs the workforce can run, one per line as id | department | stage | summary.
 
 Return JSON only: {{"model": "b2b" or "b2c" or "both", "reasoning": "<two sentences>", "keep": [{{"id": "<job id>", "why": "<ten words max>"}}], "drop": ["<job id>", ...], "first_three": ["<job id>", "<job id>", "<job id>"]}}
 
-Keep a job if it does real work for this specific idea in the next ninety days. Drop jobs that only make sense for an agency, a team or a different business model. Drop the whole sell stage for a consumer app unless it has a business buyer. first_three is what to run on day one.
+Keep a job if it does real work for this specific venture in the next ninety days. Drop jobs that only make sense for an agency, a team or a different business model. Drop the whole sell stage unless the venture has a business buyer. Keep commerce department jobs only for kinds shop, tiktok-shop and dropshipping. For a channel, the build stage is the content pipeline and the launch stage is distribution. first_three is what to run on day one.
 
 IDEA
 {idea}
@@ -49,11 +51,14 @@ def topo_order(jobs):
 def heuristic(idea, jobs):
     text = json.dumps(idea).lower()
     b2b = any(w in text for w in ["business", "agency", "agencies", "team", "b2b", "saas", "client", "firm", "company", "companies", "enterprise", "freelancer", "founder", "startup", "developer", "indie", "professional"])
+    kind = str(idea.get("kind", "app")).lower()
     keep, drop = [], []
     for j in jobs:
         if not j.get("stage"):
             drop.append(j["id"])
         elif j["stage"] == "sell" and not b2b:
+            drop.append(j["id"])
+        elif j["department"] == "commerce" and kind not in COMMERCE_KINDS:
             drop.append(j["id"])
         else:
             keep.append({"id": j["id"], "why": "staged job, heuristic"})
@@ -66,12 +71,15 @@ def run(idea, tree=None, skipped=None):
     tree = tree or util.load_tree()
     jobs = util.all_jobs(tree)
     lines = "\n".join(f"{j['id']} | {j['department']} | {j.get('stage') or 'none'} | {j['summary']}" for j in jobs)
-    idea_text = json.dumps({k: idea.get(k) for k in ("title", "problem", "who", "gap", "mvp", "money", "category")}, ensure_ascii=False)
+    idea_text = json.dumps({k: idea.get(k) for k in ("title", "kind", "problem", "who", "gap", "mvp", "money", "category", "channels", "note")}, ensure_ascii=False)
     result, model = util.ask_json(PROMPT.format(idea=idea_text, jobs=lines), skipped)
     valid = {j["id"] for j in jobs}
     if not result or not isinstance(result.get("keep"), list):
         result, model = heuristic(idea, jobs), "heuristic"
-    keep = [k for k in result["keep"] if isinstance(k, dict) and k.get("id") in valid]
+    kind = str(idea.get("kind", "app")).lower()
+    by_id = {j["id"]: j for j in jobs}
+    keep = [k for k in result["keep"] if isinstance(k, dict) and k.get("id") in valid
+            and not (by_id[k["id"]]["department"] == "commerce" and kind not in COMMERCE_KINDS)]
     keep_ids = {k["id"] for k in keep}
     why = {k["id"]: str(k.get("why", ""))[:80] for k in keep}
     ordered = topo_order([j for j in jobs if j["id"] in keep_ids])

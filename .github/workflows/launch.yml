@@ -1,21 +1,25 @@
 name: launch
 
+# Foundry's code and skills are public so GitHub Actions is free. Venture data
+# lives in the private repo quickplay-studio/foundry-ventures, checked out into
+# data/ with VENTURES_TOKEN (a fine-grained token with contents read and write
+# on that one repo). Nothing from data/ is ever committed here.
+
 on:
-  push:
-    paths:
-      - "ventures/*/idea.json"
+  schedule:
+    - cron: "23 */4 * * *"
   workflow_dispatch:
     inputs:
       slug:
-        description: "venture slug under ventures/, or all"
+        description: "venture slug under data/ventures/, or all"
         required: false
         default: all
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: launch
+  group: foundry
   cancel-in-progress: false
 
 jobs:
@@ -23,6 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check out venture data (private)
+        uses: actions/checkout@v4
+        with:
+          repository: quickplay-studio/foundry-ventures
+          token: ${{ secrets.VENTURES_TOKEN }}
+          path: data
 
       - uses: actions/setup-python@v5
         with:
@@ -47,15 +58,16 @@ jobs:
           fi
           python -m foundry.dashboards
 
-      - name: Commit
+      - name: Commit venture data
+        working-directory: data
         run: |
           git config user.name "Foundry Bot"
           git config user.email "foundry@users.noreply.github.com"
-          git add ventures docs/radar-data.json
+          git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
-          git commit -m "launch: $(git diff --cached --name-only | cut -d/ -f2 | sort -u | tr '\n' ' ')"
+          git commit -m "launch: $(git diff --cached --name-only | grep '^ventures/' | cut -d/ -f2 | sort -u | tr '\n' ' ')"
           git pull --rebase
           git push

@@ -10,7 +10,9 @@ import requests
 
 ROOT = Path(__file__).resolve().parent.parent
 TREE = ROOT / "map" / "tree.json"
-VENTURES = ROOT / "ventures"
+DATA = ROOT / "data"  # private checkout of quickplay-studio/foundry-ventures
+VENTURES = DATA / "ventures"
+OFFICE = DATA / "office"
 DEPARTMENTS = ROOT / "departments"
 
 

@@ -1,5 +1,9 @@
 name: jobs
 
+# Daily: launch any venture that has an idea.json but no board, then run up to
+# five ready GitHub jobs across ventures in plan order. Same private data
+# checkout as launch.yml; see the note there.
+
 on:
   schedule:
     - cron: "23 5 * * *"
@@ -15,10 +19,10 @@ on:
         default: ""
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: launch
+  group: foundry
   cancel-in-progress: false
 
 jobs:
@@ -26,6 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check out venture data (private)
+        uses: actions/checkout@v4
+        with:
+          repository: quickplay-studio/foundry-ventures
+          token: ${{ secrets.VENTURES_TOKEN }}
+          path: data
 
       - uses: actions/setup-python@v5
         with:
@@ -43,7 +54,9 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
         run: |
+          python -m foundry.launch --all
           SLUG="${{ github.event.inputs.slug || 'all' }}"
           JOB="${{ github.event.inputs.job }}"
           if [ "$SLUG" = "all" ]; then
@@ -55,11 +68,12 @@ jobs:
           fi
           python -m foundry.dashboards
 
-      - name: Commit
+      - name: Commit venture data
+        working-directory: data
         run: |
           git config user.name "Foundry Bot"
           git config user.email "foundry@users.noreply.github.com"
-          git add ventures docs/radar-data.json
+          git add -A
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0

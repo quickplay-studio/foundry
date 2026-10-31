@@ -1,0 +1,16 @@
+{
+  "slug": "short-name-no-spaces",
+  "title": "What the venture is called",
+  "kind": "app | channel | shop | tiktok-shop | dropshipping | service",
+  "category": "money | food | health | productivity | family | home | uk | content | retail | other",
+  "problem": "The problem or want, in one or two sentences.",
+  "who": "Who has it, specifically.",
+  "gap": "Why what exists today does not solve it, or what the opening is.",
+  "mvp": ["The smallest thing that could be sold or published", "second item", "third item"],
+  "money": "How it makes money: price, commission, ads, sponsorship, margin per unit.",
+  "channels": ["youtube", "tiktok", "instagram", "web", "tiktok-shop", "amazon"],
+  "proof": [{"source": "where the demand was seen", "url": ""}],
+  "budget_gbp": 100,
+  "note": "Anything the audit should know: existing accounts, constraints, what is off limits.",
+  "deployed": "YYYY-MM-DD"
+}

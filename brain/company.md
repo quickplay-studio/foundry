@@ -8,7 +8,8 @@ The one file every agent reads before it does anything. Charlie owns it. Built a
 - Working hours: evenings and weekends UK time. Agents run around the clock on GitHub Actions.
 
 ## What we make
-- Small software products for everyday problems (money, food, health, productivity, family, UK life), sourced by Lodestone from what people are already asking for.
+- Small software products for everyday problems (money, food, health, productivity, family, UK life), often sourced by Lodestone from what people are already asking for.
+- Content channels (Quickplay Daily first: automated short-form video on four platforms) and online retail (own store, TikTok Shop, dropshipping) when the numbers in the audit hold.
 - Each venture: one clear problem, one MVP, one way to charge, shipped in weeks not months.
 
 ## Who we sell to

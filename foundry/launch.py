@@ -109,6 +109,9 @@ def main(argv=None):
     p.add_argument("--dry-run", action="store_true")
     a = p.parse_args(argv)
     if a.all:
+        if not util.VENTURES.exists():
+            print("no data/ventures checkout; nothing to launch")
+            return
         for folder in sorted(util.VENTURES.glob("*/idea.json")):
             if not (folder.parent / "board.json").exists():
                 run_one(folder.parent.name, a.dry_run)

@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .DS_Store
+# private venture data: the quickplay-studio/foundry-ventures checkout
+data/
+foundry-skills.zip

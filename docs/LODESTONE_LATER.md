@@ -1,4 +1,6 @@
-# Lodestone hook
+# Lodestone hook (parked, 31 Oct 2026)
+
+Charlie's call: Foundry runs standalone first, applied to Quickplay, online shopping, TikTok Shop and dropshipping. When he wants Lodestone ideas flowing in, this is the design. The Deploy button that was briefly on the Lodestone page has been removed; the Lodestone repo keeps a `live` status and the sync-task text as dormant notes.
 
 How an idea gets from the Lodestone radar into a Foundry launch, and back. Nothing here changes Lodestone's sweep or scoring. Applied in session 10.
 
@@ -16,12 +18,12 @@ On every idea card with status `validated` show a **Deploy** button. Clicking it
 ## 2. Console sync carries it across (the existing daily Claude task)
 Add a step 2b to `docs/CONSOLE_SYNC_TASK.md`:
 - `query` collection `launches` where status == "requested".
-- For each: attach `quickplay-studio/foundry` with push access, clone shallow, write `ventures/<slug>/idea.json` with the launch doc's fields (plus `deployed: <today>`), commit `deploy: <slug>` as Foundry Bot, push. Then `update` the launch doc `status: "sent"`.
-- The push triggers Foundry's `launch` workflow. No PAT, no cross-repo token.
+- For each: attach `quickplay-studio/foundry-ventures` (the private data repo) with push access, clone shallow, write `ventures/<slug>/idea.json` with the launch doc's fields (plus `deployed: <today>`), commit `deploy: <slug>` as Foundry Bot, push. Then `update` the launch doc `status: "sent"`.
+- Foundry's `launch` workflow (public repo, every four hours) picks it up. No cross-repo token in Lodestone.
 
 ## 3. Foundry reports back
-The same sync task, once per day, also copies every venture in Foundry's `docs/radar-data.json` into the Foundry Radar page's database (collection `ventures`, one doc per slug, pinned versions) so the six command centres are current. Then:
-- for every `ventures/<slug>/board.json` in Foundry whose `verdict` changed, `update` the Lodestone idea doc: `foundry_stage`, `foundry_verdict`, `foundry_updated`, and the status: `live` when the Run stage reports revenue, `watching` when the verdict is `park`, `dropped` when validate says no-go (with the reason in `notes`).
+The same sync task, once per day, also copies every venture in foundry-ventures' `radar-data.json` into the Foundry Radar page's database (collection `ventures`, one doc per slug, pinned versions) so the six command centres are current. Then:
+- for every `ventures/<slug>/board.json` in foundry-ventures whose `verdict` changed, `update` the Lodestone idea doc: `foundry_stage`, `foundry_verdict`, `foundry_updated`, and the status: `live` when the Run stage reports revenue, `watching` when the verdict is `park`, `dropped` when validate says no-go (with the reason in `notes`).
 - Lodestone's overrides file gets the same status so the sweep never resurrects a parked idea as new.
 
 ## 4. Lodestone dashboard (GitHub Pages, when enabled)

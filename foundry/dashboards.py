@@ -1,4 +1,4 @@
-"""Build docs/radar-data.json: one document per venture for the Foundry Radar page.
+"""Build data/radar-data.json (in the private foundry-ventures checkout): one document per venture for the Foundry Radar page.
 
 The Radar page (a pinned Claude page with a database) shows the six command
 centres. Nothing on GitHub can write to that database, so the daily console
@@ -10,7 +10,7 @@ import json
 
 from . import audit, util
 
-OUT = util.ROOT / "docs" / "radar-data.json"
+OUT = util.DATA / "radar-data.json"
 
 
 def summarise(folder):
@@ -53,7 +53,7 @@ def main():
     data = {"generated": util.now(), "ventures": docs}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"wrote {OUT.relative_to(util.ROOT)}: {len(docs)} ventures")
+    print(f"wrote {OUT}: {len(docs)} ventures")
     return data
 
 

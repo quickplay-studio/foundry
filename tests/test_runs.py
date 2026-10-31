@@ -37,6 +37,7 @@ def test_run_py_runs_offline(script, tmp_path, monkeypatch):
     idea = {"slug": "t", "title": "Test", "kind": kind, "problem": "p", "who": "business owners", "gap": "g", "mvp": ["one"],
             "money": "m", "channels": ["web"], "budget_gbp": 50}
     ctx = jobkit.test_ctx(tmp_path / "t", idea, board={"jobs": [], "gates": {}, "verdict": "pending"})
+    util.write_json(tmp_path / "t" / "audit.json", {"business_model": "b2b", "jobs": [], "dropped": []})
     mod = load(script)
     result = mod.main(ctx) or {}
     assert isinstance(result, dict)

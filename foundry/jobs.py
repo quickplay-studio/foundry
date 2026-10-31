@@ -11,6 +11,7 @@ names, and returns one output file. Solo jobs are marked done; assisted and huma
 jobs are marked review, so Charlie sees the draft before it is used.
 """
 import argparse
+import os
 import json
 import re
 import sys
@@ -85,6 +86,9 @@ def run_job(folder, board, job, dry_run=False):
         return {"skipped": "skill still a stub"}
     if runs_on(text) != "github":
         return {"skipped": "runs in Claude Code"}
+    script = path.parent / "run.py"
+    if script.exists():
+        return run_script(script, folder, job, dry_run)
     company = (util.ROOT / "brain" / "company.md").read_text(encoding="utf-8")[:6000]
     brain = (folder / "brain.md").read_text(encoding="utf-8")[:6000] if (folder / "brain.md").exists() else ""
     prompt = PROMPT.format(company=company, brain=brain, skill=text[:9000], files=venture_files(folder, text))
@@ -111,6 +115,33 @@ def run_job(folder, board, job, dry_run=False):
         out.write_text(f["content"].rstrip() + "\n", encoding="utf-8")
         written.append(rel)
     return {"output": written[0], "outputs": written, "summary": str(result.get("summary", ""))[:300], "flag": str(result.get("flag", "ok"))[:10], "model": model}
+
+
+def run_script(script, folder, job, dry_run=False):
+    """A job's own run.py: the GitHub implementation of the skill (see foundry.jobkit)."""
+    import subprocess
+    args = [sys.executable, "-P", str(script), "--slug", folder.name, "--folder", str(folder)] + (["--dry-run"] if dry_run else [])
+    env = dict(os.environ, PYTHONPATH=str(util.ROOT))
+    try:
+        proc = subprocess.run(args, capture_output=True, text=True, timeout=1500, env=env, cwd=str(util.ROOT))
+    except subprocess.TimeoutExpired:
+        return {"skipped": "run.py timed out after 25 minutes"}
+    last = [line for line in proc.stdout.strip().splitlines() if line.startswith("{")]
+    if proc.returncode != 0 or not last:
+        tail = (proc.stderr or proc.stdout).strip().splitlines()[-3:]
+        return {"skipped": ("run.py failed: " + " | ".join(tail))[:200]}
+    try:
+        result = json.loads(last[-1])
+    except json.JSONDecodeError:
+        return {"skipped": "run.py printed no result line"}
+    if dry_run:
+        print(f"would run {job['id']} for {folder.name} via run.py: {result.get('outputs')}")
+        return {"dry_run": True}
+    if result.get("skipped") and not result.get("outputs"):
+        return {"skipped": str(result["skipped"])[:200]}
+    outputs = [str(o) for o in result.get("outputs", [])][:12]
+    return {"output": outputs[0] if outputs else f"{job['stage']}/{job['id']}.md", "outputs": outputs,
+            "summary": str(result.get("summary", ""))[:300], "flag": str(result.get("flag", "ok"))[:10], "model": "run.py"}
 
 
 def run_venture(slug, limit, dry_run=False, only=None):

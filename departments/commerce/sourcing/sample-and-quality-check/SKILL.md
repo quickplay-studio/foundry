@@ -58,3 +58,4 @@ Free first. Gemini 2.5 Flash or Groq to turn the complaint themes and compliance
 - The pass rules are written before the sample arrives and are not edited afterwards.
 - Dropshipping: the sample is the only way to see the packaging customers receive, so it is never skipped.
 - Tests offline: fixtures for a supplier list with one and with two affordable samples, and a missing compliance file.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -59,3 +59,4 @@ Free first. GitHub Actions every four hours for a venture with live listings, da
 - Credit use: check each supplier page at most once per run, and fewer for slow-moving skus.
 - Unknown is never treated as in stock.
 - Tests offline: fixtures for stock zero, a supplier page showing out of stock, an unreadable page, a stale stock file, and a price rise that breaks the floor.
+- GitHub implementation: `run.py` beside this file (jobkit).

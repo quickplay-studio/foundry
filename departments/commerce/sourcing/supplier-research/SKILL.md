@@ -58,3 +58,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) an
 - Never fabricate a price or a certificate. A fact that was not on the page is `unknown`.
 - Missing Companies House key: skip that check, log it, mark the supplier `unverified`.
 - Tests offline: fixtures for a UK wholesaler page, an overseas listing with price breaks, and a page with no prices.
+- GitHub implementation: `run.py` beside this file (jobkit).

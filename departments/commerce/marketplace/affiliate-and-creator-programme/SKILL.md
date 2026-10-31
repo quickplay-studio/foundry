@@ -60,3 +60,4 @@ Free first. Gemini 2.5 Flash or Groq to score fit and draft messages; Firecrawl 
 - Commission arithmetic in code, half-up rounding.
 - Creators' personal data stays in the private repo; no lists in public issues.
 - Tests offline: fixtures for a healthy margin, a margin too thin for any commission, and a creator list with bought-follower signs.
+- GitHub implementation: `run.py` beside this file (jobkit).

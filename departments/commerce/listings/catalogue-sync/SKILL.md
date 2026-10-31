@@ -59,3 +59,4 @@ Free first. GitHub Actions on a schedule; Python stdlib for CSV and JSON; Firecr
 - Channel field names change; read the template page each run and keep the date in the report.
 - Half-up rounding to pence; prices as strings with two decimals in the export.
 - Tests offline: fixtures for a valid item, a missing image, a price below the floor, a stale stock file and two channels with different prices.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -63,3 +63,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) an
 - Limits come from the page read that run, not from memory; store the value and the date beside it.
 - Code, not the model, enforces limits and the banned-word list.
 - Tests offline: fixtures for a title over the limit, a missing warning, and a channel with no help-centre page.
+- GitHub implementation: `run.py` beside this file (jobkit).

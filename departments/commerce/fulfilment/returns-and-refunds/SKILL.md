@@ -61,3 +61,4 @@ Free first. Gemini 2.5 Flash or Groq to classify and draft; code for the date ar
 - Statute text is read from legislation.gov.uk with the date recorded, not taken from memory.
 - Dates are counted in code, never by the model.
 - Tests offline: fixtures for a change of mind on day 10, one on day 20, a fault at day 25, a fault at month 4, a sealed hygiene item and a safety complaint.
+- GitHub implementation: `run.py` beside this file (jobkit).

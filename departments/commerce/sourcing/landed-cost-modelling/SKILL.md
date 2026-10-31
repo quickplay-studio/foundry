@@ -66,3 +66,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 - A rate that cannot be found is an explicit assumption in the file, never silently zero.
 - This is not tax advice; duty and VAT treatment is confirmed by Charlie before an order.
 - Tests offline: fixtures for UK-sourced stock, an imported product with duty, a negative margin, and a missing supplier file.
+- GitHub implementation: `run.py` beside this file (jobkit).

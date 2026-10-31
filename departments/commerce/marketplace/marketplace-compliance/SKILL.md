@@ -59,3 +59,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 - Rules and policy lists are read live each run with the date recorded, not taken from memory.
 - Any doubt resolves to the stricter flag.
 - Tests offline: fixtures for a plain homeware item (clear), a USB electrical (caution), a supplement (stop) and a page that cannot be read.
+- GitHub implementation: `run.py` beside this file (jobkit).

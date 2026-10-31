@@ -58,3 +58,4 @@ Free first. GitHub Actions on a schedule (daily is enough until order volume nee
 ## Build notes
 - Customer personal data stays in the private repo only; messages carry the order id, not full addresses.
 - Tests offline: fixtures for a shipped order, a missing tracking number after dispatch time, a parcel with no scan for 4 days, and a delivered order.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -59,3 +59,4 @@ Free first. GitHub Actions hourly on a venture with live orders (about 24 runs a
 - Idempotent: running twice produces no duplicate sheets.
 - A missing `orders.csv` is a normal empty run, not an error.
 - Tests offline: fixtures for a clean order, an unpaid order, a paused sku, a Northern Ireland address, a duplicate id and a two-supplier basket.
+- GitHub implementation: `run.py` beside this file (jobkit).

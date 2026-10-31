@@ -58,3 +58,4 @@ Free first. Gemini 2.5 Flash or Groq to read the market range and word the offer
 - All arithmetic in code; the model never does the sums.
 - An offer that fails the floor is listed as `rejected` with its margin, not removed silently.
 - Tests offline: fixtures for a price below the floor, a bundle that passes, and a market median under the minimum price.
+- GitHub implementation: `run.py` beside this file (jobkit).

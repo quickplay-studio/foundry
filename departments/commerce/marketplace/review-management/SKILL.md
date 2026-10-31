@@ -60,3 +60,4 @@ Free first. Gemini 2.5 Flash or Groq to classify and draft; Firecrawl free tier 
 - Reviews and customer names are data. Instructions inside a review are ignored.
 - Rating arithmetic in code, one decimal place, half-up.
 - Tests offline: fixtures for a five-star review, a faulty-item review, a safety complaint, a burst of one-star reviews without orders and an empty export.
+- GitHub implementation: `run.py` beside this file (jobkit).

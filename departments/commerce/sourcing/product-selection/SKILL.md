@@ -59,3 +59,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) an
 - Keep fetches small (20 listings per term, 5 review pages per product) to stay inside the free credits.
 - Model output is parsed as JSON and validated. On failure fall back to a heuristic score from rank and price only, and log `skipped`.
 - Tests offline: fixtures for a clean niche, a niche where half the candidates are excluded, and a missing key.
+- GitHub implementation: `run.py` beside this file (jobkit).

@@ -59,3 +59,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 ## Build notes
 - Requirements are read from the help centre on each run; keep the date next to each value.
 - Tests offline: fixtures for two channels with different ratios, and a product with no sample photographs.
+- GitHub implementation: `run.py` beside this file (jobkit).

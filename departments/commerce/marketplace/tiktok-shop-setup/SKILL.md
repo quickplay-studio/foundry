@@ -59,3 +59,4 @@ Free first. Firecrawl free tier (500 credits as of Oct 2026, check the limit) to
 - The help centres change often; every step carries its source URL and the date read.
 - Never put credentials, identity numbers or bank details in any file.
 - Tests offline: fixtures for a tiktok-shop venture, one with Shopify and Amazon added, and a stop flag.
+- GitHub implementation: `run.py` beside this file (jobkit).

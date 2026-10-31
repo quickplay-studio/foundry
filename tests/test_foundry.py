@@ -1,0 +1,80 @@
+import json
+import re
+import subprocess
+from pathlib import Path
+
+from foundry import audit, launch, scaffold, util
+
+ROOT = util.ROOT
+DASH = re.compile("[" + chr(0x2013) + chr(0x2014) + "]")
+
+
+def text_files():
+    out = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True)
+    names = out.stdout.split() if out.returncode == 0 else [str(p.relative_to(ROOT)) for p in ROOT.rglob("*") if p.is_file()]
+    return [ROOT / n for n in names if n.endswith((".md", ".py", ".json", ".yml", ".html", ".txt"))]
+
+
+def test_no_dashes_anywhere():
+    bad = [str(p) for p in text_files() if DASH.search(p.read_text(encoding="utf-8", errors="ignore"))]
+    assert not bad, bad
+
+
+def test_tree_is_consistent():
+    tree = util.load_tree()
+    jobs = util.all_jobs(tree)
+    ids = [j["id"] for j in jobs]
+    assert len(ids) == len(set(ids)), "duplicate job id"
+    assert len(ids) >= 151
+    assert {d["id"] for d in tree["departments"]} == {"sales", "deals", "marketing", "operations", "intelligence", "customer", "back-office", "legal"}
+    for j in jobs:
+        assert j["autonomy"] in ("solo", "assisted", "human"), j["id"]
+        assert j.get("stage") in (None, *audit.STAGE_ORDER), j["id"]
+        for b in j["builds_on"]:
+            assert b in ids, f"{j['id']} builds on unknown {b}"
+    legal = [j for j in jobs if j["department"] == "legal"]
+    assert all(j["autonomy"] != "solo" or j["id"] in ("trademark-and-name-check", "licence-audit", "platform-and-ad-compliance") for j in legal)
+
+
+def test_scaffold_matches_tree():
+    created, kept = scaffold.main(check=True)
+    assert len(created) + len(kept) == len(util.all_jobs())
+    for rel in created + kept:
+        assert (ROOT / rel).exists() or created, rel
+
+
+def test_heuristic_audit_and_order():
+    idea = json.loads((ROOT / "ventures" / "sample" / "idea.json").read_text())
+    result = audit.heuristic(idea, util.all_jobs())
+    assert result["model"] == "b2b"
+    ordered = audit.topo_order([j for j in util.all_jobs() if j["id"] in {k["id"] for k in result["keep"]}])
+    seen = set()
+    for j in ordered:
+        for b in j["builds_on"]:
+            if b in {x["id"] for x in ordered}:
+                assert b in seen, f"{j['id']} before its dependency {b}"
+        seen.add(j["id"])
+    stages = [j["stage"] for j in ordered]
+    assert stages == sorted(stages, key=audit.STAGE_ORDER.index)
+
+
+def test_dry_run_writes_nothing(monkeypatch, tmp_path):
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None: (None, None))
+    src = ROOT / "ventures" / "sample"
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((src / "idea.json").read_text())
+    out = launch.run_one("sample", dry_run=True, root=tmp_path)
+    assert set(dst.iterdir()) == {dst / "idea.json"}
+    assert out["board.json"]["jobs"] and out["board.json"]["model_used"] == "heuristic"
+    assert "## Validate" in out["plan.md"]
+
+
+def test_launch_writes_all_files(monkeypatch, tmp_path):
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None: (None, None))
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((ROOT / "ventures" / "sample" / "idea.json").read_text())
+    launch.run_one("sample", root=tmp_path)
+    assert {p.name for p in dst.iterdir()} == {"idea.json", "brain.md", "plan.md", "board.json", "budget.json", "audit.json"}
+    assert json.loads((dst / "budget.json").read_text())["ad_budget"] == 100

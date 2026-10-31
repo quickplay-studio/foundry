@@ -87,7 +87,8 @@ def run(idea, tree=None, skipped=None):
              "autonomy": j["autonomy"], "why": why.get(j["id"], "")} for j in ordered]
     return {
         "audited": util.now(), "model_used": model,
-        "business_model": result.get("model", "unknown"), "reasoning": str(result.get("reasoning", ""))[:400],
+        "business_model": "b2b" if result.get("model") == "both" else result.get("model", "unknown"),
+        "buyers": result.get("model", "unknown"), "reasoning": str(result.get("reasoning", ""))[:400],
         "first_three": [i for i in result.get("first_three", []) if i in keep_ids][:3],
         "jobs": plan, "dropped": sorted(valid - keep_ids),
     }

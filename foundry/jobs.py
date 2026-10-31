@@ -177,7 +177,8 @@ def run_venture(slug, limit, dry_run=False, only=None):
         if only and job_id != only:
             continue
         job = next(j for j in board["jobs"] if j["id"] == job_id)
-        if not (job["status"] == "todo" or due_again(job)) or not can_run(board, job):
+        on_demand = bool(only) and job_id == only  # --job runs a named job whatever its stage or gate, once
+        if not (job["status"] == "todo" or due_again(job) or on_demand) or not (on_demand or can_run(board, job)):
             continue
         result = run_job(folder, board, job, dry_run)
         if result.get("dry_run"):

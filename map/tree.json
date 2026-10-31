@@ -572,7 +572,9 @@
               "title": "Performance Mining",
               "autonomy": "solo",
               "stage": "launch",
-              "builds_on": [],
+              "builds_on": [
+                "publishing"
+              ],
               "summary": "Rank our own content by what worked and what to redo."
             },
             {

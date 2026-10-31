@@ -59,7 +59,8 @@ def deps_done(board, job):
     """Every builds_on job that is on this board has produced its output (done or review)."""
     status = {j["id"]: j["status"] for j in board["jobs"]}
     meta = {j["id"]: j for j in util.all_jobs()}.get(job["id"], {})
-    return all(status.get(dep, "absent") in ("done", "review", "absent") for dep in meta.get("builds_on", []))
+    # a dependency that gave up (skipped) no longer blocks: every script copes with a missing input
+    return all(status.get(dep, "absent") in ("done", "review", "skipped", "absent") for dep in meta.get("builds_on", []))
 
 
 def can_run(board, job):

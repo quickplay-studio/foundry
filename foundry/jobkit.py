@@ -59,6 +59,12 @@ def kind(ctx):
 def read(ctx, rel, default=None):
     path = ctx["folder"] / rel
     if not path.exists():
+        if os.environ.get("FOUNDRY_FAKE_MODEL"):  # local lifecycle runs: record what was wanted and missing
+            try:
+                with open(util.DATA / "office" / "read-misses.log", "a", encoding="utf-8") as f:
+                    f.write(f"{ctx['slug']}\t{sys.argv[0].split('/departments/')[-1].replace('/run.py', '')}\t{rel}\n")
+            except OSError:
+                pass
         return default
     if rel.endswith(".json"):
         return util.read_json(path, default)

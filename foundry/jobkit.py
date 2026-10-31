@@ -105,6 +105,8 @@ def search(query, n=5, topic="general"):
 
 def fetch(url, limit=12000):
     """Page text: Firecrawl scrape when a key exists, else a plain GET with tags stripped. '' on failure."""
+    if os.environ.get("FOUNDRY_FAKE_MODEL"):
+        return f"stub page text for {url}"[:limit]
     key = os.environ.get("FIRECRAWL_API_KEY", "").strip()
     try:
         if key:

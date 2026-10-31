@@ -169,10 +169,16 @@ def due_again(job):
     return (dt.date.today() - last).days >= days
 
 
+MAX_ATTEMPTS = 3  # a job that skips on three different days is marked skipped so its dependants can move on
+
+
 def note_skipped(board, job_id, reason):
-    """One skipped line per job, newest wins, forty kept."""
+    """One skipped line per job (with an attempt count across days), forty kept. Returns the attempt count."""
+    old = next((s for s in board.get("skipped", []) if s.get("job") == job_id), {})
+    attempts = int(old.get("attempts", 0)) + (0 if old.get("date") == util.today() else 1)
     board["skipped"] = [s for s in board.get("skipped", []) if s.get("job") != job_id][-39:]
-    board["skipped"].append({"job": job_id, "reason": reason, "date": util.today()})
+    board["skipped"].append({"job": job_id, "reason": reason, "date": util.today(), "attempts": max(attempts, 1)})
+    return max(attempts, 1)
 
 
 def run_venture(slug, limit, dry_run=False, only=None):
@@ -201,7 +207,9 @@ def run_venture(slug, limit, dry_run=False, only=None):
         job["updated"] = util.now()
         if "skipped" in result:
             reason = result["skipped"]
-            note_skipped(board, job_id, reason)
+            attempts = note_skipped(board, job_id, reason)
+            if attempts >= MAX_ATTEMPTS and not reason.startswith("no free model") and "Claude Code" not in reason and "stub" not in reason:
+                job["status"] = "skipped"  # give up for now; Charlie can set it back to todo
             if reason.startswith("no free model"):
                 board["updated"] = util.now()
                 if not dry_run:

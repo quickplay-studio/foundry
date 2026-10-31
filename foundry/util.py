@@ -112,6 +112,8 @@ MODEL_CHAIN = [
 
 def search(query, n=5, topic="general"):
     """Web search through the router (POST FREELLM_BASE/search) while it is up; [] otherwise or on any failure."""
+    if os.environ.get("FOUNDRY_FAKE_MODEL"):
+        return [{"title": f"stub result for {query[:40]}", "url": "https://example.com/stub", "content": "stub page content"}][:n]
     key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
     if not (key and base):
         return []
@@ -124,11 +126,25 @@ def search(query, n=5, topic="general"):
         return []
 
 
+def fake_answer(prompt):
+    """FOUNDRY_FAKE_MODEL=1: a stub answer shaped by the keys the prompt asks for, for local end-to-end runs."""
+    keys = sorted(set(re.findall(r'"([a-z_]{3,30})":', prompt)))
+    lists = ("items", "rows", "list", "results", "segments", "keep", "areas", "facts", "hooks", "claims", "sources", "steps", "products", "questions", "objections", "drop")
+    out = {k: ([] if k in lists else "clear" if k == "flag" else "stub") for k in keys}
+    out.setdefault("summary", "stub answer from the fake model")
+    out.setdefault("flag", "clear")
+    return out
+
+
 def ask_json(prompt, skipped=None, prefer=None):
     """Try each free model in turn; return (parsed JSON, model name) or (None, None).
 
     prefer="groq" or "gemini" moves that family to the front, for a second opinion
     from a different model family (adversarial-verification)."""
+    if os.environ.get("FOUNDRY_FAKE_MODEL"):
+        if prompt.startswith("You are the audit engine"):
+            return None, None  # the heuristic audit keeps every staged job, which is what a dry lifecycle wants
+        return fake_answer(prompt), "fake"
     chain = sorted(MODEL_CHAIN, key=lambda m: 0 if prefer and m[0].startswith(prefer) else 1) if prefer else MODEL_CHAIN
     for name, call in chain:
         try:

@@ -74,6 +74,7 @@ jobs:
           linkup: ${{ secrets.LINKUP_API_KEY }}
           ollama: ${{ secrets.OLLAMA_API_KEY }}
           llm7: ${{ secrets.LLM7_API_KEY }}
+          cerebras: ${{ secrets.CEREBRAS_API_KEY }}
 
       - name: Run jobs
         env:  # every one optional; a missing key skips that step and logs it

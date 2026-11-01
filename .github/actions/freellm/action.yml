@@ -34,6 +34,10 @@ inputs:
     description: LLM7_API_KEY (optional)
     required: false
     default: ''
+  cerebras:
+    description: CEREBRAS_API_KEY (optional)
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
@@ -48,4 +52,5 @@ runs:
         LINKUP_API_KEY: ${{ inputs.linkup }}
         OLLAMA_API_KEY: ${{ inputs.ollama }}
         LLM7_API_KEY: ${{ inputs.llm7 }}
+        CEREBRAS_API_KEY: ${{ inputs.cerebras }}
       run: cd "$GITHUB_WORKSPACE" && python3 -m foundry.freellm "${MODE:-start}" || echo "FreeLLMAPI router step failed; the job runs without it"

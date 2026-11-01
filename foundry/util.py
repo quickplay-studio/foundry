@@ -116,37 +116,57 @@ def router_models(key, base):
     return _MODELS["order"]
 
 
-def _freellm(prompt, model=None, attempts=4):
+COOL_S = 32  # seconds before the same upstream model is asked again: OVHcloud allows two calls a minute per model
+
+
+def _freellm(prompt, model=None, attempts=9):
     """The FreeLLMAPI router started on the runner by foundry.freellm (OpenAI-compatible, free tiers only).
-    Each attempt asks the next model in router_models order; a 5xx, 429, timeout or empty answer moves on."""
+    Each call goes to the preferred model that has rested longest (router_models order breaks ties), waiting out its
+    cooldown first. A 429 rests that model for a minute; a 5xx, timeout or empty answer counts a fault against it, three
+    faults and this process stops asking it."""
     key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
     if not (key and base):
         raise RuntimeError("FREELLM router not running")
-    models = [model] if model else [m for m in router_models(key, base) if _MODELS.get("bad", {}).get(m, 0) < 2] or ["auto"]
-    last = None
+    order = [model] if model else router_models(key, base)
+    last_call, bad, last = _MODELS.setdefault("last", {}), _MODELS.setdefault("bad", {}), None
     for n in range(attempts):
-        body = {"model": models[min(n, len(models) - 1)], "temperature": 0.2, "max_tokens": 6000,
+        models = [m for m in order if bad.get(m, 0) < 3] or ["auto"]
+        m = min(models, key=lambda x: (last_call.get(x, 0), models.index(x)))
+        wait = last_call.get(m, 0) + COOL_S - time.time()
+        if wait > 0:
+            time.sleep(min(wait, 90))
+        last_call[m] = time.time()
+        body = {"model": m, "temperature": 0.2, "max_tokens": 6000,
                 "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
         try:
             r = requests.post(base + "/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=150)
-            if r.status_code in (429, 500, 502, 503, 504):
-                raise RuntimeError(f"router returned HTTP {r.status_code}")
+            if r.status_code == 429:
+                raise _RateLimited(f"router returned HTTP 429 for {m}")
+            if r.status_code in (500, 502, 503, 504):
+                raise RuntimeError(f"router returned HTTP {r.status_code} for {m}")
             if r.status_code >= 400:
-                raise RuntimeError(f"router returned HTTP {r.status_code}: {r.text[:120]}")
+                raise RuntimeError(f"router returned HTTP {r.status_code} for {m}: {r.text[:100]}")
             data = r.json()
-            LAST_VIA["model"] = (requests.utils.unquote(r.headers.get("X-Routed-Via", "")) or body["model"])[:60]
+            LAST_VIA["model"] = (requests.utils.unquote(r.headers.get("X-Routed-Via", "")) or m)[:60]
             choice = data["choices"][0]
             text = choice["message"]["content"] or ""
             if not text.strip():
-                raise RuntimeError("router answer empty" + (" (finish_reason length)" if choice.get("finish_reason") == "length" else ""))
+                raise RuntimeError(f"router answer empty from {m}" + (" (finish_reason length)" if choice.get("finish_reason") == "length" else ""))
             return text
+        except _RateLimited as exc:
+            last = exc
+            last_call[m] = time.time() + 60 - COOL_S  # rest it for a minute
+            print(f"freellm: {m} rate limited, resting it", file=sys.stderr, flush=True)
         except (requests.RequestException, RuntimeError, KeyError, ValueError) as exc:
             last = exc
-            bad = _MODELS.setdefault("bad", {})
-            bad[body["model"]] = bad.get(body["model"], 0) + 1  # two failures and this process stops asking that model
-            print(f"freellm: {body['model']} failed: {type(exc).__name__}: {str(exc)[:100]}", file=sys.stderr, flush=True)
-            time.sleep(2 * (n + 1))
+            bad[m] = bad.get(m, 0) + 1
+            print(f"freellm: {m} failed: {type(exc).__name__}: {str(exc)[:100]}", file=sys.stderr, flush=True)
+            time.sleep(2)
     raise RuntimeError(str(last)[:160])
+
+
+class _RateLimited(RuntimeError):
+    pass
 
 
 SYSTEM = ("Answer with one JSON object and nothing else: no prose, no code fence. The JSON shape in the request is a template: "

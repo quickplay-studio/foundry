@@ -44,12 +44,13 @@ KEYS = {
     "LINKUP_API_KEY": ("linkup", "web search", "https://app.linkup.so/api-keys", "create an API key (free monthly credits, no card)"),
     "OLLAMA_API_KEY": ("ollama", "chat models", "https://ollama.com/settings/keys", "create an API key (Ollama Cloud, free plan, no card)"),
     "LLM7_API_KEY": ("llm7", "chat models", "https://llm7.io", "get a free token (100 requests an hour, no card)"),
+    "CEREBRAS_API_KEY": ("cerebras", "chat models", "https://cloud.cerebras.ai", "create an API key (free tier, about a million tokens a day, no card): the fastest and steadiest free chat models"),
 }
 KEYLESS_CHAT = ("kilo", "ovh")          # free without a key: Kilo (200 requests an hour per IP), OVHcloud (2 a minute per model)
 KEYLESS_SEARCH = ("parallel", "keenable")
 NEVER_ON = ("aihorde",)                 # a key row is written disabled so the router cannot treat it as configured
 FORBIDDEN = ("GEMINI_API_KEY", "GROQ_API_KEY", "OPENROUTER_API_KEY", "MISTRAL_API_KEY", "CF_API_TOKEN", "CF_ACCOUNT_ID",
-             "SAMBANOVA_API_KEY", "CEREBRAS_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_API_KEY")
+             "SAMBANOVA_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_API_KEY")
 SEARCH_PLATFORMS = {"tavily", "exa", "firecrawl", "linkup", "parallel", "keenable"}
 LABEL = "foundry"
 

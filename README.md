@@ -13,7 +13,7 @@ Foundry is Charlie's AI workforce: 167 agent jobs across 9 departments, every on
 2. `.github/workflows/launch.yml` (every four hours) runs `python -m foundry.launch --all`: the audit engine (the free router first, then any Gemini or Groq key, then a heuristic) picks the jobs that apply to this idea, orders them by stage and dependency, and writes `brain.md`, `plan.md`, `board.json` and `budget.json` in the venture folder.
 3. Departments run their jobs in stage order (`playbooks/deploy-order.md`). `.github/workflows/jobs.yml` runs every morning: `python -m foundry.jobs` takes the next ready `runs_on: github` jobs for each venture whose stage gate is open, has a free model do each one from its skill file and the brains, and writes the output into the venture folder. Solo jobs are marked done; assisted and human jobs are marked review for Charlie. `runs_on: claude-code` jobs wait for a Claude Code session (Sonnet, Opus as advisor). Charlie moves a stage on by setting its gate to `passed` in `board.json`.
 4. Ads are the one thing that costs money: Marketing writes the brief, Charlie approves the budget and pays the platform. Back Office tracks spend and revenue weekly and applies the kill rule.
-5. The verdict lives in `board.json` (`continue`, `scale`, `park`, `kill`) and on the Foundry Radar page once the optional sync task (`docs/FOUNDRY_SYNC_TASK.md`) is set up.
+5. The verdict lives in `board.json` (`continue`, `scale`, `park`, `kill`), in `office/digest.md` and the run's step summary (what needs Charlie after every run), in the Needs you issue in the private repo, and on the Foundry Radar page (live with a read-only token saved on the page, or through the optional sync task in `docs/FOUNDRY_SYNC_TASK.md`).
 
 ## Layout
 
@@ -23,13 +23,13 @@ Foundry is Charlie's AI workforce: 167 agent jobs across 9 departments, every on
 - `foundry/`: `audit`, `launch`, `scaffold`, `util`.
 - `data/`: the private repo checked out (git-ignored). `data/ventures/<slug>/`: everything about one venture. `tests/fixtures/sample-idea.json` is the test fixture.
 - `playbooks/deploy-order.md`: stages, outputs, gates, kill rule.
-- `docs/radar.html`: the Foundry Radar, six command centres on one pinned Claude page, fed from the private repo's `radar-data.json` by the daily sync.
+- `docs/radar.html`: the Foundry Radar, six command centres and the Needs you digest on one pinned Claude page, reading the private repo's `radar-data.json` directly or through the daily sync.
 - `docs/map.html`: the visual skill tree, pinned too; rebuild with `python -m foundry.mapbuild` after skills change.
 - `foundry/jobs.py`: the GitHub job runner. `foundry/dashboards.py`: radar data. `foundry/freellm.py` and `.github/actions/freellm`: the free model router, pinned in `config.json`.
 - `cli/foundry.sh`: `status`, `sync` (into `~/.claude/skills`), `zip` (for the Claude app).
 - `templates/venture/`: what a new venture repo starts from (Operations `project-scaffolding`).
 - `INTAKE.md`: how a venture goes in. `foundry/intake.py`: the local command. `templates/idea.template.json`: the shape.
-- `docs/FOUNDRY_SYNC_TASK.md`: the optional Claude task that feeds the Radar page. `docs/LODESTONE_LATER.md`: the parked Lodestone hook.
+- `docs/FOUNDRY_SYNC_TASK.md`: the optional Claude task that feeds the Radar page's store (not needed with a token on the page). `docs/LODESTONE_LATER.md`: the parked Lodestone hook. `docs/HANDOVER.md`: where things stand and what Charlie must do.
 
 ## Secrets
 

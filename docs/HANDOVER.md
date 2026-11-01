@@ -1,10 +1,10 @@
 # Foundry handover, 1 November 2026
 
-Written at the end of session 3. Read this first in the next session, then `CLAUDE.md`, then `SESSIONS.md`.
+Written at the end of session 4 (session 3's handover updated in place). Read this first in the next session, then `CLAUDE.md`, then `SESSIONS.md`.
 
 ## One paragraph
 
-Foundry is built and tested. 167 agent jobs across 9 departments, every skill filled, 149 GitHub implementations, the audit, launch and job runner, the free model router, the map and radar pages, two repos (public code, private venture data), three workflows. It has been rehearsed live on GitHub eight times today on the fixture venture and the last run was clean: router up, eight validate-stage jobs in ten minutes writing real evidence from Hacker News, the App Store, ONS, Google Trends and competitor sites. The only thing stopping the three real ventures from launching is one GitHub token that cannot see the private repo. Nothing else is blocked.
+Foundry is built and tested. 167 agent jobs across 9 departments, every skill filled, 149 GitHub implementations, the audit, launch and job runner, the free model router, the map and radar pages, two repos (public code, private venture data), three workflows. It has been rehearsed live on GitHub on the fixture venture through the validate and clear stages, writing real evidence from Hacker News, Reddit's feed, Bing, the App Store, ONS, Google Trends and competitor sites. Every run now ends with a digest of what needs Charlie, and the Radar can read the private repo directly. The only thing stopping the three real ventures from launching is one GitHub token that cannot see the private repo. Nothing else is blocked.
 
 ## What Charlie must do
 
@@ -16,7 +16,14 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
    - `TAVILY_API_KEY` from https://app.tavily.com: real web search for every job (1,000 a month). Without it search falls back to Hacker News; DuckDuckGo challenges GitHub runners and Reddit is unreachable from them.
    - `FIRECRAWL_API_KEY` (https://www.firecrawl.dev/app/api-keys) for JavaScript-heavy pages, `APIFY_TOKEN` for Reddit, Play reviews and Trustpilot actors, `COMPANIES_HOUSE_API_KEY` for company lookups, `YOUTUBE_API_KEY` for comment and trend sources.
 5. Give `tiktok-shop-pilot` a real product: edit `ventures/tiktok-shop-pilot/idea.json` in https://github.com/quickplay-studio/foundry-ventures (problem, who, gap, mvp, money, channels, budget_gbp). Until then it runs on the placeholder.
-6. Optional: the Radar page. Paste `docs/FOUNDRY_SYNC_TASK.md` as a Claude scheduled task so the pinned Foundry Radar reads the private `radar-data.json` daily. Without it the Radar shows the sample doc only.
+6. Optional: the Radar page live. Make a second fine-grained token with Repository access: Only `foundry-ventures`, Permissions: Contents, Read only; open the pinned Foundry Radar, Source, paste it, Read live. It stays in that browser only and the page then shows every run's `radar-data.json` and the Needs you digest with no Claude task. (`docs/FOUNDRY_SYNC_TASK.md`, the daily Claude task that fills the page's store, is the fallback and costs a Sonnet run a day.)
+7. Read what needs you after each run: the Summary tab of the run at https://github.com/quickplay-studio/foundry/actions (the digest is printed there), or `office/digest.md` in the private repo, or the Radar's Needs you view.
+
+## Decisions waiting on you (not blocking)
+
+- Whether to add an `mvp-build` job. Today `project-scaffolding` (Claude Code) opens one issue per MVP bullet in the venture repo and nothing on GitHub builds the product; a Claude Code session does. Adding a GitHub job would mean the free models write product code unattended, which session 1's agents advised against.
+- Thresholds the department agents chose: auto-reply confidence 0.85 (customer), 80 percent usage warning and 90 percent agent-evaluation pass (operations), returns allowance 8 percent, margin floor 25 percent, target CPA 60 percent of break-even (commerce). Each is a constant at the top of its `run.py`.
+- `marketplace-compliance` runs on GitHub and resolves doubt to the stricter flag; set `runs_on: claude-code` in its SKILL.md if a wrong clear worries you.
 
 ## How it runs day to day
 
@@ -24,7 +31,7 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 - `jobs.yml` runs ready GitHub jobs in plan order, gated by stage. A job writes its files into the venture folder and commits them. Solo jobs end `done`; assisted and human jobs end `review` for Charlie.
 - Gates: when a stage is done Charlie sets `gates.<stage>: passed` in `board.json` and the next stage starts. A job that returns a stop flag sets `verdict: blocked`; Charlie overrides in writing or kills.
 - Run-stage jobs repeat every 7 days, support jobs every 3. A job that skips on three different days is marked `skipped` so dependants can move on; set it back to `todo` to retry.
-- `smoke.yml` (manual) runs the whole pipeline on the fixture venture with no private repo: dispatch it with a `job` input to try one job live before a venture reaches it; read the Board summary step and the per-script diagnostics in the log.
+- `smoke.yml` (manual) runs the whole pipeline on the fixture venture with no private repo: dispatch it with a `job` input to try one job live before a venture reaches it, or `through` (a stage name) to rehearse every stage up to that one with gates passed automatically, or `probe_only` true to see which keyless sources answer the runner; read the Board summary step and the per-script diagnostics in the log.
 - Jobs outside a stage (email triage, HR, talent) run on demand: `jobs.yml` with the job input, or `python -m foundry.jobs --slug <slug> --job <id>`.
 - 18 jobs run in Claude Code, not on GitHub: icp-definition, cold-email-drafting, demo-prototyping, project-scaffolding, integration-builds, data-migration, portal-provisioning, qa-and-verification, buying-committee-mapping, onboarding-journeys, calendar-management, onboarding-and-training, video-production, terms-of-service, privacy-policy, contract-drafting, nda-and-agreements, ip-assignment. Each needs a session when a venture reaches it (`SESSIONS.md` has the brief).
 
@@ -45,12 +52,21 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 - Google Trends RSS added as a keyless trend source; off-topic trends rank below fitting ones. Audience themes are folded into groups so counts mean something.
 - The router status file crashed on a missing folder on a fresh runner; fixed. Per-script diagnostics now print into the workflow log.
 
+## What session 4 added
+
+- `foundry/digest.py`: after every run, `office/digest.md` in the private repo and the workflow step summary list drafts waiting for review (with links), stages whose jobs are all finished (set the gate), blocked verdicts, jobs that gave up, last runs.
+- `jobkit.render_pdf`: proposals, brand-deal approval packs and lead-magnet guides render to PDF with the runner's Chrome.
+- `tests/test_seams.py`: writer and reader scripts run in order on one venture (validate chain for a service, an app and a shop; market map into account monitoring; QA result into handoff and status; transcript into follow-ups). Status updates carry the QA line.
+- `foundry/probe.py` and the findings in `SESSIONS.md`: from runners Reddit's `search.rss` and Bing's HTML page answer; both are now fallbacks (`intelkit.reddit`, `util.keyless_search`), with off-topic Bing rows dropped. Everything else keyless is closed; a `TAVILY_API_KEY` is still the real search fix.
+- `foundry/smoke.py` and the `through` input: stage rehearsals.
+- Radar: reads the private repo with a browser-held read-only token; Needs you view renders the digest.
+
 ## Known gaps
 
-- Reddit is unreachable from GitHub runners (403); scripts log it and carry on. An Apify token restores it.
+- Reddit's JSON API is unreachable from GitHub runners (403); the search feed answers but is throttled per address, so some runs get nothing. An Apify token restores full access.
 - Pricing and teardown signals vary run to run with the model and the competitor set; a sample idea with few public complaints will read `fail` or `warn`, which is the honest answer, not a bug.
 - Nothing posts, sends, pays or opens issues from GitHub. Where a skill wanted that, the script writes the commands or draft to a file.
-- PDFs read only when pypdf is installed (guarded); headless Chrome renders pending.
+- PDFs read only when pypdf is installed (guarded). Deck renders (Marp) are still a pending workflow step.
 - Live APIs not yet exercised by a real venture: YouTube, Meta, Gmail, Cal.com, HubSpot, Fireflies, Pexels, Companies House. Every call is wrapped and logs a skip; the first real run may need small fixes, which is what `smoke.yml` with a `job` input is for.
 - Lodestone integration is parked (`docs/LODESTONE_LATER.md`). Lodestone's own daily sweep has failed since 29 October because GitHub Actions on the account's private repos is blocked on billing; that is a Lodestone matter, not Foundry's.
 
@@ -65,4 +81,5 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 - Session 0 (31 Oct): index, scaffold, brain, audit, launch, deploy order, map.
 - Session 1 (31 Oct): every department filled by eight parallel agents, job runner, Radar, repo split.
 - Session 2 (31 Oct): a `run.py` for all 149 GitHub jobs, jobkit, offline harness, contracts, router, local full lifecycle with the fake model.
-- Session 3 (1 Nov): `smoke.yml`, eight live rehearsals, the fixes above, Cerebras as an optional router key, this handover. Last commit `ef7e954` plus this file.
+- Session 3 (1 Nov): `smoke.yml`, eight live rehearsals, the fixes above, Cerebras as an optional router key.
+- Session 4 (1 Nov): digest, PDF render, seam tests, source probes with the Reddit feed and Bing fallbacks, stage rehearsals through clear, Radar live from GitHub, this handover.

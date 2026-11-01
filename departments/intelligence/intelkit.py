@@ -236,9 +236,17 @@ ATOM = "{http://www.w3.org/2005/Atom}"
 def reddit_rss(query, n=25, sort="top", t="year"):
     """Reddit's search feed (search.rss), which answers GitHub runners when the JSON API returns 403. Same rows as reddit(),
     with score 0 because the feed carries none; None when the feed is blocked too."""
-    r = get("https://www.reddit.com/search.rss", {"q": query, "t": t, "sort": sort, "limit": n}, headers={"User-Agent": util.BROWSER_UA}, wait=3)
+    params = {"q": query, "t": t, "sort": sort, "limit": n}
+    r = get("https://www.reddit.com/search.rss", params, headers={"User-Agent": util.BROWSER_UA}, wait=6)
+    if r is not None and r.status_code == 429:  # the feed is throttled per address; runners share theirs, so wait once as told (a minute at most)
+        try:
+            pause = min(60, max(5, int(r.headers.get("Retry-After", "20"))))
+        except ValueError:
+            pause = 20
+        time.sleep(pause)
+        r = get("https://www.reddit.com/search.rss", params, headers={"User-Agent": util.BROWSER_UA}, wait=6)
     if os.environ.get("FOUNDRY_PROBE_DEBUG"):
-        print(f"reddit rss: {'no response' if r is None else f'HTTP {r.status_code}, {len(r.text)} bytes'}\n{(r.text[:500] if r is not None else '')}", file=sys.stderr)
+        print("reddit rss: " + ("no response" if r is None else f"HTTP {r.status_code}, {len(r.text)} bytes, retry-after {r.headers.get('Retry-After')}"), file=sys.stderr)
     if r is None or not r.ok or "<feed" not in r.text[:400]:
         return None
     try:

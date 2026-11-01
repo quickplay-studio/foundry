@@ -271,13 +271,29 @@ def bing_search(query, n=5):
     rows = []
     for block in re.findall(r'<li class="b_algo"(.*?)</li>', r.text, flags=re.S)[: n * 2]:
         m = re.search(r'<h2[^>]*>\s*<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', block, flags=re.S)
-        if not m or not m.group(1).startswith("http") or "bing.com" in m.group(1).split("/")[2]:
+        url = bing_target(m.group(1)) if m else ""
+        if not url or "bing.com" in url.split("/")[2]:
             continue
         snippet = re.search(r"<p[^>]*>(.*?)</p>", block, flags=re.S)
-        rows.append({"title": strip_tags(m.group(2))[:200], "url": m.group(1), "content": strip_tags(snippet.group(1))[:1500] if snippet else "", "source": "bing"})
+        rows.append({"title": strip_tags(m.group(2))[:200], "url": url, "content": strip_tags(snippet.group(1))[:1500] if snippet else "", "source": "bing"})
         if len(rows) >= n:
             break
     return rows
+
+
+def bing_target(href):
+    """The real address behind a Bing result link: plain, or a bing.com/ck/a redirect whose u=a1<base64url> carries it."""
+    import base64
+    href = href.replace("&amp;", "&")
+    if "/ck/a" in href:
+        m = re.search(r"[?&]u=a1([A-Za-z0-9_-]+)", href)
+        if not m:
+            return ""
+        try:
+            href = base64.urlsafe_b64decode(m.group(1) + "=" * (-len(m.group(1)) % 4)).decode("utf-8", "replace")
+        except (ValueError, UnicodeDecodeError):
+            return ""
+    return href if href.startswith("http") else ""
 
 
 def fake_answer(prompt):

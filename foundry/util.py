@@ -251,7 +251,16 @@ BROWSER_UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 
 
 def strip_tags(text):
-    return re.sub(r"\s+([.,;:!?)])", r"\1", re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", str(text)))).strip()
+    import html
+    return re.sub(r"\s+([.,;:!?)])", r"\1", re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", str(text))))).strip()
+
+
+def on_topic(query, *texts):
+    """True when a result mentions at least one real word of the query. Search engines serve suspected bots
+    results for some other query; a row that shares no word with ours is one of those."""
+    words = {w for w in re.findall(r"[a-z0-9]{4,}", query.lower()) if w not in ("with", "that", "this", "from", "best", "free", "what", "your", "have")}
+    blob = " ".join(texts).lower()
+    return not words or any(w in blob for w in words)
 
 
 def bing_search(query, n=5):
@@ -275,7 +284,10 @@ def bing_search(query, n=5):
         if not url or "bing.com" in url.split("/")[2]:
             continue
         snippet = re.search(r"<p[^>]*>(.*?)</p>", block, flags=re.S)
-        rows.append({"title": strip_tags(m.group(2))[:200], "url": url, "content": strip_tags(snippet.group(1))[:1500] if snippet else "", "source": "bing"})
+        title, content = strip_tags(m.group(2))[:200], strip_tags(snippet.group(1))[:1500] if snippet else ""
+        if not on_topic(query, title, content, url):
+            continue  # Bing's answer to a suspected bot: results for some other query
+        rows.append({"title": title, "url": url, "content": content, "source": "bing"})
         if len(rows) >= n:
             break
     return rows

@@ -220,3 +220,17 @@ def test_smoke_rehearses_stage_by_stage(monkeypatch, tmp_path):
     assert stages == {"validate", "clear"} and len(ran) == 4
     assert all(j["status"] == "skipped" for j in board["jobs"] if j["stage"] == "validate" and j["id"] not in ran)
     assert any(s["reason"].startswith("smoke:") for s in board["skipped"])
+
+
+def test_keyless_search_drops_off_topic_rows(monkeypatch):
+    """Bing serves suspected bots results for some other query; those rows never reach a job."""
+    html = ('<li class="b_algo"><h2><a href="https://www.bing.com/ck/a?!&amp;&amp;p=x&amp;u=a1aHR0cHM6Ly93d3cuYm9vdHMuY29tL3BlYXJz&amp;ntb=1">Pears Transparent Soap</a></h2><p>Prices may vary.</p></li>'
+            '<li class="b_algo"><h2><a href="https://www.mealime.com/">Mealime <b>Meal</b> Planner</a></h2><div><p class="b_lineclamp2">Plan meals &amp; shop in minutes.</p></div></li>')
+
+    class R:
+        status_code, text, url = 200, html, "https://www.bing.com/search"
+    monkeypatch.setattr(util.requests, "get", lambda *a, **k: R())
+    util._DOWN.pop("bing", None)
+    rows = util.bing_search("meal planning app", 5)
+    assert rows == [{"title": "Mealime Meal Planner", "url": "https://www.mealime.com/", "content": "Plan meals & shop in minutes.", "source": "bing"}]
+    assert util.bing_target("https://www.bing.com/ck/a?!&amp;&amp;p=x&amp;u=a1aHR0cHM6Ly93d3cuYm9vdHMuY29tL3BlYXJz&amp;ntb=1") == "https://www.boots.com/pears"

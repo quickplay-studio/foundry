@@ -1,4 +1,6 @@
-# Foundry: radar sync (scheduled task, optional)
+# Foundry: radar sync (scheduled task, optional, superseded)
+
+Not needed any more (1 Nov 2026): the Radar reads `radar-data.json` and `office/digest.md` straight from the private repo once a read-only GitHub token is saved under Source on the page (fine-grained, Repository access: only `foundry-ventures`, Permissions: Contents read; the token lives in that browser only). The Claude store below is the fallback when no token is saved; this task fills it at the cost of a Sonnet run a day.
 
 The Foundry Radar is a pinned Claude page with its own database. GitHub cannot write to it, so a small daily Claude task copies `radar-data.json` from the private data repo into the page. Without it the Radar stays empty and the plan, board and stage folders in the data repo are the dashboard.
 

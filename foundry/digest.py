@@ -37,7 +37,7 @@ def venture_lines(folder):
     done = sum(1 for j in jobs if j.get("status") == "done")
     lines = [f"## {board.get('title') or slug} (`{slug}`)",
              f"Stage **{board.get('stage', '?')}**, verdict **{board.get('verdict', 'pending')}**, {done} of {len(jobs)} jobs done, "
-             f"gates: " + ", ".join(f"{s} {g}" for s, g in board.get("gates", {}).items() if g != "open") + ".", ""]
+             "gates: " + (", ".join(f"{s} {g}" for s, g in board.get("gates", {}).items() if g != "open") or "none passed yet") + ".", ""]
     todo = []
     if board.get("verdict") == "blocked":
         stops = [e for e in board.get("log", []) if e.get("flag") == "stop"]

@@ -42,6 +42,21 @@ jobs:
       - name: Test
         run: python -m pytest -q tests
 
+      - name: Keyless search probe
+        continue-on-error: true
+        run: |
+          python - <<'EOF'
+          import re, requests
+          from foundry import util
+          q = "AI tool spend tracking for indie hackers"
+          r = requests.post("https://html.duckduckgo.com/html/", data={"q": q}, timeout=25, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Foundry research bot"})
+          print("ddg html:", r.status_code, len(r.text), "result__a:", len(re.findall(r'class="result__a"', r.text)), "snippets:", len(re.findall(r'class="result__snippet"', r.text)))
+          print("ddg sample:", re.sub(r"\s+", " ", r.text[:600]))
+          r2 = requests.get("https://lite.duckduckgo.com/lite/", params={"q": q}, timeout=25, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Foundry research bot"})
+          print("ddg lite:", r2.status_code, len(r2.text), "result-link:", len(re.findall(r'result-link', r2.text)))
+          print("keyless_search:", util.keyless_search(q, 3))
+          EOF
+
       - name: Fixture venture
         run: |
           mkdir -p data/ventures/sample data/office

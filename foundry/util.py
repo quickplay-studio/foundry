@@ -144,15 +144,20 @@ def search(query, n=5, topic="general"):
         return []
 
 
+_DOWN = {}  # engines that refused this process, so later calls skip them
+
+
 def keyless_search(query, n=5):
     """Search with no key at all: DuckDuckGo's HTML page, then Hacker News (Algolia) as the last resort. [] on failure."""
     if os.environ.get("FOUNDRY_FAKE_MODEL"):
         return []
     rows = []
     try:
-        r = requests.post("https://html.duckduckgo.com/html/", data={"q": query}, timeout=25,
-                          headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Foundry research bot"})
-        if r.ok:
+        r = None if _DOWN.get("ddg") else requests.post("https://html.duckduckgo.com/html/", data={"q": query}, timeout=25,
+                                                         headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Foundry research bot"})
+        if r is not None and r.status_code != 200:  # 202 is DuckDuckGo's bot challenge (GitHub runners get it every time): stop asking
+            _DOWN["ddg"] = True
+        if r is not None and r.ok:
             links = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', r.text, flags=re.S)
             snippets = re.findall(r'class="result__snippet"[^>]*>(.*?)</a>', r.text, flags=re.S)
             for i, (href, title) in enumerate(links[:n]):
@@ -165,7 +170,8 @@ def keyless_search(query, n=5):
     if rows:
         return rows[:n]
     try:
-        r = requests.get("https://hn.algolia.com/api/v1/search", params={"query": query, "hitsPerPage": n}, timeout=20)
+        short = " ".join(re.sub(r"\b(OR|AND|tool|app|service|alternatives?|best|uk)\b", " ", query, flags=re.I).split()[:10])
+        r = requests.get("https://hn.algolia.com/api/v1/search", params={"query": short or query, "hitsPerPage": n}, timeout=20)
         hits = r.json().get("hits", []) if r.ok else []
         return [{"title": h.get("title") or h.get("story_title") or "", "url": h.get("url") or f"https://news.ycombinator.com/item?id={h.get('objectID')}",
                  "content": re.sub(r"<[^>]+>", " ", str(h.get("story_text") or h.get("comment_text") or ""))[:1500], "source": "hackernews"} for h in hits][:n]

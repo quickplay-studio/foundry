@@ -77,8 +77,13 @@ def main(ctx):
     model_flags = {}
     if not incomplete:
         for row in answer["areas"]:
-            if isinstance(row, dict) and row.get("area") in baseline:
-                model_flags[row["area"]] = (str(row.get("flag", "caution")).lower(), str(row.get("finding", ""))[:200], str(row.get("source", ""))[:200])
+            given = str(row.get("area", "")).strip().lower() if isinstance(row, dict) else ""
+            # models reword the area names ("Financial Services", "financial-services regulation"): match loosely
+            area = next((a for a in baseline if a.lower() == given), None) or next((a for a in baseline if given and (a.lower() in given or given in a.lower())), None)
+            if area and area not in model_flags:
+                model_flags[area] = (str(row.get("flag", "caution")).lower().strip(), str(row.get("finding", ""))[:200], str(row.get("source", ""))[:200])
+    if not incomplete and not model_flags:
+        incomplete = True  # the model answered but none of its areas could be matched: do not call that clear
     areas, overall = [], "clear"
     for area, question, source, _ in AREAS:
         kw_flag, kw_reason = baseline[area]

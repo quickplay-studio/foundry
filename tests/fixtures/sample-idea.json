@@ -11,7 +11,7 @@
     "Spend spike alert webhook",
     "Pre-run cost estimate"
   ],
-  "money": "Flat monthly fee or a small percentage of managed spend.",
+  "money": "Flat monthly fee of about £9 a month, or a small percentage of managed spend.",
   "channels": [
     "hacker news",
     "reddit",

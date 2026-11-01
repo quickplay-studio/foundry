@@ -208,6 +208,7 @@ def run_venture(slug, limit, dry_run=False, only=None):
         job["updated"] = util.now()
         if "skipped" in result:
             reason = result["skipped"]
+            print(f"  {job_id}: skipped, {reason}", flush=True)
             attempts = note_skipped(board, job_id, reason)
             if attempts >= MAX_ATTEMPTS and not reason.startswith("no free model") and "Claude Code" not in reason and "stub" not in reason:
                 job["status"] = "skipped"  # give up for now; Charlie can set it back to todo
@@ -220,6 +221,7 @@ def run_venture(slug, limit, dry_run=False, only=None):
                 job["status"] = "skipped"
         else:
             job["status"] = "done" if job["autonomy"] == "solo" else "review"
+            print(f"  {job_id}: {job['status']}, flag {result['flag']}, {result['summary'][:120]}", flush=True)
             job["output"] = result["output"]
             job["outputs"] = result["outputs"]
             board.setdefault("log", []).append({"date": util.today(), "job": job_id, "status": job["status"], "flag": result["flag"], "summary": result["summary"], "model": result["model"]})

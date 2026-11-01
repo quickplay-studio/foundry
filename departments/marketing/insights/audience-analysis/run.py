@@ -121,10 +121,21 @@ def label(items):
     out = []
     for i in range(0, min(len(items), 300), 50):
         batch = items[i:i + 50]
-        answer = k.ask('Return JSON only: {"labels": [{"i": 0, "kind": "question, objection, desired outcome or other", "theme": "2 to 4 words"}]}. Label each comment.\n\n' + "\n".join(f"{j}: {t[:300]}" for j, (_, t) in enumerate(batch)))
-        for r in (answer.get("labels") if isinstance(answer, dict) and isinstance(answer.get("labels"), list) else []):
-            if isinstance(r, dict) and isinstance(r.get("i"), int) and 0 <= r["i"] < len(batch) and str(r.get("kind", "")).lower() in KINDS and tidy(r.get("theme", "")):
-                out.append((str(r["kind"]).lower(), tidy(r["theme"])[:40], batch[r["i"]][1]))
+        answer = k.ask('Return JSON only: {"labels": [{"i": 0, "kind": "question", "theme": "pricing too high"}, {"i": 1, "kind": "other", "theme": "off topic"}]}, one entry per numbered comment below, in order. '
+                       'kind is exactly one of question, objection, desired outcome, other. theme is 2 to 4 words of your own naming what the comment is about.\n\n'
+                       + "\n".join(f"{j}: {t[:300]}" for j, (_, t) in enumerate(batch)))
+        rows = answer.get("labels") if isinstance(answer, dict) and isinstance(answer.get("labels"), list) else []
+        for pos, r in enumerate(rows):
+            if not isinstance(r, dict):
+                continue
+            try:
+                i = int(r.get("i", pos))
+            except (TypeError, ValueError):
+                i = pos
+            kind = next((x for x in KINDS if x in str(r.get("kind", "")).lower()), None)
+            theme = tidy(r.get("theme", ""))
+            if 0 <= i < len(batch) and kind and theme and theme.lower() not in ("2 to 4 words", "pricing too high", "off topic"):
+                out.append((kind, theme[:40], batch[i][1]))
     return out
 
 

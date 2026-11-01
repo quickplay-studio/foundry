@@ -4,6 +4,7 @@ import importlib.util
 import json
 
 import pytest
+import requests
 
 from foundry import jobkit, util
 
@@ -33,6 +34,12 @@ def test_run_py_runs_offline(script, tmp_path, monkeypatch):
     monkeypatch.setattr(jobkit, "fetch", lambda url, limit=12000: "page text")
     monkeypatch.setattr(jobkit, "secret", lambda name: "")
     monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None, prefer=None: (fake_ask(prompt), "fake"))
+
+    def offline(*a, **kw):  # no script may depend on the network: a public API that is down must be a logged skip
+        raise ConnectionError("offline test")
+    for name in ("get", "post", "put", "patch", "delete", "head", "request"):
+        monkeypatch.setattr(requests, name, offline)
+    monkeypatch.setattr(requests.Session, "request", offline)
     kind = "tiktok-shop" if script.parents[2].name == "commerce" else "service"
     idea = {"slug": "t", "title": "Test", "kind": kind, "problem": "p", "who": "business owners", "gap": "g", "mvp": ["one"],
             "money": "m", "channels": ["web"], "budget_gbp": 50}

@@ -93,20 +93,20 @@ def ask(prompt, prefer=None):
 
 
 def search(query, n=5, topic="general"):
-    """Web search through the router; falls back to Firecrawl search when a key exists; [] otherwise."""
+    """Web search: the router, then Firecrawl when a key exists, then the keyless engines (DuckDuckGo, Hacker News); [] when all fail."""
     rows = util.search(query, n, topic)
     if rows:
         return rows
     key = os.environ.get("FIRECRAWL_API_KEY", "").strip()
-    if not key:
-        return []
-    try:
-        r = requests.post(f"{FIRECRAWL}/search", json={"query": query, "limit": n},
-                          headers={"Authorization": f"Bearer {key}"}, timeout=40)
-        data = r.json().get("data", []) if r.ok else []
-        return [{"title": d.get("title", ""), "url": d.get("url", ""), "content": str(d.get("description", "") or d.get("markdown", ""))[:1500]} for d in data][:n]
-    except Exception:  # noqa: BLE001
-        return []
+    if key:
+        try:
+            r = requests.post(f"{FIRECRAWL}/search", json={"query": query, "limit": n},
+                              headers={"Authorization": f"Bearer {key}"}, timeout=40)
+            data = r.json().get("data", []) if r.ok else []
+            rows = [{"title": d.get("title", ""), "url": d.get("url", ""), "content": str(d.get("description", "") or d.get("markdown", ""))[:1500]} for d in data][:n]
+        except Exception:  # noqa: BLE001
+            rows = []
+    return rows or util.keyless_search(query, n)
 
 
 def fetch(url, limit=12000):

@@ -95,11 +95,29 @@ def _freellm(prompt, model="auto"):
     key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
     if not (key and base):
         raise RuntimeError("FREELLM router not running")
-    body = {"model": model, "temperature": 0.2, "max_tokens": 4000,
-            "messages": [{"role": "system", "content": "Answer with one JSON object and nothing else."},
-                         {"role": "user", "content": prompt}]}
+    body = {"model": model, "temperature": 0.2, "max_tokens": 6000,
+            "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
     data = http_post_json(base + "/chat/completions", body, {"Authorization": f"Bearer {key}"}, timeout=180)
-    return data["choices"][0]["message"]["content"]
+    text = data["choices"][0]["message"]["content"]
+    if not text and (data["choices"][0].get("finish_reason") == "length"):
+        raise RuntimeError("router answer empty (finish_reason length)")
+    return text
+
+
+SYSTEM = ("Answer with one JSON object and nothing else: no prose, no code fence. The JSON shape in the request is a template: "
+          "put real content in every field and never copy its placeholder text, angle brackets or option lists.")
+PLACEHOLDER = re.compile(r"^\s*<[^<>]{1,80}>\s*$")
+
+
+def scrub(obj):
+    """Blank the placeholders a weak model echoes back from a JSON template ("<two sentences>"), recursively."""
+    if isinstance(obj, dict):
+        return {k: scrub(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [scrub(v) for v in obj]
+    if isinstance(obj, str) and PLACEHOLDER.match(obj):
+        return ""
+    return obj
 
 
 MODEL_CHAIN = [
@@ -122,6 +140,35 @@ def search(query, n=5, topic="general"):
                               {"Authorization": f"Bearer {key}"}, timeout=40)
         rows = data.get("results", []) if isinstance(data, dict) else data
         return [{"title": r.get("title", ""), "url": r.get("url", ""), "content": str(r.get("content", ""))[:1500]} for r in rows][:n]
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def keyless_search(query, n=5):
+    """Search with no key at all: DuckDuckGo's HTML page, then Hacker News (Algolia) as the last resort. [] on failure."""
+    if os.environ.get("FOUNDRY_FAKE_MODEL"):
+        return []
+    rows = []
+    try:
+        r = requests.post("https://html.duckduckgo.com/html/", data={"q": query}, timeout=25,
+                          headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Foundry research bot"})
+        if r.ok:
+            links = re.findall(r'class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>', r.text, flags=re.S)
+            snippets = re.findall(r'class="result__snippet"[^>]*>(.*?)</a>', r.text, flags=re.S)
+            for i, (href, title) in enumerate(links[:n]):
+                m = re.search(r"uddg=([^&]+)", href)
+                url = requests.utils.unquote(m.group(1)) if m else href
+                clean = lambda t: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", t)).strip()  # noqa: E731
+                rows.append({"title": clean(title), "url": url, "content": clean(snippets[i]) if i < len(snippets) else "", "source": "duckduckgo"})
+    except Exception:  # noqa: BLE001
+        rows = []
+    if rows:
+        return rows[:n]
+    try:
+        r = requests.get("https://hn.algolia.com/api/v1/search", params={"query": query, "hitsPerPage": n}, timeout=20)
+        hits = r.json().get("hits", []) if r.ok else []
+        return [{"title": h.get("title") or h.get("story_title") or "", "url": h.get("url") or f"https://news.ycombinator.com/item?id={h.get('objectID')}",
+                 "content": re.sub(r"<[^>]+>", " ", str(h.get("story_text") or h.get("comment_text") or ""))[:1500], "source": "hackernews"} for h in hits][:n]
     except Exception:  # noqa: BLE001
         return []
 
@@ -150,7 +197,7 @@ def ask_json(prompt, skipped=None, prefer=None):
         try:
             text = call(prompt)
             start, end = text.find("{"), text.rfind("}")
-            return json.loads(text[start:end + 1]), name
+            return scrub(json.loads(text[start:end + 1])), name
         except Exception as exc:  # noqa: BLE001
             if skipped is not None:
                 skipped.append({"model": name, "reason": f"{type(exc).__name__}: {exc}"[:160]})

@@ -250,7 +250,7 @@ def load_status():
 
 
 def save_status(st):
-    STATUS.parent.mkdir(exist_ok=True)
+    STATUS.parent.mkdir(parents=True, exist_ok=True)
     STATUS.write_text(json.dumps(st, indent=1, ensure_ascii=False) + "\n")
 
 
@@ -336,6 +336,7 @@ def start(env=None, sh=subprocess.run):
         st["search_switched_on"], st["search_rows"] = enable_keyless_search(tok) if tok else ([], [])
         st["search_engines"] = live_search(key)
         st["models"] = len(ids)
+        st["model_ids"] = ids[:60]
         st["ok"] = True
         export_env(key, f"http://127.0.0.1:{PORT}/v1")
         log(f"freellm: router up, {len(ids)} chat models on {', '.join(st['chat_platforms']) or '?'}; search: {', '.join(st['search_engines']) or 'none'}")
@@ -429,6 +430,7 @@ def probe(env=None):
     code, j, _ = http("GET", "/v1/models", key=key, base=root)
     rows = [m for m in (j or {}).get("data") or [] if isinstance(m, dict)] if code == 200 else []
     out["models"] = f"{sum(1 for m in rows if m.get('available'))} available of {len(rows)} listed"
+    out["model_ids"] = chat_models(j)[:60]
     st = load_status()
     st["probe"] = dict(out, at=stamp())
     save_status(st)

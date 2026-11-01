@@ -86,10 +86,20 @@ def collect(phrases, since, skipped):
                               "engagement": int(v.get("statistics", {}).get("viewCount", 0)), "duration_s": duration_s(v.get("contentDetails", {}).get("duration")), "phrase": ids.get(v["id"], "")})
     else:
         skipped.append("youtube: YOUTUBE_API_KEY missing")
-    for p in phrases[:3]:  # web news through the router or Firecrawl, if either is up
+    for p in phrases[:3]:  # web news through the router, Firecrawl or the keyless engines
         for r in k.search(p + " news this week", 4, "news"):
             if r.get("url") and r.get("title"):
                 items.append({"title": r["title"], "source": "web", "url": r["url"], "date": "", "engagement": None, "phrase": p})
+    try:  # Google Trends daily trending searches for the UK, no key: the fit score decides what is relevant
+        r = k.requests.get("https://trends.google.com/trending/rss", params={"geo": "GB"}, timeout=20, headers={"User-Agent": "Mozilla/5.0 (Foundry research bot)"})
+        for block in re.findall(r"<item>(.*?)</item>", r.text if r.ok else "", flags=re.S)[:25]:
+            title = re.sub(r"<!\[CDATA\[|\]\]>", "", (re.search(r"<title>(.*?)</title>", block, flags=re.S) or [None, ""])[1]).strip()
+            traffic = re.sub(r"\D", "", (re.search(r"<ht:approx_traffic>(.*?)</ht:approx_traffic>", block) or [None, "0"])[1]) or "0"
+            url = (re.search(r"<ht:news_item_url>(.*?)</ht:news_item_url>", block, flags=re.S) or [None, ""])[1].strip()
+            if title:
+                items.append({"title": title, "source": "trends", "url": url or f"https://trends.google.com/trending?geo=GB&q={title}", "date": "", "engagement": int(traffic), "phrase": ""})
+    except Exception as exc:  # noqa: BLE001
+        skipped.append(f"google trends: {type(exc).__name__}")
     seen, out = set(), []
     for it in items:
         if it["url"] not in seen and not SENSITIVE.search(it["title"]):

@@ -42,6 +42,11 @@ jobs:
       - name: Test
         run: python -m pytest -q tests
 
+      - name: Fixture venture
+        run: |
+          mkdir -p data/ventures/sample data/office
+          cp tests/fixtures/sample-idea.json data/ventures/sample/idea.json
+
       - name: Free model router (FreeLLMAPI on the runner, fails open)
         uses: ./.github/actions/freellm
         continue-on-error: true
@@ -57,11 +62,6 @@ jobs:
         uses: ./.github/actions/freellm
         continue-on-error: true
         with: { mode: probe }
-
-      - name: Fixture venture
-        run: |
-          mkdir -p data/ventures/sample data/office
-          cp tests/fixtures/sample-idea.json data/ventures/sample/idea.json
 
       - name: Launch and run jobs
         env:  # every one optional; a missing key skips that step and logs it
@@ -111,7 +111,21 @@ jobs:
           for j in b.get("jobs", []):
               if j.get("status") not in ("todo", "done", "review"):
                   print(f"{j.get('status'):8} {j.get('stage','?'):9} {j.get('id')}")
+          a = json.loads(pathlib.Path("data/ventures/sample/audit.json").read_text())
+          print("audit:", a.get("model_used"), a.get("business_model"), "| reasoning:", a.get("reasoning"))
+          print("audit dropped:", len(a.get("dropped", [])), json.dumps(a.get("dropped_why", {}), ensure_ascii=False)[:1200])
+          print("audit skipped:", a.get("skipped"))
+          f = pathlib.Path("data/office/freellm.json")
+          if f.exists():
+              st = json.loads(f.read_text())
+              print("router:", {k: st.get(k) for k in ("ok", "models", "chat_platforms", "search_engines", "search_switched_on", "search_rows", "probe", "calls", "reason")})
+              print("router models:", st.get("model_ids"))
           EOF
+          echo "::group::Output files"
+          for f in $(find data/ventures/sample -type f \( -path '*/validate/*' -o -path '*/clear/*' -o -path '*/build/*' -o -path '*/launch/*' -o -path '*/sell/*' -o -path '*/support/*' -o -path '*/finance/*' \) | sort); do
+            echo "=== $f ($(wc -c < "$f") bytes)"; head -c 1800 "$f"; echo
+          done
+          echo "::endgroup::"
           find data/ventures/sample -type f | sort
 
       - name: Router stats, then stop it

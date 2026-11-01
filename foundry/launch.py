@@ -111,7 +111,9 @@ def run_one(slug, dry_run=False, root=None):
             util.write_json(path, content)
         else:
             path.write_text(content, encoding="utf-8")
-    print(f"launched {slug}: {len(result['jobs'])} jobs, model {result['model_used']}")
+    print(f"launched {slug}: {len(result['jobs'])} jobs, model {result['model_used']}, {result['business_model']}, dropped {len(result['dropped'])}")
+    for s in skipped:
+        print(f"  audit model skipped: {s.get('model')}: {s.get('reason')}")
     return outputs
 
 

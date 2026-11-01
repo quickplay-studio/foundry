@@ -14,9 +14,9 @@ COMMERCE_KINDS = ("shop", "tiktok-shop", "dropshipping")
 
 PROMPT = """You are the audit engine of an AI workforce. A new venture is below (its kind is one of app, channel, shop, tiktok-shop, dropshipping, service), and after it the list of agent jobs the workforce can run, one per line as id | department | stage | summary.
 
-Return JSON only: {{"model": "b2b" or "b2c" or "both", "reasoning": "<two sentences>", "keep": [{{"id": "<job id>", "why": "<ten words max>"}}], "drop": ["<job id>", ...], "first_three": ["<job id>", "<job id>", "<job id>"]}}
+Return JSON only, with real content in every field: {{"model": "b2b" or "b2c" or "both", "reasoning": "two sentences on who pays and what matters first", "drop": [{{"id": "a job id from the list", "why": "ten words max"}}], "first_three": ["job id", "job id", "job id"]}}
 
-Keep a job if it does real work for this specific venture in the next ninety days. Drop jobs that only make sense for an agency, a team or a different business model. Drop the whole sell stage unless the venture has a business buyer. Keep commerce department jobs only for kinds shop, tiktok-shop and dropshipping. For a channel, the build stage is the content pipeline and the launch stage is distribution. first_three is what to run on day one.
+Every job not in drop is kept. Drop a job when it only makes sense for an agency, a team or a different business model, or does no real work for this specific venture in the next ninety days. Drop the whole sell stage unless the venture has a business buyer. Jobs with stage none and commerce jobs for a venture that is not a shop are handled in code, so leave them out of drop. For a channel, the build stage is the content pipeline and the launch stage is distribution. first_three is what to run on day one.
 
 IDEA
 {idea}
@@ -61,7 +61,7 @@ def heuristic(idea, jobs):
         elif j["department"] == "commerce" and kind not in COMMERCE_KINDS:
             drop.append(j["id"])
         else:
-            keep.append({"id": j["id"], "why": "staged job, heuristic"})
+            keep.append({"id": j["id"], "why": ""})
     first = [k["id"] for k in keep if k["id"] in ("regulatory-screen", "vertical-analysis", "competitor-teardown")][:3]
     return {"model": "b2b" if b2b else "b2c", "reasoning": "Heuristic: no free model answered. Every staged job kept; sell stage only for business buyers.",
             "keep": keep, "drop": drop, "first_three": first}
@@ -74,21 +74,24 @@ def run(idea, tree=None, skipped=None):
     idea_text = json.dumps({k: idea.get(k) for k in ("title", "kind", "problem", "who", "gap", "mvp", "money", "category", "channels", "note")}, ensure_ascii=False)
     result, model = util.ask_json(PROMPT.format(idea=idea_text, jobs=lines), skipped)
     valid = {j["id"] for j in jobs}
-    if not result or not isinstance(result.get("keep"), list):
+    if not result or not isinstance(result.get("drop"), list) or result.get("model") not in ("b2b", "b2c", "both"):
+        if result and skipped is not None:
+            skipped.append({"model": model, "reason": "answer not in the audit shape (drop list and model missing)"})
         result, model = heuristic(idea, jobs), "heuristic"
     kind = str(idea.get("kind", "app")).lower()
-    by_id = {j["id"]: j for j in jobs}
-    keep = [k for k in result["keep"] if isinstance(k, dict) and k.get("id") in valid
-            and not (by_id[k["id"]]["department"] == "commerce" and kind not in COMMERCE_KINDS)]
-    keep_ids = {k["id"] for k in keep}
-    why = {k["id"]: str(k.get("why", ""))[:80] for k in keep}
-    ordered = topo_order([j for j in jobs if j["id"] in keep_ids])
-    plan = [{"id": j["id"], "title": j["title"], "department": j["department"], "stage": j["stage"],
-             "autonomy": j["autonomy"], "why": why.get(j["id"], "")} for j in ordered]
+    b2b = result.get("model") in ("b2b", "both")
+    drop_why = {str(d.get("id") if isinstance(d, dict) else d): str(d.get("why", "") if isinstance(d, dict) else "")[:80] for d in result["drop"]}
+    # the model decides the venture-specific drops; the structural rules stay in code whatever it said
+    keep = [j for j in jobs if j["id"] not in drop_why and j.get("stage")
+            and not (j["stage"] == "sell" and not b2b) and not (j["department"] == "commerce" and kind not in COMMERCE_KINDS)]
+    keep_ids = {j["id"] for j in keep}
+    plan = [{"id": j["id"], "title": j["title"], "department": j["department"], "stage": j["stage"], "autonomy": j["autonomy"], "why": ""}
+            for j in topo_order(keep)]
     return {
         "audited": util.now(), "model_used": model,
         "business_model": "b2b" if result.get("model") == "both" else result.get("model", "unknown"),
         "buyers": result.get("model", "unknown"), "reasoning": str(result.get("reasoning", ""))[:400],
         "first_three": [i for i in result.get("first_three", []) if i in keep_ids][:3],
         "jobs": plan, "dropped": sorted(valid - keep_ids),
+        "dropped_why": {i: w for i, w in drop_why.items() if i in valid and w},
     }

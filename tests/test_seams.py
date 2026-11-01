@@ -118,3 +118,33 @@ def test_transcript_feeds_meeting_follow_ups(tmp_path, monkeypatch):
     r = run(ctx, reads, "meeting-follow-ups")  # reads the meeting records by glob, not through jobkit.read
     assert not r.get("skipped"), r
     assert list((ctx["folder"] / "meetings").glob("*-recap.md")), "meeting-follow-ups writes a recap next to each record"
+
+
+def test_research_reports_counts_a_job_whose_sources_were_skipped(tmp_path, monkeypatch):
+    """A sidecar listing sources that did not answer is a finished job, not a skipped one (seen live on 1 Nov 2026)."""
+    ctx, reads = setup(tmp_path, monkeypatch)
+    for job, sig in (("regulatory-screen", "pass"), ("vertical-analysis", "warn"), ("competitor-teardown", "fail"), ("pricing-research", "fail"), ("tam-market-sizing", "pass")):
+        util.write_json(ctx["folder"] / "validate" / f"{job}.json", {"job": job, "signal": sig, "confidence": "medium", "reason": "r", "sources": ["https://example.com"], "skipped": ["reddit: blocked from this runner"]})
+    run(ctx, reads, "research-reports", ["validate/*.json"])
+    verdict = json.loads((ctx["folder"] / "validate" / "verdict.json").read_text(encoding="utf-8"))
+    assert verdict["missing"] == [] and verdict["verdict"] != "NO-GO (provisional)"
+
+
+def test_reddit_feed_rows_share_a_word_with_the_query(monkeypatch):
+    """Reddit's search feed ranks loosely (a breakup post came back for a pricing query on 1 Nov 2026); such rows are dropped."""
+    import sys
+    sys.path.insert(0, str(util.DEPARTMENTS / "intelligence"))
+    import intelkit
+    feed = ('<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">'
+            '<entry><category term="malelivingspace" label="r/malelivingspace"/><content type="html">&lt;p&gt;My ex of 3 years suddenly left me&lt;/p&gt;</content>'
+            '<link href="https://www.reddit.com/r/malelivingspace/comments/1/x/"/><updated>2026-10-30T09:12:00+00:00</updated><title>Lived in a warehouse</title></entry>'
+            '<entry><category term="SaaS" label="r/SaaS"/><content type="html">&lt;p&gt;Which budget tool do you use to cap AI spend?&lt;/p&gt;</content>'
+            '<link href="https://www.reddit.com/r/SaaS/comments/2/y/"/><updated>2026-10-29T09:12:00+00:00</updated><title>AI budget tool recommendations?</title></entry></feed>')
+
+    class R:
+        ok, status_code, text, content, headers = True, 200, feed, feed.encode(), {}
+    monkeypatch.setattr(intelkit, "get", lambda *a, **kw: R())
+    monkeypatch.setattr(intelkit, "offline", lambda: False)
+    intelkit._REDDIT_RSS_DOWN.clear()
+    rows = intelkit.reddit_rss("AI budget tool", 10)
+    assert [r["title"] for r in rows] == ["AI budget tool recommendations?"] and rows[0]["sub"] == "SaaS"

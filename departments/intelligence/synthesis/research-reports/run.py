@@ -65,7 +65,8 @@ def collect(ctx):
         stem = PATHS.get(job, f"validate/{job}")
         d = I.dct(k.read(ctx, stem + ".json") or k.read(ctx, f"validate/{job}.json"))
         sig = d.get("signal") or {"clear": "pass", "caution": "warn", "stop": "fail"}.get(str(d.get("flag")))
-        if d and not d.get("skipped") and sig in ("pass", "warn", "fail"):
+        # a sidecar's "skipped" is a list of sources that did not answer (the job still ran); only a string means the job itself skipped
+        if d and not isinstance(d.get("skipped"), str) and sig in ("pass", "warn", "fail"):
             urls = I.lst(d.get("sources")) or [s.get("url") for s in map(I.dct, I.lst(d.get("sources_read")))]
             rows[job] = {"signal": sig, "confidence": d.get("confidence") if d.get("confidence") in RANK else ("low" if d.get("incomplete") else "medium"),
                          "reason": I.txt(d.get("reason"), 200), "sources": [u for u in urls if isinstance(u, str) and u.startswith("http")][:4], "data": d}

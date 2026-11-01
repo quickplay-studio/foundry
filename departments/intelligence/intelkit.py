@@ -265,8 +265,10 @@ def reddit_rss(query, n=25, sort="top", t="year"):
         sub = (cat.get("label", "") if cat is not None else "").lstrip("r/") or (re.search(r"/r/([^/]+)/", link) or [None, ""])[1]
         body = html.unescape(re.sub(r"<[^>]+>", " ", (e.findtext(ATOM + "content") or "")))
         body = re.sub(r"\s+", " ", re.sub(r"submitted by\s+.*?\[link\].*?\[comments\]", " ", body)).strip()
-        out.append({"title": txt(e.findtext(ATOM + "title"), 200), "text": txt(body, 500), "url": link, "score": 0, "sub": sub,
-                    "date": (e.findtext(ATOM + "updated") or "")[:10]})
+        title = txt(e.findtext(ATOM + "title"), 200)
+        if not util.on_topic(query, title, body, sub):
+            continue  # the feed ranks loosely: a post sharing no word with the query is noise
+        out.append({"title": title, "text": txt(body, 500), "url": link, "score": 0, "sub": sub, "date": (e.findtext(ATOM + "updated") or "")[:10]})
     return out
 
 

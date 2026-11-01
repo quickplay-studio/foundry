@@ -193,7 +193,9 @@ def main(ctx):
     k.write(ctx, "launch/insights/trends.md", "\n".join(lines))
     k.write(ctx, f"launch/insights/trends-{today.isoformat()}.json", {"date": today.isoformat(), "phrases": phrases, "items": items, "formats": fmt,
                                                                        "rising": [r[0] for r in rising], "angles": rows, "fit_scored": had_model, "skipped": skipped})
-    return {"summary": f"{len(items)} topics from {len({i['source'] for i in items})} sources; top: {cell(top[0]['title'])[:60]}. Skipped: {len(skipped)}.", "flag": "ok"}
+    fitting = [t for t in top if t["fit"] > 0]
+    lead = f"top: {cell(fitting[0]['title'])[:60]}" if fitting else ("no topic this week touches the venture" if had_model else "fit not scored, no model answered")
+    return {"summary": f"{len(items)} topics from {len({i['source'] for i in items})} sources, {len(fitting)} fit; {lead}. Skipped: {len(skipped)}.", "flag": "ok" if fitting or not had_model else "caution"}
 
 
 if __name__ == "__main__":

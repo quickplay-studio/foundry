@@ -68,6 +68,9 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 - Reddit's feed search ranks loosely (a breakup post came back for a pricing query); feed rows that share no word with the query are dropped, as are Bing rows.
 - The trends brief led with an off-topic Google Trends item; the summary now names the first fitting topic or says none fits this week.
 - `bank-and-payments-setup` returns a real stop for the fixture venture (it issues virtual cards): the clear gate goes `failed`, the verdict `blocked`, and the rest of the stage waits. That is the designed behaviour; on a real venture Charlie overrides in writing or kills.
+- A firm NO-GO from `research-reports` blocked the venture before `adversarial-verification` could challenge it: a job that builds on the job whose stop blocked the venture now still runs (`board.json` records `blocked_by`), so Charlie decides with the challenge in hand. Everything else waits.
+- `consumer-law-check` returned a stop in one run and a caution in the next for the same venture: the free model's own flag and an ungrounded "breach" could escalate. In the legal checks the model's flag now raises to caution at most and a breach counts only when the rule's page was read; stops come from the coded rules.
+- Build-stage jobs mostly wait on the Claude Code jobs they build on (`project-scaffolding`, `qa-and-verification`), which is right; the digest now names the Claude Code jobs the current stage is waiting for.
 - `entity-and-structure` sometimes cannot ground the corporation tax figures the free model extracts from gov.uk and says "Not computed: re-run" instead of guessing. A `CEREBRAS_API_KEY` (steadier model) is the cheap fix.
 
 ## Known gaps

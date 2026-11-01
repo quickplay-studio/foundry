@@ -60,7 +60,18 @@ def facts_from(ctx, since):
             "skipped_new": sum(1 for s in board.get("skipped") or [] if isinstance(s, dict) and (not since or after(s.get("date")))),
             "review": review, "blocked": blocked, "open_incidents": len(open_inc),
             "high_incidents": [str(i.get("id")) for i in open_inc if i.get("severity") == "high"],
-            "spent": gbp(budget.get("spent")), "revenue": gbp(budget.get("revenue")), "ad_budget": gbp(budget.get("ad_budget"))}
+            "spent": gbp(budget.get("spent")), "revenue": gbp(budget.get("revenue")), "ad_budget": gbp(budget.get("ad_budget")),
+            "qa": qa_line(ctx)}
+
+
+def qa_line(ctx):
+    """One line from qa/result.json when the QA job has run (its documented shape: verdict, sha, date, checks)."""
+    qa = k.read(ctx, "qa/result.json", None)
+    if not isinstance(qa, dict) or not qa.get("verdict"):
+        return ""
+    checks = [c for c in (qa.get("checks") or []) if isinstance(c, dict)]
+    failed = sum(1 for c in checks if str(c.get("result", "")).lower() not in ("pass", "ok"))
+    return f"QA: {str(qa['verdict']).upper()} on {str(qa.get('sha', ''))[:7] or 'no sha'} ({len(checks)} checks, {failed} failed, {str(qa.get('date', ''))[:10]})."
 
 
 def template(f):
@@ -106,7 +117,7 @@ def main(ctx):
         head = f"Where we are: {f['stage'] or 'launch'} stage, {f['done_total']} of {f['total']} jobs done. Gates passed: {', '.join(f['passed']) or 'none'}."
         body = reword(f, template(f), today, since)
         spend = f"Spend: {f['spent']} of {f['ad_budget']} ad budget, revenue {f['revenue']}."
-        text = "\n".join([head] + body + [spend])
+        text = "\n".join([head] + body + [spend] + ([f["qa"]] if f["qa"] else []))
         if len(text) > 600 or BAD.search(text):  # over length or a stray mark: fall back to the short template
             f = dict(f, done_new=f["done_new"][:2], review=f["review"][:2], blocked=f["blocked"][:2], high_incidents=f["high_incidents"][:2])
             text = "\n".join([head] + template(f) + [spend])[:600]

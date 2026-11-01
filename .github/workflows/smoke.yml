@@ -1,0 +1,130 @@
+name: smoke
+
+# A live rehearsal that needs no private repo: launches the fixture venture
+# (tests/fixtures/sample-idea.json) in a throwaway data/ folder, starts the
+# free model router, runs the first GitHub jobs for real and uploads the
+# venture folder as a workflow artifact. Nothing is committed anywhere.
+# Manual only. Use it to see what the live APIs and models do before the
+# real ventures run.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "how many jobs to run after the launch"
+        required: false
+        default: "5"
+      job:
+        description: "one job id to run on demand, or blank for plan order"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundry-smoke
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -r requirements.txt pytest
+
+      - name: Test
+        run: python -m pytest -q tests
+
+      - name: Free model router (FreeLLMAPI on the runner, fails open)
+        uses: ./.github/actions/freellm
+        continue-on-error: true
+        with:
+          tavily: ${{ secrets.TAVILY_API_KEY }}
+          exa: ${{ secrets.EXA_API_KEY }}
+          firecrawl: ${{ secrets.FIRECRAWL_API_KEY }}
+          linkup: ${{ secrets.LINKUP_API_KEY }}
+          ollama: ${{ secrets.OLLAMA_API_KEY }}
+          llm7: ${{ secrets.LLM7_API_KEY }}
+
+      - name: Router probe (one chat, one search)
+        uses: ./.github/actions/freellm
+        continue-on-error: true
+        with: { mode: probe }
+
+      - name: Fixture venture
+        run: |
+          mkdir -p data/ventures/sample data/office
+          cp tests/fixtures/sample-idea.json data/ventures/sample/idea.json
+
+      - name: Launch and run jobs
+        env:  # every one optional; a missing key skips that step and logs it
+          GH_TOKEN: ${{ github.token }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ secrets.POSTHOG_PROJECT_ID }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          SUPPORT_IMAP_USER: ${{ secrets.SUPPORT_IMAP_USER }}
+          SUPPORT_IMAP_PASSWORD: ${{ secrets.SUPPORT_IMAP_PASSWORD }}
+          HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
+          HUBSPOT_TOKEN: ${{ secrets.HUBSPOT_TOKEN }}
+          CALCOM_API_KEY: ${{ secrets.CALCOM_API_KEY }}
+          CALCOM_BOOKING_URL: ${{ secrets.CALCOM_BOOKING_URL }}
+          FIREFLIES_API_KEY: ${{ secrets.FIREFLIES_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          DEAL_ROOM_PING_URL: ${{ secrets.DEAL_ROOM_PING_URL }}
+        run: |
+          python -m foundry.launch --slug sample
+          JOB="${{ github.event.inputs.job }}"
+          LIMIT="${{ github.event.inputs.limit || '5' }}"
+          if [ -n "$JOB" ]; then
+            python -m foundry.jobs --slug sample --job "$JOB"
+          else
+            python -m foundry.jobs --slug sample --limit "$LIMIT"
+          fi
+          python -m foundry.dashboards
+
+      - name: Board summary
+        if: ${{ always() }}
+        run: |
+          python - <<'EOF'
+          import json, pathlib
+          b = json.loads(pathlib.Path("data/ventures/sample/board.json").read_text())
+          print("verdict:", b.get("verdict"), "| model:", b.get("model_used"), "| gates:", b.get("gates"))
+          for e in b.get("log", []):
+              print(f"RAN  {e.get('status'):7} {e.get('flag'):7} {e.get('job')} [{e.get('model')}]  {str(e.get('summary') or '')[:160]}")
+          for s in b.get("skipped", []):
+              print(f"SKIP {s.get('job')}  {s.get('reason')}")
+          for j in b.get("jobs", []):
+              if j.get("status") not in ("todo", "done", "review"):
+                  print(f"{j.get('status'):8} {j.get('stage','?'):9} {j.get('id')}")
+          EOF
+          find data/ventures/sample -type f | sort
+
+      - name: Router stats, then stop it
+        if: ${{ always() }}
+        uses: ./.github/actions/freellm
+        continue-on-error: true
+        with: { mode: stats }
+
+      - name: Upload the venture folder
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: foundry-smoke-data
+          path: data
+          retention-days: 7
+          if-no-files-found: warn

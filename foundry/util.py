@@ -262,6 +262,9 @@ def bing_search(query, n=5):
         r = requests.get("https://www.bing.com/search", params={"q": query, "setlang": "en-GB", "cc": "GB"}, timeout=25, headers={"User-Agent": BROWSER_UA, "Accept-Language": "en-GB,en;q=0.8"})
     except Exception:  # noqa: BLE001
         return []
+    if os.environ.get("FOUNDRY_PROBE_DEBUG"):
+        i = r.text.find('class="b_algo"')
+        print(f"bing: HTTP {r.status_code}, {len(r.text)} bytes, b_algo at {i}, final url {r.url}\n{r.text[i:i + 700] if i >= 0 else r.text[:700]}", file=sys.stderr)
     if r.status_code != 200:
         _DOWN["bing"] = True
         return []

@@ -69,6 +69,8 @@ SOURCES = [
 
 def parsed():
     """What the scrapers make of the routes that answered: the rows a job would get."""
+    import os
+    os.environ["FOUNDRY_PROBE_DEBUG"] = "1"
     from foundry import util
     sys.path.insert(0, str(util.DEPARTMENTS / "intelligence"))
     import intelkit

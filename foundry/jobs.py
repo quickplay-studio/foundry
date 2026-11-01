@@ -63,10 +63,17 @@ def deps_done(board, job):
     return all(status.get(dep, "absent") in ("done", "review", "skipped", "absent") for dep in meta.get("builds_on", []))
 
 
+def challenger(board, job):
+    """A job that builds on the one whose stop blocked the venture (adversarial-verification after a NO-GO report):
+    it may still run, so Charlie decides with the challenge in hand. Everything else waits."""
+    meta = {j["id"]: j for j in util.all_jobs()}.get(job["id"], {})
+    return board.get("verdict") == "blocked" and board.get("blocked_by") in meta.get("builds_on", [])
+
+
 def can_run(board, job):
     order = audit.STAGE_ORDER
     stage = job["stage"]
-    if stage not in order or board.get("verdict") in HALT_VERDICTS:
+    if stage not in order or (board.get("verdict") in HALT_VERDICTS and not challenger(board, job)):
         return False
     for earlier in order[: order.index(stage)]:
         has_jobs = any(j["stage"] == earlier for j in board["jobs"])
@@ -230,6 +237,7 @@ def run_venture(slug, limit, dry_run=False, only=None):
             if result["flag"] == "stop":
                 board["gates"][job["stage"]] = "failed"
                 board["verdict"] = "blocked"  # Charlie decides: override in writing, or kill
+                board["blocked_by"] = job_id  # the jobs that build on this one (its challengers) may still run
             done += 1
         board["updated"] = util.now()
         board["stage"] = next((j["stage"] for j in board["jobs"] if j["status"] in ("todo", "review")), board["stage"])

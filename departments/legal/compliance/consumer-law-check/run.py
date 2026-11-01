@@ -143,7 +143,7 @@ def main(ctx):
         status = str(m.get("status", "open")).lower() if m else "open"
         status = status if status in ("ok", "open", "breach") else "open"
         if not confirmed:
-            status = "unconfirmed" if status == "ok" else status
+            status = "unconfirmed" if status == "ok" else "open" if status == "breach" else status  # a breach needs the rule's page read
         src = "store terms" if p is None else (f"{p['url']} (read {p['read_on']})" if p["ok"] else "NOT READ")
         table.append((rule, src, str(m.get("must_do") or must)[:220], str(m.get("affects") or affects)[:80], status))
         if status == "breach":
@@ -158,7 +158,7 @@ def main(ctx):
     if questions:
         flag = worse(flag, "caution")
     mflag = str(ans.get("flag", "caution")).lower()
-    flag = worse(flag, mflag if mflag in ORDER else "caution")
+    flag = worse(flag, "caution" if mflag in ("caution", "stop") else "clear")  # the model's own flag raises to caution at most: stops come from the rules above
     reason = "; ".join(reasons) or str(ans.get("reason", ""))[:300] or "All required pages read and every rule mapped."
     wording = [str(w)[:200] for w in (ans.get("wording") if isinstance(ans.get("wording"), list) else [])] or WORDING
     lines = [f"FLAG: {flag}", "", reason, "", NOTICE, "", "## Classification",

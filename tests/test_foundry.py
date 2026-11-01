@@ -273,3 +273,23 @@ def test_notify_keeps_one_needs_you_issue(monkeypatch, tmp_path):
     monkeypatch.setattr(notify.requests, "get", lambda url, **kw: R([{"title": "Needs you", "url": "u", "comments_url": "c", "number": 7}]))
     notify.main()
     assert calls and calls[-1][0] == "patch" and calls[-1][2]["state"] == "closed"
+
+
+def test_a_challenger_runs_on_a_blocked_venture(monkeypatch, tmp_path):
+    """research-reports' NO-GO blocks the venture, and adversarial-verification (which builds on it) still runs so Charlie sees the challenge."""
+    from foundry import jobs
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None, prefer=None: (None, None))
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
+    launch.run_one("sample", root=tmp_path)
+    board = json.loads((dst / "board.json").read_text())
+    by_id = {j["id"]: j for j in board["jobs"]}
+    for dep in ("vertical-analysis", "competitor-teardown", "tam-market-sizing", "pricing-research"):
+        by_id[dep]["status"] = "done"
+    by_id["research-reports"]["status"] = "done"
+    board["verdict"], board["blocked_by"], board["gates"]["validate"] = "blocked", "research-reports", "failed"
+    assert jobs.can_run(board, by_id["adversarial-verification"])
+    assert not jobs.can_run(board, by_id["regulatory-screen"]), "everything else waits for Charlie"
+    board["blocked_by"] = "bank-and-payments-setup"
+    assert not jobs.can_run(board, by_id["adversarial-verification"])

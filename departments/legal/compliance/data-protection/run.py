@@ -166,7 +166,7 @@ def main(ctx):
         flag = worse(flag, "caution")
         why.append("DPIA needed: " + ", ".join(triggers))
     mflag = str(ans.get("flag", "caution")).lower()
-    flag = worse(flag, mflag if mflag in ORDER else "caution")
+    flag = worse(flag, "caution" if mflag in ("caution", "stop") else "clear")  # the model's own flag raises to caution at most: stops come from the rules above
     fee = ans.get("fee") if isinstance(ans.get("fee"), dict) else {}
     ftext = pages["fee"]["text"]
     amount = str(fee.get("amount", ""))

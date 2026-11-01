@@ -28,6 +28,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check the data repo token
+        env:
+          T: ${{ secrets.VENTURES_TOKEN }}
+        run: |
+          if [ -z "$T" ]; then
+            echo "::error::VENTURES_TOKEN is not set on this repo (Settings, Secrets and variables, Actions). Add a fine-grained token with Contents read and write on quickplay-studio/foundry-ventures."
+            exit 1
+          fi
+          who=$(curl -s -H "Authorization: Bearer $T" https://api.github.com/user | python3 -c "import sys,json; print(json.load(sys.stdin).get('login','unknown'))" 2>/dev/null || echo unknown)
+          code=$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $T" https://api.github.com/repos/quickplay-studio/foundry-ventures)
+          echo "token owner: $who, GET foundry-ventures: HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::VENTURES_TOKEN (owner $who) cannot see quickplay-studio/foundry-ventures (HTTP $code). Edit the token: Repository access, Only select repositories, tick foundry-ventures; Permissions, Contents: Read and write."
+            exit 1
+          fi
+
       - name: Check out venture data (private)
         uses: actions/checkout@v4
         with:

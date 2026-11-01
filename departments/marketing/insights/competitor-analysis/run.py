@@ -43,6 +43,11 @@ def allowed(url):
 
 def find_competitors(idea, skipped):
     seen, out = set(), []
+    for r in k.known_competitors(idea, 5):  # what the model already knows, then the web
+        host = urlparse(r["url"]).netloc.lower().removeprefix("www.")
+        if host and host not in seen:
+            seen.add(host)
+            out.append({"name": r["name"], "url": r["url"], "youtube": "", "instagram": "", "tiktok": ""})
     phrases = [str(idea.get("problem", ""))[:90], str(idea.get("gap", ""))[:90], f"{idea.get('title', '')} alternatives"]
     for q in phrases:
         for r in k.search(q.strip() + " tool OR app OR service", 6):
@@ -51,7 +56,7 @@ def find_competitors(idea, skipped):
                 seen.add(host)
                 out.append({"name": re.split(r"\s[|:]\s|\s-\s", r.get("title") or host)[0][:50], "url": r["url"], "youtube": "", "instagram": "", "tiktok": ""})
     if not out:
-        skipped.append("competitor search: no router or Firecrawl results")
+        skipped.append("competitor search: no results from the model, the router, Firecrawl or the keyless engines")
     return out
 
 

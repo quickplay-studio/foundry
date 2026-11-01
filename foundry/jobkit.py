@@ -134,6 +134,26 @@ def secret(name):
     return os.environ.get(name, "").strip()
 
 
+def known_competitors(idea, n=6):
+    """Products the model already knows as direct alternatives for the idea: [{"name", "url", "why"}], verified only as far
+    as having a plausible https url. Seeds competitor discovery when web search is thin; the scripts fetch the sites afterwards."""
+    brief = json.dumps({k: idea.get(k) for k in ("title", "kind", "problem", "who", "gap", "mvp") if idea.get(k)}, ensure_ascii=False)[:1500]
+    answer = ask('Return JSON only: {"competitors": [{"name": "the product name", "url": "https://its-homepage.example", "why": "one line on what it does"}]}. '
+                 f'List up to {n} real, existing products that people with this problem use today as direct alternatives, best known first, each with its real homepage. '
+                 'Leave the list empty rather than inventing one.\n\nIDEA\n' + brief)
+    rows = answer.get("competitors") if isinstance(answer, dict) and isinstance(answer.get("competitors"), list) else []
+    out, seen = [], set()
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        name, url = str(r.get("name", "")).strip()[:60], str(r.get("url", "")).strip()
+        if not re.match(r"^https?://[\w.-]+\.[a-z]{2,}", url, flags=re.I) or ".example" in url or not name or name.lower() in seen or name.lower() == "the product name":
+            continue
+        seen.add(name.lower())
+        out.append({"name": name, "url": url.split("?")[0], "why": str(r.get("why", ""))[:120]})
+    return out[:n]
+
+
 def test_ctx(folder, idea=None, board=None):
     """A context for tests: a venture folder on disk with idea.json and brain.md."""
     folder = Path(folder)

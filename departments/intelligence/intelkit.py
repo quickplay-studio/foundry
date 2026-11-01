@@ -228,17 +228,55 @@ def hn_monthly(query, months=12):
     return out
 
 
-def reddit(query, n=25, sort="top", t="year"):
-    """Reddit public JSON (about 10 requests a minute, so each call waits 6 seconds); None when blocked."""
-    d = get_json("https://www.reddit.com/search.json", {"q": query, "t": t, "sort": sort, "limit": n}, wait=6)
-    if not isinstance(d, dict):
+_REDDIT_JSON_DOWN = []  # set once the JSON API answers 403 in this process (GitHub runners, every time)
+ATOM = "{http://www.w3.org/2005/Atom}"
+
+
+def reddit_rss(query, n=25, sort="top", t="year"):
+    """Reddit's search feed (search.rss), which answers GitHub runners when the JSON API returns 403. Same rows as reddit(),
+    with score 0 because the feed carries none; None when the feed is blocked too."""
+    r = get("https://www.reddit.com/search.rss", {"q": query, "t": t, "sort": sort, "limit": n}, headers={"User-Agent": util.BROWSER_UA}, wait=3)
+    if r is None or not r.ok or "<feed" not in r.text[:400]:
+        return None
+    try:
+        root = ET.fromstring(r.content)
+    except ET.ParseError:
         return None
     out = []
-    for c in lst(dct(d.get("data")).get("children")):
-        p = dct(c.get("data"))
-        out.append({"title": txt(p.get("title"), 200), "text": txt(p.get("selftext"), 500), "url": "https://www.reddit.com" + str(p.get("permalink", "")),
-                    "score": int(p.get("score") or 0), "sub": p.get("subreddit", ""), "date": datetime.fromtimestamp(p.get("created_utc") or 0, timezone.utc).strftime("%Y-%m-%d")})
+    for e in list(root.iter(ATOM + "entry"))[:n]:
+        link = next((a.get("href", "") for a in e.findall(ATOM + "link") if a.get("href")), "")
+        cat = e.find(ATOM + "category")
+        sub = (cat.get("label", "") if cat is not None else "").lstrip("r/") or (re.search(r"/r/([^/]+)/", link) or [None, ""])[1]
+        body = html.unescape(re.sub(r"<[^>]+>", " ", (e.findtext(ATOM + "content") or "")))
+        body = re.sub(r"\s+", " ", re.sub(r"submitted by\s+.*?\[link\].*?\[comments\]", " ", body)).strip()
+        out.append({"title": txt(e.findtext(ATOM + "title"), 200), "text": txt(body, 500), "url": link, "score": 0, "sub": sub,
+                    "date": (e.findtext(ATOM + "updated") or "")[:10]})
     return out
+
+
+def reddit(query, n=25, sort="top", t="year"):
+    """Reddit public JSON (about 10 requests a minute, so each call waits 6 seconds), falling back to the search feed
+    where the JSON API is blocked (GitHub runners); None when both are."""
+    if not _REDDIT_JSON_DOWN:
+        r = get("https://www.reddit.com/search.json", {"q": query, "t": t, "sort": sort, "limit": n}, wait=6)
+        if r is not None and r.status_code in (403, 429):
+            _REDDIT_JSON_DOWN.append(r.status_code)
+        d = None
+        if r is not None and r.ok:
+            try:
+                d = r.json()
+            except ValueError:
+                d = None
+        if isinstance(d, dict):
+            out = []
+            for c in lst(dct(d.get("data")).get("children")):
+                p = dct(c.get("data"))
+                out.append({"title": txt(p.get("title"), 200), "text": txt(p.get("selftext"), 500), "url": "https://www.reddit.com" + str(p.get("permalink", "")),
+                            "score": int(p.get("score") or 0), "sub": p.get("subreddit", ""), "date": datetime.fromtimestamp(p.get("created_utc") or 0, timezone.utc).strftime("%Y-%m-%d")})
+            return out
+    if offline():
+        return None
+    return reddit_rss(query, n, sort, t)
 
 
 def app_row(r):

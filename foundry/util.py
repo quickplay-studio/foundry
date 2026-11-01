@@ -213,7 +213,7 @@ _DOWN = {}  # engines that refused this process, so later calls skip them
 
 
 def keyless_search(query, n=5):
-    """Search with no key at all: DuckDuckGo's HTML page, then Hacker News (Algolia) as the last resort. [] on failure."""
+    """Search with no key at all: DuckDuckGo's HTML page, then Bing's, then Hacker News (Algolia) as the last resort. [] on failure."""
     if os.environ.get("FOUNDRY_FAKE_MODEL"):
         return []
     rows = []
@@ -234,6 +234,9 @@ def keyless_search(query, n=5):
         rows = []
     if rows:
         return rows[:n]
+    rows = bing_search(query, n)
+    if rows:
+        return rows
     try:
         short = " ".join(re.sub(r"\b(OR|AND|tool|app|service|alternatives?|best|uk)\b", " ", query, flags=re.I).split()[:10])
         r = requests.get("https://hn.algolia.com/api/v1/search", params={"query": short or query, "hitsPerPage": n}, timeout=20)
@@ -242,6 +245,36 @@ def keyless_search(query, n=5):
                  "content": re.sub(r"<[^>]+>", " ", str(h.get("story_text") or h.get("comment_text") or ""))[:1500], "source": "hackernews"} for h in hits][:n]
     except Exception:  # noqa: BLE001
         return []
+
+
+BROWSER_UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+
+
+def strip_tags(text):
+    return re.sub(r"\s+([.,;:!?)])", r"\1", re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", str(text)))).strip()
+
+
+def bing_search(query, n=5):
+    """Bing's plain HTML results page, which answers GitHub runners (DuckDuckGo, Brave and Mojeek do not). [] on failure."""
+    if _DOWN.get("bing"):
+        return []
+    try:
+        r = requests.get("https://www.bing.com/search", params={"q": query, "setlang": "en-GB", "cc": "GB"}, timeout=25, headers={"User-Agent": BROWSER_UA, "Accept-Language": "en-GB,en;q=0.8"})
+    except Exception:  # noqa: BLE001
+        return []
+    if r.status_code != 200:
+        _DOWN["bing"] = True
+        return []
+    rows = []
+    for block in re.findall(r'<li class="b_algo"(.*?)</li>', r.text, flags=re.S)[: n * 2]:
+        m = re.search(r'<h2[^>]*>\s*<a[^>]*href="([^"]+)"[^>]*>(.*?)</a>', block, flags=re.S)
+        if not m or not m.group(1).startswith("http") or "bing.com" in m.group(1).split("/")[2]:
+            continue
+        snippet = re.search(r"<p[^>]*>(.*?)</p>", block, flags=re.S)
+        rows.append({"title": strip_tags(m.group(2))[:200], "url": m.group(1), "content": strip_tags(snippet.group(1))[:1500] if snippet else "", "source": "bing"})
+        if len(rows) >= n:
+            break
+    return rows
 
 
 def fake_answer(prompt):

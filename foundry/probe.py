@@ -67,12 +67,25 @@ SOURCES = [
 ]
 
 
+def parsed():
+    """What the scrapers make of the routes that answered: the rows a job would get."""
+    from foundry import util
+    sys.path.insert(0, str(util.DEPARTMENTS / "intelligence"))
+    import intelkit
+    for name, rows in (("bing_search", util.bing_search(Q, 3)), ("keyless_search", util.keyless_search(Q, 3)), ("reddit_rss", (intelkit.reddit_rss(Q, 3) or [])[:3])):
+        print(f"{name:28} {len(rows)} rows")
+        for r in rows:
+            print("   ", json.dumps({k: str(v)[:90] for k, v in r.items()}, ensure_ascii=False))
+
+
 def main(argv=None):
     only = (argv or [])[:1]
     for name, method, url, count, kw in SOURCES:
         if only and only[0].lower() not in name.lower():
             continue
         probe(name, method, url, count, **kw)
+    if not only:
+        parsed()
 
 
 if __name__ == "__main__":

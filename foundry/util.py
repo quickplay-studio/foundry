@@ -90,18 +90,38 @@ def _groq(prompt, model):
     return data["choices"][0]["message"]["content"]
 
 
-def _freellm(prompt, model="auto"):
-    """The FreeLLMAPI router started on the runner by foundry.freellm (OpenAI-compatible, free tiers only)."""
+LAST_VIA = {"model": ""}  # which upstream model answered the last router call (X-Routed-Via), for the board log
+
+
+def _freellm(prompt, model="auto", attempts=3):
+    """The FreeLLMAPI router started on the runner by foundry.freellm (OpenAI-compatible, free tiers only).
+    A 5xx, 429 or timeout is retried, since auto routing lands on a different upstream each time."""
     key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
     if not (key and base):
         raise RuntimeError("FREELLM router not running")
     body = {"model": model, "temperature": 0.2, "max_tokens": 6000,
             "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
-    data = http_post_json(base + "/chat/completions", body, {"Authorization": f"Bearer {key}"}, timeout=180)
-    text = data["choices"][0]["message"]["content"]
-    if not text and (data["choices"][0].get("finish_reason") == "length"):
-        raise RuntimeError("router answer empty (finish_reason length)")
-    return text
+    last = None
+    for n in range(attempts):
+        try:
+            r = requests.post(base + "/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=180)
+            if r.status_code in (429, 500, 502, 503, 504):
+                raise RuntimeError(f"router returned HTTP {r.status_code}")
+            if r.status_code >= 400:
+                raise RuntimeError(f"router returned HTTP {r.status_code}: {r.text[:120]}")
+            data = r.json()
+            LAST_VIA["model"] = requests.utils.unquote(r.headers.get("X-Routed-Via", ""))[:60]
+            choice = data["choices"][0]
+            text = choice["message"]["content"] or ""
+            if not text.strip():
+                raise RuntimeError("router answer empty" + (" (finish_reason length)" if choice.get("finish_reason") == "length" else ""))
+            return text
+        except (requests.RequestException, RuntimeError, KeyError, ValueError) as exc:
+            last = exc
+            if isinstance(exc, RuntimeError) and "HTTP 4" in str(exc) and "429" not in str(exc):
+                break
+            time.sleep(3 * (n + 1))
+    raise RuntimeError(str(last)[:160])
 
 
 SYSTEM = ("Answer with one JSON object and nothing else: no prose, no code fence. The JSON shape in the request is a template: "
@@ -200,12 +220,19 @@ def ask_json(prompt, skipped=None, prefer=None):
         return fake_answer(prompt), "fake"
     chain = sorted(MODEL_CHAIN, key=lambda m: 0 if prefer and m[0].startswith(prefer) else 1) if prefer else MODEL_CHAIN
     for name, call in chain:
-        try:
-            text = call(prompt)
-            start, end = text.find("{"), text.rfind("}")
-            return scrub(json.loads(text[start:end + 1])), name
-        except Exception as exc:  # noqa: BLE001
-            if skipped is not None:
-                skipped.append({"model": name, "reason": f"{type(exc).__name__}: {exc}"[:160]})
-            time.sleep(1)
+        for n in range(2):  # a second go when the answer was not JSON: the next upstream usually is
+            try:
+                text = call(prompt if n == 0 else prompt + "\n\nReturn the JSON object only, complete and valid.")
+                start, end = text.find("{"), text.rfind("}")
+                if start < 0 or end < 0:
+                    raise ValueError("no JSON object in the answer: " + text.strip()[:80])
+                parsed = scrub(json.loads(text[start:end + 1]))
+                via = LAST_VIA["model"] if name.startswith("freellm") else ""
+                return parsed, (name + "/" + via if via else name)
+            except Exception as exc:  # noqa: BLE001
+                if skipped is not None:
+                    skipped.append({"model": name, "reason": f"{type(exc).__name__}: {exc}"[:160]})
+                if not isinstance(exc, ValueError):  # json.JSONDecodeError is a ValueError
+                    break  # the model did not answer at all: move down the chain, do not ask it twice
+                time.sleep(1)
     return None, None

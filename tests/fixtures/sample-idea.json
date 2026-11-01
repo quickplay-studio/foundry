@@ -1,14 +1,36 @@
 {
   "slug": "sample",
   "title": "Sample: Agent Spend Guard",
+  "kind": "app",
   "category": "money",
   "problem": "Autonomous coding agents trigger surprise recharges and runaway API loops.",
   "who": "Solo founders and indie hackers running AI tools",
   "gap": "No real-time circuit breaker stops an agent burning the monthly budget.",
-  "mvp": ["Virtual card with hard caps", "Spend spike alert webhook", "Pre-run cost estimate"],
+  "mvp": [
+    "Virtual card with hard caps",
+    "Spend spike alert webhook",
+    "Pre-run cost estimate"
+  ],
   "money": "Flat monthly fee or a small percentage of managed spend.",
-  "proof": [{"source": "Hacker News", "url": "https://news.ycombinator.com/"}],
-  "scores": {"demand": 8, "ease": 6, "wtp": 7, "crowding": 3, "composite": 7.2},
+  "channels": [
+    "hacker news",
+    "reddit",
+    "product hunt",
+    "x"
+  ],
+  "proof": [
+    {
+      "source": "Hacker News",
+      "url": "https://news.ycombinator.com/"
+    }
+  ],
+  "scores": {
+    "demand": 8,
+    "ease": 6,
+    "wtp": 7,
+    "crowding": 3,
+    "composite": 7.2
+  },
   "budget_gbp": 100,
   "deployed": "2026-10-31",
   "note": "Sample venture so the launch pipeline can be tested. Delete when the first real idea lands."

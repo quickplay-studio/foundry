@@ -62,6 +62,14 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 - `foundry/notify.py`: the Needs you issue (above), the one place GitHub itself tells you something changed.
 - Radar: reads the private repo with a browser-held read-only token; Needs you view renders the digest.
 
+## What the stage rehearsals taught (session 4, already fixed)
+
+- `research-reports` read a sidecar's `skipped` list (sources that did not answer) as "the job skipped", so the validate verdict was NO-GO (provisional) whenever Reddit was blocked. Only a string `skipped` means that now.
+- Reddit's feed search ranks loosely (a breakup post came back for a pricing query); feed rows that share no word with the query are dropped, as are Bing rows.
+- The trends brief led with an off-topic Google Trends item; the summary now names the first fitting topic or says none fits this week.
+- `bank-and-payments-setup` returns a real stop for the fixture venture (it issues virtual cards): the clear gate goes `failed`, the verdict `blocked`, and the rest of the stage waits. That is the designed behaviour; on a real venture Charlie overrides in writing or kills.
+- `entity-and-structure` sometimes cannot ground the corporation tax figures the free model extracts from gov.uk and says "Not computed: re-run" instead of guessing. A `CEREBRAS_API_KEY` (steadier model) is the cheap fix.
+
 ## Known gaps
 
 - Reddit's JSON API is unreachable from GitHub runners (403); the search feed answers but is throttled per address, so some runs get nothing. An Apify token restores full access.

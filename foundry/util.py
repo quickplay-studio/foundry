@@ -268,7 +268,7 @@ def bing_search(query, n=5):
     if _DOWN.get("bing"):
         return []
     try:
-        r = requests.get("https://www.bing.com/search", params={"q": query, "setlang": "en-GB", "cc": "GB"}, timeout=25, headers={"User-Agent": BROWSER_UA, "Accept-Language": "en-GB,en;q=0.8"})
+        r = requests.get("https://www.bing.com/search", params={"q": query, "setlang": "en-GB"}, timeout=25, headers={"User-Agent": BROWSER_UA, "Accept-Language": "en-GB,en;q=0.8"})
     except Exception:  # noqa: BLE001
         return []
     if os.environ.get("FOUNDRY_PROBE_DEBUG"):

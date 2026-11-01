@@ -139,6 +139,8 @@ def run_script(script, folder, job, dry_run=False):
     except subprocess.TimeoutExpired:
         return {"skipped": "run.py timed out after 25 minutes"}
     last = [line for line in proc.stdout.strip().splitlines() if line.startswith("{")]
+    for line in (proc.stderr or "").strip().splitlines()[-12:]:  # the script's own diagnostics (model failures, skips), in the workflow log
+        print(f"    [{job['id']}] {line[:160]}", flush=True)
     if proc.returncode != 0 or not last:
         tail = (proc.stderr or proc.stdout).strip().splitlines()[-3:]
         return {"skipped": ("run.py failed: " + " | ".join(tail))[:200]}

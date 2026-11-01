@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -121,13 +122,13 @@ def _freellm(prompt, model=None, attempts=4):
     key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
     if not (key and base):
         raise RuntimeError("FREELLM router not running")
-    models = [model] if model else router_models(key, base)
+    models = [model] if model else [m for m in router_models(key, base) if _MODELS.get("bad", {}).get(m, 0) < 2] or ["auto"]
     last = None
     for n in range(attempts):
         body = {"model": models[min(n, len(models) - 1)], "temperature": 0.2, "max_tokens": 6000,
                 "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
         try:
-            r = requests.post(base + "/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=180)
+            r = requests.post(base + "/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=150)
             if r.status_code in (429, 500, 502, 503, 504):
                 raise RuntimeError(f"router returned HTTP {r.status_code}")
             if r.status_code >= 400:
@@ -141,6 +142,9 @@ def _freellm(prompt, model=None, attempts=4):
             return text
         except (requests.RequestException, RuntimeError, KeyError, ValueError) as exc:
             last = exc
+            bad = _MODELS.setdefault("bad", {})
+            bad[body["model"]] = bad.get(body["model"], 0) + 1  # two failures and this process stops asking that model
+            print(f"freellm: {body['model']} failed: {type(exc).__name__}: {str(exc)[:100]}", file=sys.stderr, flush=True)
             time.sleep(2 * (n + 1))
     raise RuntimeError(str(last)[:160])
 

@@ -112,6 +112,7 @@ jobs:
             python -m foundry.jobs --slug sample --limit "$LIMIT"
           fi
           python -m foundry.dashboards
+          python -m foundry.digest
 
       - name: Board summary
         if: ${{ always() }}

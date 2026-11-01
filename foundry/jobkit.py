@@ -134,6 +134,76 @@ def secret(name):
     return os.environ.get(name, "").strip()
 
 
+def md_html(text):
+    """Small markdown to HTML: headings, bullet lists, pipe tables, paragraphs, bold."""
+    import html
+    out, buf = [], []
+
+    def inline(s):
+        return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", html.escape(s))
+
+    def flush():
+        if not buf:
+            return
+        if buf[0][0] == "li":
+            out.append("<ul>" + "".join(f"<li>{inline(b[1])}</li>" for b in buf) + "</ul>")
+        elif buf[0][0] == "tr":
+            rows = [b[1] for b in buf if not re.fullmatch(r"[\s|:-]+", b[1])]
+            out.append("<table>" + "".join("<tr>" + "".join(f"<td>{inline(c.strip())}</td>" for c in r.strip("|").split("|")) + "</tr>" for r in rows) + "</table>")
+        else:
+            out.append("<p>" + inline(" ".join(b[1] for b in buf)) + "</p>")
+        buf.clear()
+
+    for line in text.splitlines():
+        s = line.strip()
+        h = re.match(r"(#{1,4}) +(.*)", s)
+        kind = "h" if h else "li" if re.match(r"[-*] +", s) else "tr" if s.startswith("|") else "p" if s else None
+        if buf and kind != buf[0][0]:
+            flush()
+        if kind == "h":
+            out.append(f"<h{len(h.group(1))}>{inline(h.group(2))}</h{len(h.group(1))}>")
+        elif kind:
+            buf.append((kind, re.sub(r"^[-*] +", "", s) if kind == "li" else s))
+    flush()
+    return "\n".join(out)
+
+
+PDF_CSS = ("body{font-family:Georgia,serif;max-width:720px;margin:2em auto;line-height:1.5;color:#222}h1,h2{font-family:Arial,sans-serif}"
+           "table{border-collapse:collapse}td{border:1px solid #bbb;padding:4px 8px}h1{page-break-before:always}h1:first-of-type{page-break-before:avoid}")
+
+
+def chrome():
+    import shutil
+    return shutil.which("google-chrome") or shutil.which("google-chrome-stable") or shutil.which("chromium") or shutil.which("chromium-browser")
+
+
+def render_pdf(ctx, rel, markdown, css=None):
+    """Render markdown to a PDF under the venture folder with the runner's headless Chrome (ubuntu-latest has it).
+    Returns the relative path when the file was written, else None (no Chrome, dry run, offline test, or Chrome failed);
+    the caller records the pending render and carries on, nothing else depends on the PDF."""
+    import subprocess
+    import tempfile
+    exe = chrome()
+    if not exe or ctx.get("dry_run") or os.environ.get("PYTEST_CURRENT_TEST") or os.environ.get("FOUNDRY_FAKE_MODEL"):
+        return None
+    out = ctx["folder"] / rel
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        page = Path(tmp) / "page.html"
+        page.write_text(f"<!doctype html><meta charset=utf-8><style>{css or PDF_CSS}</style>{md_html(markdown)}", encoding="utf-8")
+        try:
+            subprocess.run([exe, "--headless=new", "--no-sandbox", "--disable-gpu", "--no-pdf-header-footer", f"--print-to-pdf={out}", page.as_uri()],
+                           capture_output=True, timeout=90)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            print(f"pdf render failed: {type(exc).__name__}", file=sys.stderr)
+            return None
+    if not out.exists() or out.stat().st_size == 0:
+        return None
+    if rel not in ctx["outputs"]:
+        ctx["outputs"].append(rel)
+    return rel
+
+
 def known_competitors(idea, n=6):
     """Products the model already knows as direct alternatives for the idea: [{"name", "url", "why"}], verified only as far
     as having a plausible https url. Seeds competitor discovery when web search is thin; the scripts fetch the sites afterwards."""

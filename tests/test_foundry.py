@@ -168,3 +168,32 @@ def test_dependencies_and_halt_gate_the_runner(monkeypatch, tmp_path):
     assert jobs.can_run(board, by_id["research-reports"])
     board["verdict"] = "blocked"
     assert not jobs.can_run(board, by_id["vertical-analysis"]), "a blocked venture waits for Charlie"
+
+
+def test_digest_lists_what_needs_charlie(monkeypatch, tmp_path):
+    from foundry import digest
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None, prefer=None: (None, None))
+    dst = tmp_path / "ventures" / "sample"
+    dst.mkdir(parents=True)
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
+    launch.run_one("sample", root=tmp_path / "ventures")
+    board = json.loads((dst / "board.json").read_text())
+    for j in board["jobs"]:
+        if j["stage"] == "validate":
+            j["status"] = "done"
+    board["jobs"][0].update(status="review", outputs=["validate/report.md"])
+    board["jobs"][1]["status"] = "skipped"
+    board["skipped"] = [{"job": board["jobs"][1]["id"], "reason": "App Store: no answer", "date": "2026-11-01", "attempts": 3}]
+    board["verdict"] = "blocked"
+    board["log"] = [{"date": "2026-11-01", "job": "regulatory-screen", "status": "review", "flag": "stop", "summary": "licence needed", "model": "run.py"}]
+    (dst / "board.json").write_text(json.dumps(board))
+    monkeypatch.setattr(util, "VENTURES", tmp_path / "ventures")
+    monkeypatch.setattr(digest, "OUT", tmp_path / "office" / "digest.md")
+    summary = tmp_path / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    text = digest.main()
+    assert "**Blocked** (regulatory-screen: licence needed)" in text
+    assert "set `gates.validate: passed`" in text
+    assert f"Review `{board['jobs'][0]['id']}`" in text and "foundry-ventures/blob/main/ventures/sample/validate/report.md" in text
+    assert "gave up after 3 days" in text
+    assert summary.read_text() == text + "\n" and (tmp_path / "office" / "digest.md").read_text() == text

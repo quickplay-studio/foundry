@@ -6,7 +6,6 @@ folder for Charlie. Scripts import this with a sys.path line, see any run.py in 
 import base64
 import csv
 import datetime as dt
-import html
 import io
 import re
 
@@ -260,36 +259,8 @@ def gmail(query, limit=40):
 
 
 def md_html(text):
-    """Small markdown to HTML: headings, bullet lists, pipe tables, paragraphs, bold."""
-    out, buf = [], []
-
-    def inline(s):
-        return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", html.escape(s))
-
-    def flush():
-        if not buf:
-            return
-        if buf[0][0] == "li":
-            out.append("<ul>" + "".join(f"<li>{inline(b[1])}</li>" for b in buf) + "</ul>")
-        elif buf[0][0] == "tr":
-            rows = [b[1] for b in buf if not re.fullmatch(r"[\s|:-]+", b[1])]
-            out.append("<table>" + "".join("<tr>" + "".join(f"<td>{inline(c.strip())}</td>" for c in r.strip("|").split("|")) + "</tr>" for r in rows) + "</table>")
-        else:
-            out.append("<p>" + inline(" ".join(b[1] for b in buf)) + "</p>")
-        buf.clear()
-
-    for line in text.splitlines():
-        s = line.strip()
-        h = re.match(r"(#{1,4}) +(.*)", s)
-        kind = "h" if h else "li" if re.match(r"[-*] +", s) else "tr" if s.startswith("|") else "p" if s else None
-        if buf and kind != buf[0][0]:
-            flush()
-        if kind == "h":
-            out.append(f"<h{len(h.group(1))}>{inline(h.group(2))}</h{len(h.group(1))}>")
-        elif kind:
-            buf.append((kind, re.sub(r"^[-*] +", "", s) if kind == "li" else s))
-    flush()
-    return "\n".join(out)
+    """Small markdown to HTML (foundry.jobkit.md_html)."""
+    return k.md_html(text)
 
 
 def starter_library(ctx):

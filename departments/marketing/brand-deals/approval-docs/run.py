@@ -2,8 +2,8 @@
 
 Assembles the sign-off pack for the latest script version of each deal: cover, compliance table, final script,
 storyboard, disclosure, claims list, schedule and rights as Charlie recorded them, a brand-safety table and a blank
-sign-off block. Each version is a new file and earlier ones are never overwritten. The PDF render needs headless
-Chrome, which this job does not call, so the PDF is pending. It never emails a sponsor.
+sign-off block. Each version is a new file and earlier ones are never overwritten. The PDF is rendered with the
+runner's headless Chrome (foundry.jobkit.render_pdf) and pending where there is none. It never emails a sponsor.
 """
 import datetime as dt
 import difflib
@@ -55,7 +55,7 @@ def main(ctx):
     base = folder / "launch/deals"
     today = dt.date.today().isoformat()
     comps = [str(c.get("name", "")).lower() for c in (k.read(ctx, "launch/inputs/competitors.json", []) or []) if isinstance(c, dict) and c.get("name")]
-    made, issues = [], 0
+    made, issues, pdfs = [], 0, 0
     for d in sorted(base.glob("*")) if base.is_dir() else []:
         found = scripts_of(d) if d.is_dir() else {}
         if not found:
@@ -94,6 +94,7 @@ def main(ctx):
               f"| AI check | {'not run' if ai_flags is None else 'FAIL' if ai_flags else 'pass'} | {'; '.join(tidy(f['issue']) for f in (ai_flags or []))[:120]} |", tag, "",
               "## Sign-off", "Name:", "Date:", "Approved, or changes needed:", tag]
         k.write(ctx, f"launch/deals/{d.name}/approval-pack-v{n}.md", "\n".join(md))
+        pdfs += 1 if k.render_pdf(ctx, f"launch/deals/{d.name}/approval-pack-v{n}.pdf", "\n".join(md)) else 0
         prev = scripts_of(d).get(n - 1)
         diff = [l for l in difflib.unified_diff(prev.read_text(encoding="utf-8").splitlines(), script.splitlines(), lineterm="", n=0) if l[:1] in "+-" and l[:3] not in ("+++", "---")] if prev else []
         why = [l.strip() for l in feedback.splitlines() if l.strip()][:3]
@@ -103,7 +104,7 @@ def main(ctx):
         made.append(f"{d.name} v{n}")
     if not made:
         return {"skipped": "no deal has a script version without an approval pack"}
-    return {"summary": f"Packs written for {', '.join(made)}. {issues} brand-safety issues shown in the pack. PDF pending a render step; Charlie sends it, nothing was emailed.", "flag": "caution" if issues else "ok"}
+    return {"summary": f"Packs written for {', '.join(made)}. {issues} brand-safety issues shown in the pack. {pdfs} PDFs rendered{'' if pdfs == len(made) else ' (the rest pending headless Chrome)'}; Charlie sends them, nothing was emailed.", "flag": "caution" if issues else "ok"}
 
 
 if __name__ == "__main__":

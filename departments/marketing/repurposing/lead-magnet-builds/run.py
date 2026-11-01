@@ -1,8 +1,8 @@
 """Lead-Magnet Builds: GitHub implementation of departments/marketing/repurposing/lead-magnet-builds/SKILL.md.
 
 Picks the most-asked question that is not in a regulated area, writes a short guide section by section, lints it
-in code, writes the gate page copy and the comment keyword for sell/ctas.json. The PDF render needs headless
-Chrome, which this job does not call, so guide.pdf is pending. No account is created and nothing is emailed.
+in code, writes the gate page copy and the comment keyword for sell/ctas.json. guide.pdf is rendered with the runner's
+headless Chrome (foundry.jobkit.render_pdf) and pending where there is none. No account is created and nothing is emailed.
 """
 import re
 

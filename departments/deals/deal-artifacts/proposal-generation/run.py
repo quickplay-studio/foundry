@@ -8,10 +8,7 @@ it exists. The cover text is a draft under sell/drafts/. Nothing is sent. Debrie
 import datetime as dt
 import json
 import re
-import shutil
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -50,22 +47,8 @@ def build(ctx, row, d, a, price, phases):
 
 
 def pdf(ctx, rel, md):
-    chrome = shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chromium-browser")
-    if not chrome or ctx["dry_run"]:
-        return False
-    css = k.read(ctx, "sell/proposals/proposal.css", "") or CSS
-    with tempfile.TemporaryDirectory() as tmp:
-        page = Path(tmp) / "p.html"
-        page.write_text(f"<!doctype html><meta charset=utf-8><style>{css}</style>{D.md_html(md)}", encoding="utf-8")
-        out = ctx["folder"] / rel
-        try:
-            subprocess.run([chrome, "--headless", "--no-sandbox", "--disable-gpu", "--no-pdf-header-footer", f"--print-to-pdf={out}", page.as_uri()], capture_output=True, timeout=90)
-        except (OSError, subprocess.TimeoutExpired):
-            return False
-    ok = out.exists() and out.stat().st_size > 0
-    if ok:
-        ctx["outputs"].append(rel)
-    return ok
+    """The proposal PDF, rendered with the runner's headless Chrome (foundry.jobkit.render_pdf); False when there is none."""
+    return bool(k.render_pdf(ctx, rel, md, k.read(ctx, "sell/proposals/proposal.css", "") or CSS))
 
 
 def main(ctx):

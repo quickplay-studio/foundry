@@ -111,6 +111,7 @@ jobs:
             python -m foundry.jobs --slug "$SLUG"
           fi
           python -m foundry.dashboards
+          python -m foundry.digest
 
       - name: Router stats, then stop it
         if: ${{ always() }}

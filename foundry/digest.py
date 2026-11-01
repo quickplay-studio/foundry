@@ -10,6 +10,7 @@ and the last few log lines. No model, no Claude: a GitHub page is enough to stee
 import os
 
 from . import audit, util
+from . import jobs as jobs_mod
 
 REPO = "quickplay-studio/foundry-ventures"
 OUT = util.OFFICE / "digest.md"
@@ -17,6 +18,13 @@ OUT = util.OFFICE / "digest.md"
 
 def link(slug, rel):
     return f"[{rel}](https://github.com/{REPO}/blob/main/ventures/{slug}/{rel})"
+
+
+def claude_code(job):
+    """True when the job's skill says runs_on: claude-code (it never runs on GitHub)."""
+    meta = {j["id"]: j for j in util.all_jobs()}.get(job["id"])
+    path = jobs_mod.skill_path(meta) if meta else None
+    return bool(path and path.exists() and jobs_mod.runs_on(path.read_text(encoding="utf-8")) != "github")
 
 
 def gate_ready(board):
@@ -49,6 +57,9 @@ def venture_lines(folder):
         if j.get("status") == "review":
             outs = j.get("outputs") or ([j["output"]] if j.get("output") else [])
             todo.append(f"- Review `{j['id']}` ({j.get('autonomy', '')}): " + (", ".join(link(slug, o) for o in outs[:4]) or "no file") + ".")
+    sessions = [j["id"] for j in jobs if j.get("status") == "todo" and j.get("stage") == board.get("stage") and claude_code(j) and jobs_mod.deps_done(board, j)]
+    if sessions:
+        todo.append(f"- Claude Code session needed for: {', '.join(f'`{i}`' for i in sessions)} (brief in `SESSIONS.md`); the jobs that build on them wait.")
     gave_up = {s["job"]: s for s in board.get("skipped", []) if int(s.get("attempts", 0)) >= 3}
     for j in jobs:
         if j.get("status") == "skipped" and j["id"] in gave_up:

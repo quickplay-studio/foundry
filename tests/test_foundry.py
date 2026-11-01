@@ -197,6 +197,13 @@ def test_digest_lists_what_needs_charlie(monkeypatch, tmp_path):
     assert f"Review `{board['jobs'][0]['id']}`" in text and "foundry-ventures/blob/main/ventures/sample/validate/report.md" in text
     assert "gave up after 3 days" in text
     assert summary.read_text() == text + "\n" and (tmp_path / "office" / "digest.md").read_text() == text
+    board["verdict"], board["stage"] = "pending", "clear"
+    for j in board["jobs"]:
+        if j["stage"] == "clear" and j["id"] not in ("terms-of-service", "privacy-policy", "contract-drafting"):
+            j["status"] = "done"
+    (dst / "board.json").write_text(json.dumps(board))
+    text = digest.main()
+    assert "Claude Code session needed for: `terms-of-service`, `privacy-policy`, `contract-drafting`" in text
 
 
 def test_smoke_rehearses_stage_by_stage(monkeypatch, tmp_path):

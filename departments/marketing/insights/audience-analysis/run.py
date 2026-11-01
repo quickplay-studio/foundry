@@ -139,6 +139,34 @@ def label(items):
     return out
 
 
+def merge_themes(labels, idea):
+    """Comments get a theme each, so nothing clusters: one model call folds the themes into at most ten per kind,
+    and drops the ones off the venture's topic. Falls back to the raw labels when the model gives nothing usable."""
+    themes = sorted({t for kind, t, _ in labels if kind in ("question", "objection")})
+    if len(themes) < 4:
+        return labels
+    answer = k.ask('Return JSON only: {"groups": [{"theme": "3 word group name", "members": ["theme as given", "theme as given"]}], "off_topic": ["theme as given"]}. '
+                   'Fold these comment themes into at most 10 groups per kind that someone marketing this venture would act on; themes unrelated to the venture go in off_topic.\n\nVENTURE: '
+                   + tidy(f"{idea.get('title', '')}. {idea.get('problem', '')}")[:300] + "\n\nTHEMES\n" + "\n".join(f"- {t}" for t in themes[:300]))
+    groups = answer.get("groups") if isinstance(answer, dict) and isinstance(answer.get("groups"), list) else []
+    off = {theme_key(tidy(t)) for t in (answer.get("off_topic") if isinstance(answer, dict) and isinstance(answer.get("off_topic"), list) else []) if isinstance(t, str)}
+    into = {}
+    for g in groups:
+        name = tidy(g.get("theme", "")) if isinstance(g, dict) else ""
+        for m in (g.get("members") if isinstance(g, dict) and isinstance(g.get("members"), list) else []):
+            if name and isinstance(m, str) and name.lower() != "3 word group name":
+                into[theme_key(tidy(m))] = name[:40]
+    if not into:
+        return labels
+    out = []
+    for kind, theme, text in labels:
+        key = theme_key(theme)
+        if key in off:
+            continue
+        out.append((kind, into.get(key, theme), text))
+    return out
+
+
 def language_bank(texts):
     seen = defaultdict(set)
     for n, t in enumerate(texts):
@@ -168,7 +196,7 @@ def main(ctx):
         return {"skipped": "no public text collected: " + "; ".join(skipped)[:150]}
     texts = [t for _, t in items]
     bank = language_bank(texts)
-    labels = label(items)
+    labels = merge_themes(label(items), idea)
     groups = {"question": {}, "objection": {}}
     for kind, theme, text in labels:
         if kind in groups:

@@ -18,6 +18,10 @@ on:
         description: "one job id to run on demand, or blank for plan order"
         required: false
         default: ""
+      through:
+        description: "rehearse stage by stage up to this one (validate, clear, build, launch, sell, support, run), passing gates automatically; blank for plan order"
+        required: false
+        default: ""
       probe_only:
         description: "true: only the source and router probes, no launch, no jobs"
         required: false
@@ -99,9 +103,12 @@ jobs:
         run: |
           python -m foundry.launch --slug sample
           JOB="${{ github.event.inputs.job }}"
+          THROUGH="${{ github.event.inputs.through }}"
           LIMIT="${{ github.event.inputs.limit || '5' }}"
           if [ -n "$JOB" ]; then
             python -m foundry.jobs --slug sample --job "$JOB"
+          elif [ -n "$THROUGH" ]; then
+            python -m foundry.smoke --slug sample --through "$THROUGH" --limit "$LIMIT"
           else
             python -m foundry.jobs --slug sample --limit "$LIMIT"
           fi

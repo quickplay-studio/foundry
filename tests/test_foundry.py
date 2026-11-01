@@ -197,3 +197,26 @@ def test_digest_lists_what_needs_charlie(monkeypatch, tmp_path):
     assert f"Review `{board['jobs'][0]['id']}`" in text and "foundry-ventures/blob/main/ventures/sample/validate/report.md" in text
     assert "gave up after 3 days" in text
     assert summary.read_text() == text + "\n" and (tmp_path / "office" / "digest.md").read_text() == text
+
+
+def test_smoke_rehearses_stage_by_stage(monkeypatch, tmp_path):
+    from foundry import jobs, smoke
+    monkeypatch.setattr(util, "ask_json", lambda prompt, skipped=None, prefer=None: (None, None))
+    monkeypatch.setattr(util, "VENTURES", tmp_path)
+    dst = tmp_path / "sample"
+    dst.mkdir()
+    (dst / "idea.json").write_text((ROOT / "tests" / "fixtures" / "sample-idea.json").read_text())
+    launch.run_one("sample", root=tmp_path)
+    ran = []
+
+    def fake_script(script, folder, job, dry_run=False):
+        ran.append(job["id"])
+        return {"output": f"{job['stage']}/{job['id']}.md", "outputs": [], "summary": "ok", "flag": "clear", "model": "fake"}
+    monkeypatch.setattr(jobs, "run_script", fake_script)
+    assert smoke.main(["--slug", "sample", "--through", "clear", "--limit", "2"]) == 0
+    board = json.loads((dst / "board.json").read_text())
+    assert board["gates"]["validate"] == "passed" and board["gates"]["clear"] == "passed" and board["gates"]["build"] == "open"
+    stages = {j["stage"] for j in board["jobs"] if j["status"] in ("done", "review")}
+    assert stages == {"validate", "clear"} and len(ran) == 4
+    assert all(j["status"] == "skipped" for j in board["jobs"] if j["stage"] == "validate" and j["id"] not in ran)
+    assert any(s["reason"].startswith("smoke:") for s in board["skipped"])

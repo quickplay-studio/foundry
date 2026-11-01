@@ -234,3 +234,42 @@ def test_keyless_search_drops_off_topic_rows(monkeypatch):
     rows = util.bing_search("meal planning app", 5)
     assert rows == [{"title": "Mealime Meal Planner", "url": "https://www.mealime.com/", "content": "Plan meals & shop in minutes.", "source": "bing"}]
     assert util.bing_target("https://www.bing.com/ck/a?!&amp;&amp;p=x&amp;u=a1aHR0cHM6Ly93d3cuYm9vdHMuY29tL3BlYXJz&amp;ntb=1") == "https://www.boots.com/pears"
+
+
+def test_notify_keeps_one_needs_you_issue(monkeypatch, tmp_path):
+    from foundry import digest, notify
+    text = "# Foundry digest, 2026-11-01\n\n## Sample (`sample`)\nStage **validate**.\n\n### Needs you\n- Review `vertical-analysis` (assisted): [validate/vertical-analysis.md](https://github.com/x/y).\n- Stage **validate** is finished: set `gates.validate: passed`.\n\n## Other (`other`)\n\n### Needs you\n- Nothing. The workforce is running.\n"
+    monkeypatch.setattr(digest, "OUT", tmp_path / "office" / "digest.md")
+    monkeypatch.setattr(notify, "LAST", tmp_path / "office" / "needs-last.json")
+    digest.OUT.parent.mkdir(parents=True)
+    digest.OUT.write_text(text)
+    items = notify.needs(text)
+    assert list(items) == ["Sample (`sample`)"] and len(items["Sample (`sample`)"]) == 2
+    monkeypatch.setenv("VENTURES_TOKEN", "")
+    notify.main()
+    assert not notify.LAST.exists(), "without a token nothing is recorded, so the next run with one still posts"
+    calls = []
+
+    class R:
+        def __init__(self, data, status=200):
+            self._d, self.status_code = data, status
+        def json(self):
+            return self._d
+        def raise_for_status(self):
+            pass
+    monkeypatch.setenv("VENTURES_TOKEN", "t")
+    monkeypatch.setattr(notify.requests, "get", lambda url, **kw: calls.append(("get", url)) or R([]))
+    monkeypatch.setattr(notify.requests, "post", lambda url, **kw: calls.append(("post", url, kw["json"])) or R({"number": 7, "url": "u", "comments_url": "c"}))
+    monkeypatch.setattr(notify.requests, "patch", lambda url, **kw: calls.append(("patch", url, kw["json"])) or R({}))
+    notify.main()
+    posts = [c for c in calls if c[0] == "post"]
+    assert posts[0][1].endswith("/issues") and posts[0][2]["title"] == "Needs you" and "vertical-analysis" in posts[0][2]["body"]
+    assert posts[1][1] == "c" and "New: Sample" in posts[1][2]["body"]
+    assert json.loads(notify.LAST.read_text())["items"] == items
+    calls.clear()
+    notify.main()
+    assert not calls, "an unchanged list makes no request"
+    digest.OUT.write_text("# Foundry digest\n\n## Sample (`sample`)\n\n### Needs you\n- Nothing. The workforce is running.\n")
+    monkeypatch.setattr(notify.requests, "get", lambda url, **kw: R([{"title": "Needs you", "url": "u", "comments_url": "c", "number": 7}]))
+    notify.main()
+    assert calls and calls[-1][0] == "patch" and calls[-1][2]["state"] == "closed"

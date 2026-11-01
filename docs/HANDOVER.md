@@ -8,7 +8,7 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 
 ## What Charlie must do
 
-1. Fix `VENTURES_TOKEN` (required). https://github.com/settings/personal-access-tokens, open the fine-grained token saved as `VENTURES_TOKEN`, Repository access: Only select repositories, tick `foundry-ventures`, Permissions: Contents, Read and write, save. Or make a new one and paste it at https://github.com/quickplay-studio/foundry/settings/secrets/actions. Every check today (the last at 12:10) returned HTTP 404 for `quickplay-studio/foundry-ventures` with token owner `quickplay-studio`.
+1. Fix `VENTURES_TOKEN` (required). https://github.com/settings/personal-access-tokens, open the fine-grained token saved as `VENTURES_TOKEN`, Repository access: Only select repositories, tick `foundry-ventures`, Permissions: Contents, Read and write, and (optional, for emails) Issues, Read and write, save. With Issues on, every run keeps one "Needs you" issue in `foundry-ventures` in step with the digest and comments when the list changes, which GitHub emails you; without it that step logs a skip. Or make a new one and paste it at https://github.com/quickplay-studio/foundry/settings/secrets/actions. Every check today (the last at 12:10) returned HTTP 404 for `quickplay-studio/foundry-ventures` with token owner `quickplay-studio`.
 2. Run the first launch: https://github.com/quickplay-studio/foundry/actions/workflows/launch.yml, Run workflow, slug `all`. It launches `sample`, `quickplay-daily` and `tiktok-shop-pilot` into the private repo (brain.md, plan.md, board.json, budget.json, audit.json, README.md each). The schedule does the same every four hours.
 3. Run the first jobs: https://github.com/quickplay-studio/foundry/actions/workflows/jobs.yml, Run workflow. Daily at 05:23 UTC otherwise. Up to five jobs a run across ventures in plan order.
 4. Optional free keys, same secrets page, no card, each one a real step up:
@@ -59,6 +59,7 @@ Foundry is built and tested. 167 agent jobs across 9 departments, every skill fi
 - `tests/test_seams.py`: writer and reader scripts run in order on one venture (validate chain for a service, an app and a shop; market map into account monitoring; QA result into handoff and status; transcript into follow-ups). Status updates carry the QA line.
 - `foundry/probe.py` and the findings in `SESSIONS.md`: from runners Reddit's `search.rss` and Bing's HTML page answer; both are now fallbacks (`intelkit.reddit`, `util.keyless_search`), with off-topic Bing rows dropped. Everything else keyless is closed; a `TAVILY_API_KEY` is still the real search fix.
 - `foundry/smoke.py` and the `through` input: stage rehearsals.
+- `foundry/notify.py`: the Needs you issue (above), the one place GitHub itself tells you something changed.
 - Radar: reads the private repo with a browser-held read-only token; Needs you view renders the digest.
 
 ## Known gaps

@@ -119,6 +119,11 @@ jobs:
         continue-on-error: true
         with: { mode: stats }
 
+      - name: Needs you issue (emails Charlie when the list changes; needs Issues read and write on the token)
+        env:
+          VENTURES_TOKEN: ${{ secrets.VENTURES_TOKEN }}
+        run: python -m foundry.notify
+
       - name: Commit venture data
         working-directory: data
         run: |

@@ -133,9 +133,17 @@ def add_fit(items, brain):
     rows = answer.get("fits") if isinstance(answer, dict) else None
     if not isinstance(rows, list):
         return False
-    for r in rows:
-        if isinstance(r, dict) and isinstance(r.get("i"), int) and 0 <= r["i"] < len(ranked) and str(r.get("fit", "")).lower().startswith("y") and str(r.get("reason", "")).strip():
-            ranked[r["i"]]["fit"], ranked[r["i"]]["reason"] = 20, cell(r["reason"])
+    for pos, r in enumerate(rows):
+        if not isinstance(r, dict):
+            continue
+        try:
+            i = int(r.get("i", pos))
+        except (TypeError, ValueError):
+            continue
+        if 0 <= i < len(ranked):
+            yes = str(r.get("fit", "")).lower().startswith("y")
+            # a topic that does not touch the venture drops below every one that does, however big it is this week
+            ranked[i]["fit"], ranked[i]["reason"] = (20, cell(r.get("reason", "")) or "fits") if yes else (-50, "off topic")
     return True
 
 

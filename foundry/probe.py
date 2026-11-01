@@ -29,6 +29,10 @@ def probe(name, method, url, count=None, **kw):
         return None
 
 
+def titles(found):
+    return str(len(found)) + " " + " | ".join(re.sub(r"<[^>]+>", "", f)[:40] for f in found[:4])
+
+
 def json_count(key):
     def f(text):
         try:
@@ -54,7 +58,12 @@ SOURCES = [
     ("hn algolia", "GET", "https://hn.algolia.com/api/v1/search", json_count("hits"), {"params": {"query": Q, "hitsPerPage": 5}}),
     ("ddg html", "POST", "https://html.duckduckgo.com/html/", lambda t: len(re.findall(r'class="result__a"', t)), {"data": {"q": Q}, "headers": UA}),
     ("ddg lite", "GET", "https://lite.duckduckgo.com/lite/", lambda t: len(re.findall(r"result-link", t)), {"params": {"q": Q}, "headers": UA}),
-    ("bing html", "GET", "https://www.bing.com/search", lambda t: len(re.findall(r'<li class="b_algo"', t)), {"params": {"q": Q, "setlang": "en-GB"}, "headers": UA}),
+    ("bing html", "GET", "https://www.bing.com/search", lambda t: titles(re.findall(r'<li class="b_algo".*?<h2[^>]*><a[^>]*>(.*?)</a>', t, re.S)), {"params": {"q": Q, "setlang": "en-GB"}, "headers": UA}),
+    ("bing html plain", "GET", "https://www.bing.com/search", lambda t: titles(re.findall(r'<li class="b_algo".*?<h2[^>]*><a[^>]*>(.*?)</a>', t, re.S)), {"params": {"q": Q}, "headers": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36", "Accept": "text/html,application/xhtml+xml", "Accept-Language": "en-GB,en;q=0.9"}}),
+    ("yahoo html", "GET", "https://search.yahoo.com/search", lambda t: titles(re.findall(r'<h3 class="title[^"]*"><a[^>]*>(.*?)</a>', t, re.S)), {"params": {"p": Q}, "headers": UA}),
+    ("qwant api", "GET", "https://api.qwant.com/v3/search/web", lambda t: titles([i.get("title", "") for g in (json.loads(t).get("data", {}).get("result", {}).get("items", {}).get("mainline", []) if t.startswith("{") else []) for i in g.get("items", [])]), {"params": {"q": Q, "count": 10, "locale": "en_GB", "offset": 0, "safesearch": 1}, "headers": UA}),
+    ("marginalia", "GET", "https://search.marginalia.nu/search", lambda t: titles(re.findall(r'<a class="[^"]*" href="[^"]+"[^>]*>\s*<h2[^>]*>(.*?)</h2>', t, re.S) or re.findall(r"<h2[^>]*>(.*?)</h2>", t, re.S)), {"params": {"query": Q}, "headers": UA}),
+    ("startpage html", "POST", "https://www.startpage.com/sp/search", lambda t: titles(re.findall(r'class="w-gl__result-title[^"]*"[^>]*>\s*<h2[^>]*>(.*?)</h2>', t, re.S)), {"data": {"query": Q, "cat": "web", "language": "english"}, "headers": UA}),
     ("brave html", "GET", "https://search.brave.com/search", lambda t: len(re.findall(r'class="snippet', t)), {"params": {"q": Q, "source": "web"}, "headers": UA}),
     ("mojeek api", "GET", "https://www.mojeek.com/search", lambda t: len(re.findall(r'class="results-standard"|<li class="r', t)), {"params": {"q": Q, "fmt": "html"}, "headers": UA}),
     ("google play page", "GET", "https://play.google.com/store/apps/details", lambda t: len(re.findall(r"review", t, re.I)), {"params": {"id": "com.mealime", "hl": "en_GB"}, "headers": UA}),

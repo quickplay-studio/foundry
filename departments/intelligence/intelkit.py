@@ -230,12 +230,15 @@ def hn_monthly(query, months=12):
 
 
 _REDDIT_JSON_DOWN = []  # set once the JSON API answers 403 in this process (GitHub runners, every time)
+_REDDIT_RSS_DOWN = []  # set once the feed is still throttled after one wait
 ATOM = "{http://www.w3.org/2005/Atom}"
 
 
 def reddit_rss(query, n=25, sort="top", t="year"):
     """Reddit's search feed (search.rss), which answers GitHub runners when the JSON API returns 403. Same rows as reddit(),
     with score 0 because the feed carries none; None when the feed is blocked too."""
+    if _REDDIT_RSS_DOWN:
+        return None
     params = {"q": query, "t": t, "sort": sort, "limit": n}
     r = get("https://www.reddit.com/search.rss", params, headers={"User-Agent": util.BROWSER_UA}, wait=6)
     if r is not None and r.status_code == 429:  # the feed is throttled per address; runners share theirs, so wait once as told (a minute at most)
@@ -248,6 +251,8 @@ def reddit_rss(query, n=25, sort="top", t="year"):
     if os.environ.get("FOUNDRY_PROBE_DEBUG"):
         print("reddit rss: " + ("no response" if r is None else f"HTTP {r.status_code}, {len(r.text)} bytes, retry-after {r.headers.get('Retry-After')}"), file=sys.stderr)
     if r is None or not r.ok or "<feed" not in r.text[:400]:
+        if r is not None and r.status_code in (403, 429):
+            _REDDIT_RSS_DOWN.append(r.status_code)  # still throttled after the wait: stop asking in this process
         return None
     try:
         root = ET.fromstring(r.content)

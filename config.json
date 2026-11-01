@@ -6,6 +6,8 @@
     "digest": "sha256:9b11990847dc2cba7b7041a7fe9bd2246cfae49993f00e86371333082e9a2b49",
     "search_per_run": 20,
     "top_models": 6,
-    "wait_s": 90
+    "wait_s": 90,
+    "prefer": ["qwen3.5-397b", "nemotron-3-ultra", "gpt-oss-120b", "qwen3.6-27b", "qwen3.8-27b", "llama-3.3-70b", "qwen2.5-vl-72b", "mistral-small", "gpt-oss-20b"],
+    "never": ["guard", "safety", "moderation", "embed", "whisper", "tts", "0.6b", "2.6b", "lightning", "north-mini"]
   }
 }

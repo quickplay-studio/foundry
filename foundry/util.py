@@ -91,18 +91,41 @@ def _groq(prompt, model):
 
 
 LAST_VIA = {"model": ""}  # which upstream model answered the last router call (X-Routed-Via), for the board log
+_MODELS = {}  # the router's model order for this process, resolved once
 
 
-def _freellm(prompt, model="auto", attempts=3):
+def router_models(key, base):
+    """The upstream models to ask, best first: config.json freellm.prefer matched against what the router lists as available,
+    never the guard, safety or tiny ones, then auto as the last resort. The router's own auto routing has landed on a
+    safety classifier ("Safety: Safe") and on 2B models, so a named order is more reliable than auto."""
+    if "order" in _MODELS:
+        return _MODELS["order"]
+    cfg = read_json(ROOT / "config.json", {}).get("freellm", {}) if (ROOT / "config.json").exists() else {}
+    prefer, never = [str(p).lower() for p in cfg.get("prefer", [])], [str(p).lower() for p in cfg.get("never", [])]
+    order = []
+    try:
+        r = requests.get(base + "/models?available=true", headers={"Authorization": f"Bearer {key}"}, timeout=30)
+        ids = [str(m.get("id")) for m in (r.json().get("data") or []) if isinstance(m, dict) and m.get("id") and m.get("available") is not False] if r.ok else []
+        ids = [i for i in ids if i not in ("auto", "fusion") and not i.startswith("auto:") and not any(w in i.lower() for w in never)]
+        for p in prefer:
+            order += [i for i in ids if p in i.lower() and i not in order]
+    except Exception:  # noqa: BLE001
+        order = []
+    _MODELS["order"] = (order[:6] or []) + ["auto"]
+    return _MODELS["order"]
+
+
+def _freellm(prompt, model=None, attempts=4):
     """The FreeLLMAPI router started on the runner by foundry.freellm (OpenAI-compatible, free tiers only).
-    A 5xx, 429 or timeout is retried, since auto routing lands on a different upstream each time."""
+    Each attempt asks the next model in router_models order; a 5xx, 429, timeout or empty answer moves on."""
     key, base = os.environ.get("FREELLM_KEY", "").strip(), os.environ.get("FREELLM_BASE", "").strip().rstrip("/")
     if not (key and base):
         raise RuntimeError("FREELLM router not running")
-    body = {"model": model, "temperature": 0.2, "max_tokens": 6000,
-            "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
+    models = [model] if model else router_models(key, base)
     last = None
     for n in range(attempts):
+        body = {"model": models[min(n, len(models) - 1)], "temperature": 0.2, "max_tokens": 6000,
+                "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt}]}
         try:
             r = requests.post(base + "/chat/completions", json=body, headers={"Authorization": f"Bearer {key}"}, timeout=180)
             if r.status_code in (429, 500, 502, 503, 504):
@@ -110,7 +133,7 @@ def _freellm(prompt, model="auto", attempts=3):
             if r.status_code >= 400:
                 raise RuntimeError(f"router returned HTTP {r.status_code}: {r.text[:120]}")
             data = r.json()
-            LAST_VIA["model"] = requests.utils.unquote(r.headers.get("X-Routed-Via", ""))[:60]
+            LAST_VIA["model"] = (requests.utils.unquote(r.headers.get("X-Routed-Via", "")) or body["model"])[:60]
             choice = data["choices"][0]
             text = choice["message"]["content"] or ""
             if not text.strip():
@@ -118,9 +141,7 @@ def _freellm(prompt, model="auto", attempts=3):
             return text
         except (requests.RequestException, RuntimeError, KeyError, ValueError) as exc:
             last = exc
-            if isinstance(exc, RuntimeError) and "HTTP 4" in str(exc) and "429" not in str(exc):
-                break
-            time.sleep(3 * (n + 1))
+            time.sleep(2 * (n + 1))
     raise RuntimeError(str(last)[:160])
 
 
